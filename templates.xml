@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+
+	<!--Action para Cierre de Caja-->
+		<record id="cierre_action" model="ir.actions.act_window">
+		<field name="name">Cierre De Caja</field>
+     	<field name="res_model">cierre</field>
+		<field name="view_type">form</field>
+		<field name="view_mode">tree,form</field>
+		<field name="help" type="html">
+			<p class="oe_view_nocontent_create">Presione aquí para crear un cierre de caja.</p>
+		</field>
+		</record>
+
+
+<!--Vista Heredada de Facturas - Purchase Order -->
+
+<record model="ir.ui.view" id="purchase_order_view_form">
+    <field name="name">purchase_order_view_form_inherit</field>
+    <field name="model">purchase.order</field>
+    <field name="inherit_id" ref="purchase.purchase_order_form"/>
+    <field name="arch" type="xml">
+
+	<field name="date_order" position="after">
+		<field name="pago" attrs="{'readonly': [('state','in',('confirmed', 'approved', 'done'))]}"/>
+        </field>
+
+	<field name="partner_ref" position="attributes">
+	<attribute name="invisible">True</attribute>
+	</field>
+
+	<field name="picking_type_id" position="attributes">
+	<attribute name="invisible">True</attribute>
+	</field>
+
+    </field>
+</record>
+
+<!--Vista Heredada de Gasto  -->
+<record model="ir.ui.view" id="gasto_view_form_inherit">
+    <field name="name">gasto_view_form_inherit</field>
+    <field name="model">gasto</field>
+    <field name="inherit_id" ref="gastos_v8.gasto_form_view"/>
+    <field name="arch" type="xml">
+
+	<field name="responsable" position="after">
+		<field name="cierre_id" />
+        </field>
+
+        </field>
+</record>
+
+
+<!--Form View Cierre de Caja-->
+	<record id="cierre_form_view" model="ir.ui.view">
+	<field name="name">cierre.form.view</field>
+		<field name="view_type">form</field>
+		<field name="model">cierre</field>
+		<field name="arch" type="xml">
+			<form string="Cierre de Caja"  version="7.0">
+			<header>	
+
+ 
+ 	 <button name="action_revisado" string="Listo Para Revisar" type="object" attrs="{'invisible': ['|', ('state','=','assigned'), ('state','=', 'lost')]}" class="oe_highlight" />
+ 	 <button name="action_revisado" string="Revisado" type="object" attrs="{'invisible': ['|', ('state','=','new'), ('state','=', 'lost')]}" class="oe_highlight" />
+	 	<field name="state" widget="statusbar"  statusbar_colors='{"new":"red","won":"red"}'/>
+
+
+            </header>
+	<sheet string="Cierre de Caja">
+	<group>			
+			<group >
+			<field  name="cajero"/>
+			<field  name="cajero_id"/>
+			<field  name="fecha"/>
+<!--	
+			<field  name="pizarra_id"  attrs="{'readonly': [('state','in',('lost'))]}"/>
+-->
+			</group>
+
+			<group >
+			<field  name="revisado" attrs="{'invisible':[('state','=','new')] , 'readonly': [('state','in',('lost'))]}" />
+			<field  name="dinero_retorno"/>
+			<field  name="dinero_balance"/>
+			</group>
+					
+			<group string="Dineros Salida">
+			<field  name="dinero_compra_ventana" options="{'always_reload': true}"/>
+			<field  name="dinero_compra_regular" options="{'always_reload': true}"/>
+			<field  name="dinero_salida" options="{'always_reload': true}"/>
+			<field  name="dinero_salida_total" options="{'always_reload': true}"/>
+			</group>
+
+			<group string="Dineros Ingreso">
+			<field  name="dinero_ingreso_caja"/>
+			<field  name="dinero_ingreso_bns"/>
+			<field  name="dinero_ingreso_ventas"/>
+			<field  name="dinero_ingreso"/>
+			
+			</group>
+								
+	</group>
+
+			<notebook >
+				<page string="Ingresos de Dinero">
+					<field name="ingreso_ids" widget="one2many_list" colspan="4" nolabel="1" attrs="{'readonly': [('state','in',('lost'))]}">
+   						<tree editable="bottom">
+			        			<field name="cajero_id"/> 
+			        			<field name="detalle"/>  
+        						<field name="tipo_ingreso"/>  
+							<field name="monto_ingreso"  sum="True"/>                               
+  				 		</tree>
+					</field>
+
+				</page>
+	   		        <page string="Salidas de Dinero">	
+					<field name="salida_ids" widget="one2many_list" colspan="4" nolabel="1" attrs="{'readonly': [('state','in',('lost'))]}">
+   						<tree editable="bottom">
+			        			<field name="cajero_id"/> 
+        						<field name="detalle"/>  
+						   	<field name="monto"  sum="True"/>                               
+  				 		</tree>
+					</field>
+	
+    				</page>
+		 		<page string="Compras Ventana">
+					<field name="compra_ids" widget="one2many_list" colspan="4" nolabel="1" attrs="{'readonly': [('state','in',('lost'))]}">
+   						<tree editable="bottom">
+			        			<field name="cajero_id"/> 
+        						<field name="tipo"/>  
+			    				<field name="monto"  sum="True"/>                               
+  				 		</tree>
+					</field>
+
+    				</page>
+				
+				<page string="Retorno de Dinero" >
+					<field name="dinero_ids" widget="one2many_list" colspan="4" nolabel="1" attrs="{'readonly': [('state','in',('lost'))]}" >
+   						<tree editable="bottom">
+			        			<field name="cajero_id"/> 
+        						<field name="denominacion"/>
+        						<field name="cantidad"/>  
+			  				<field name="total"  sum="True"/>                               
+  				 		</tree>
+					</field>
+
+    				</page>
+
+<!--				<page string="Prestamos" >
+				<label colspan="4" align="0.0" string="Prestamos Realizados"/>
+				<field name="prestamos"   attrs="{'readonly': [('state','in',('lost'))]}" />
+				<label colspan="4" align="0.0" string="Abonos a prestamos"/>
+				<field name="abonos" attrs="{'readonly': [('state','in',('lost'))]}" />
+   						
+    			</page>
+				
+-->				<page string="Facturas" >
+        		<field name="factura_ids"  attrs="{'readonly': [('state','in',('lost'))]}"/>  
+				</page>
+<!--
+				<page string="Gastos" >
+        		<field name="gasto_id" attrs="{'readonly': [('state','in',('lost'))]}"/>  
+				</page>
+-->
+<!--
+				<page string="Informe" >
+        		<field  name="enlace_descarga" string="Descargar Informe" widget="url" />  
+				</page>
+-->
+			</notebook>
+	</sheet>
+            </form>
+		</field>
+		</record>
+
+
+<!--Tree View Cierre de Caja-->
+<record id="cierre_tree_view" model="ir.ui.view">
+		<field name="name">cierre.tree.view</field>
+		<field name="view_type">tree</field>
+		<field name="model">cierre</field>
+		<field name="arch" type="xml">
+			<tree string="Cierre de Caja" colors="blue:state == 'new';black:state in ('assigned');gray:state == 'lost'">
+			<field name="fecha" />
+			<field  name="cajero"/>
+<!--			<field  name="revisado" string="Revisado por"/>
+-->			<field  name="dinero_balance"/>
+			<field  name="state" string="Estado"/>
+            </tree>
+		</field>
+	</record>
+
+
+<!--Menus-->
+		<menuitem id="cierrecaja" name="Cierre de Caja"/>
+		<menuitem id="cierrecaja_menu" name="Cierres" parent= "cierrecaja"/>	
+		<menuitem id="cierre_libro_menu" 
+				name="Cierres Diarios" 
+				parent="cierrecaja_menu"
+				action="cierre_action"
+        />
+
+
+    </data>
+</openerp>

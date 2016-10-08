@@ -1,0 +1,76 @@
+<?xml version="1.0"?>
+<openerp>
+<data>
+<record model="workflow" id="workflow_cierre_id">
+
+    <field name="name">workflow.cierre</field>
+    <field name="osv">cierre</field>
+    <field name="on_create" eval='True|False' />
+
+</record>
+
+<record model="workflow.activity" id="act_new">
+    <field name="wkf_id" ref="workflow_cierre_id" />
+    <field name="flow_start" eval='True' />
+    <field name="name">new</field>
+    <field name="kind">function</field>
+    <field name="action">write({'state':'new'})</field>
+</record>
+
+<record model="workflow.activity" id="act_assigned">
+    <field name="wkf_id" ref="workflow_cierre_id" />
+    <field name="name">assigned</field>
+    <field name="kind">function</field>
+    <field name="action">write({'state':'assigned'})</field>
+</record>
+
+<record model="workflow.activity" id="act_negotiation">
+    <field name="wkf_id" ref="workflow_cierre_id" />
+    <field name="name">negotiation</field>
+    <field name="kind">function</field>
+    <field name="action">write({'state':'lost'})</field>
+	<field name="flow_stop" eval='True' />
+</record>
+
+<record model="workflow.activity" id="act_won">
+    <field name="wkf_id" ref="workflow_cierre_id" />
+    <field name="name">won</field>
+    <field name="kind">function</field>
+    <field name="action">mymod_won()</field>
+    <field name="flow_stop" eval='True' />
+</record>
+
+<record model="workflow.activity" id="act_lost">
+    <field name="wkf_id" ref="workflow_cierre_id" />
+    <field name="name">lost</field>
+    <field name="kind">function</field>
+    <field name="action">mymod_lost()</field>
+    <field name="flow_stop" eval='True' />
+</record>
+
+<record model="workflow.transition" id="t1">
+    <field name="act_from" ref="act_new" />
+    <field name="act_to" ref="act_assigned" />
+    <field name="signal">mymod_assigned</field>
+</record>
+
+<record model="workflow.transition" id="t2">
+    <field name="act_from" ref="act_assigned" />
+    <field name="act_to" ref="act_negotiation" />
+    <field name="signal">mymod_negotiation</field>
+</record>
+
+<record model="workflow.transition" id="t3">
+    <field name="act_from" ref="act_negotiation" />
+    <field name="act_to" ref="act_won" />
+    <field name="signal">mymod_won</field>
+</record>
+
+<record model="workflow.transition" id="t4">
+    <field name="act_from" ref="act_negotiation" />
+    <field name="act_to" ref="act_lost" />
+    <field name="signal">mymod_lost</field>
+</record>
+
+</data>
+</openerp>
