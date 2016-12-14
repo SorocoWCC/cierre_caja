@@ -72,7 +72,6 @@
 	<group>			
 			<group >
 			<field  name="cajero"/>
-			<field  name="cajero_id"/>
 			<field  name="fecha"/>
 <!--	
 			<field  name="pizarra_id"  attrs="{'readonly': [('state','in',('lost'))]}"/>
@@ -106,7 +105,7 @@
 				<page string="Ingresos de Dinero">
 					<field name="ingreso_ids" widget="one2many_list" colspan="4" nolabel="1" attrs="{'readonly': [('state','in',('lost'))]}">
    						<tree editable="bottom">
-			        			<field name="cajero_id"/> 
+			        			<field name="cajero"/> 
 			        			<field name="detalle"/>  
         						<field name="tipo_ingreso"/>  
 							<field name="monto_ingreso"  sum="True"/>                               
@@ -117,7 +116,7 @@
 	   		        <page string="Salidas de Dinero">	
 					<field name="salida_ids" widget="one2many_list" colspan="4" nolabel="1" attrs="{'readonly': [('state','in',('lost'))]}">
    						<tree editable="bottom">
-			        			<field name="cajero_id"/> 
+			        			<field name="cajero"/> 
         						<field name="detalle"/>  
 						   	<field name="monto"  sum="True"/>                               
   				 		</tree>
@@ -127,7 +126,7 @@
 		 		<page string="Compras Ventana">
 					<field name="compra_ids" widget="one2many_list" colspan="4" nolabel="1" attrs="{'readonly': [('state','in',('lost'))]}">
    						<tree editable="bottom">
-			        			<field name="cajero_id"/> 
+			        			<field name="cajero"/> 
         						<field name="tipo"/>  
 			    				<field name="monto"  sum="True"/>                               
   				 		</tree>
@@ -138,7 +137,7 @@
 				<page string="Retorno de Dinero" >
 					<field name="dinero_ids" widget="one2many_list" colspan="4" nolabel="1" attrs="{'readonly': [('state','in',('lost'))]}" >
    						<tree editable="bottom">
-			        			<field name="cajero_id"/> 
+			        			<field name="cajero"/> 
         						<field name="denominacion"/>
         						<field name="cantidad"/>  
 			  				<field name="total"  sum="True"/>                               

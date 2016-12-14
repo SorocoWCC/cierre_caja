@@ -14,11 +14,16 @@ class compra(models.Model):
     monto = fields.Integer('Monto:', required=True)
     notas = fields.Text('Observaciones')
     cierre_id = fields.Many2one(comodel_name='cierre', string='Cierre', delegate=True)
-    cajero_id= fields.Many2one(comodel_name='res.users', string='Cajero', delegate=True, readonly=True)
+    cajero = fields.Char(compute='_action_cajero', string="Cajero", readonly=True, store=True )
     _defaults = {
-    'tipo': 'ventana',
-    'cajero_id': lambda self, cr, uid, ctx=None: uid
+    'tipo': 'ventana'
     }	
+
+# Nombre del cajero
+    @api.one
+    @api.depends('name')
+    def _action_cajero(self):
+		self.cajero = str(self.env.user.name)
 
 class salida(models.Model):
     _name = "salida"
@@ -26,10 +31,15 @@ class salida(models.Model):
     monto = fields.Integer('Monto:', required=True)
     notas = fields.Text('Observaciones')
     cierre_id= fields.Many2one(comodel_name='cierre', string='Cierre', delegate=True)
-    cajero_id= fields.Many2one(comodel_name='res.users', string='Cajero', delegate=True, readonly=True)
+    cajero = fields.Char(compute='_action_cajero', string="Cajero", readonly=True, store=True )
     _defaults = {
-    'cajero_id': lambda self, cr, uid, ctx=None: uid
     }
+
+# Nombre del cajero
+    @api.one
+    @api.depends('name')
+    def _action_cajero(self):
+		self.cajero = str(self.env.user.name)
 
 class ingreso(models.Model):
     _name = 'ingreso'
@@ -37,12 +47,15 @@ class ingreso(models.Model):
     tipo_ingreso = fields.Selection([('caja','Caja'), ('bns','BNS'),('ventas','Ventas')], string='Tipo',required=True)
     monto_ingreso = fields.Integer('Monto:', required=True, type='integer')
     cierre_id = fields.Many2one(comodel_name='cierre', string='Cierre', delegate=True)
-    cajero_id= fields.Many2one(comodel_name='res.users', string='Cajero', delegate=True, readonly=True)
+    cajero = fields.Char(compute='_action_cajero', string="Cajero", readonly=True, store=True )
     _defaults = {
-    'cajero_id': lambda self, cr, uid, ctx=None: uid
     }	
 
-#------------Clase Dinero------------
+# Nombre del cajero
+    @api.one
+    @api.depends('name')
+    def _action_cajero(self):
+		self.cajero = str(self.env.user.name)
 
 class dinero(models.Model):
     _name = 'dinero'
@@ -50,9 +63,8 @@ class dinero(models.Model):
     total = fields.Integer('Total', required=True)
     cierre_id = fields.Many2one(comodel_name='cierre', string='Cierre', delegate=True)
     cantidad = fields.Integer(compute='_retorno_dinero', store=True, string="Cantidad")
-    cajero_id= fields.Many2one(comodel_name='res.users', string='Cajero', delegate=True, readonly=True)
+    cajero = fields.Char(compute='_action_cajero', string="Cajero", readonly=True, store=True )
     _defaults = {
-    'cajero_id': lambda self, cr, uid, ctx=None: uid
     }	
 
 # Cantidad Dinero
@@ -64,8 +76,11 @@ class dinero(models.Model):
 		total = self.total / int(self.denominacion)
 	self.cantidad= total
 
-
-#------------Fin de la Clase Dinero------------
+# Nombre del cajero
+    @api.one
+    @api.depends('name')
+    def _action_cajero(self):
+		self.cajero = str(self.env.user.name)
 
 class cierre(models.Model):
     _name = 'cierre'
@@ -73,7 +88,6 @@ class cierre(models.Model):
     name = fields.Char(string='Name')
     fecha = fields.Char(string='Fecha', readonly=True)
     cajero = fields.Char(compute='_action_cajero', string="Cajero", readonly=True, store=True )
-    cajero_id= fields.Many2one(comodel_name='res.users', string='Nuevo Cajero', delegate=True, readonly=True)
     revisado = fields.Char(string="Revisado por :", readonly=True, store=True, default="Nadie")
     factura_ids = fields.One2many(comodel_name='purchase.order', inverse_name='cierre_id', string="Facturas")
     ingreso_ids = fields.One2many(comodel_name='ingreso', inverse_name='cierre_id', string="Ingresos de Dinero")
@@ -96,8 +110,7 @@ class cierre(models.Model):
     _defaults = {
     'state': 'new',
     'name': fields.Date.today(),
-    'fecha': fields.Date.today(),
-    'cajero_id': lambda self, cr, uid, ctx=None: uid	
+    'fecha': fields.Date.today(),	
 
 	    }
 
@@ -105,7 +118,7 @@ class cierre(models.Model):
     @api.one
     @api.depends('name')
     def _action_cajero(self):
-	self.cajero = str(self.env.user.name)
+		self.cajero = str(self.env.user.name)
 
 # Dinero Compra Regular / Sistema
     @api.one
