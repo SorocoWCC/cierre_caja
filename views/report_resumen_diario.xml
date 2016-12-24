@@ -1,0 +1,662 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+  <data>
+    <template id="report_resumen_diario_document">
+      <t t-foreach="docs" t-as="o">
+<div class="page">
+
+<!-- Variables -->
+  <t t-set="total_gastos" t-value="0"/>
+  <t t-set="total_inversion" t-value="0"/>
+  <t t-set="total_ganancia" t-value="0"/>
+
+  <t t-set="cantidad_acero_inoxidable" t-value="0"/>
+  <t t-set="compra_acero_inoxidable" t-value="0"/>
+  <t t-set="inversion_acero_inoxidable" t-value="0"/>
+  <t t-set="venta_acero_inoxidable" t-value="0"/>
+  <t t-set="ganancia_acero_inoxidable" t-value="0"/>
+
+  <t t-set="cantidad_aluminio" t-value="0"/>
+  <t t-set="compra_aluminio" t-value="0"/>
+  <t t-set="inversion_aluminio" t-value="0"/>
+  <t t-set="venta_aluminio" t-value="0"/>
+  <t t-set="ganancia_aluminio" t-value="0"/>
+
+  <t t-set="cantidad_chatarra" t-value="0"/>
+  <t t-set="compra_chatarra" t-value="0"/>
+  <t t-set="inversion_chatarra" t-value="0"/>
+  <t t-set="venta_chatarra" t-value="0"/>
+  <t t-set="ganancia_chatarra" t-value="0"/>
+
+  <t t-set="cantidad_bateria" t-value="0"/>
+  <t t-set="compra_bateria" t-value="0"/>
+  <t t-set="inversion_bateria" t-value="0"/>
+  <t t-set="venta_bateria" t-value="0"/>
+  <t t-set="ganancia_bateria" t-value="0"/>
+
+  <t t-set="cantidad_bronce" t-value="0"/>
+  <t t-set="compra_bronce" t-value="0"/>
+  <t t-set="inversion_bronce" t-value="0"/>
+  <t t-set="venta_bronce" t-value="0"/>
+  <t t-set="ganancia_bronce" t-value="0"/>
+
+  <t t-set="cantidad_caja_plastica" t-value="0"/>
+  <t t-set="compra_caja_plastica" t-value="0"/>
+  <t t-set="inversion_caja_plastica" t-value="0"/>
+  <t t-set="venta_caja_plastica" t-value="0"/>
+  <t t-set="ganancia_caja_plastica" t-value="0"/>
+
+  <t t-set="cantidad_carton" t-value="0"/>
+  <t t-set="compra_carton" t-value="0"/>
+  <t t-set="inversion_carton" t-value="0"/>
+  <t t-set="venta_carton" t-value="0"/>
+  <t t-set="ganancia_carton" t-value="0"/>
+
+  <t t-set="cantidad_catalizador_generico" t-value="0"/>
+  <t t-set="compra_catalizador_generico" t-value="0"/>
+  <t t-set="inversion_catalizador_generico" t-value="0"/>
+  <t t-set="venta_catalizador_generico" t-value="0"/>
+  <t t-set="ganancia_catalizador_generico" t-value="0"/>
+
+  <t t-set="cantidad_catalizador_original" t-value="0"/>
+  <t t-set="compra_catalizador_original" t-value="0"/>
+  <t t-set="inversion_catalizador_original" t-value="0"/>
+  <t t-set="venta_catalizador_original" t-value="0"/>
+  <t t-set="ganancia_catalizador_original" t-value="0"/>
+
+  <t t-set="cantidad_cobre" t-value="0"/>
+  <t t-set="compra_cobre" t-value="0"/>
+  <t t-set="inversion_cobre" t-value="0"/>
+  <t t-set="venta_cobre" t-value="0"/>
+  <t t-set="ganancia_cobre" t-value="0"/>
+
+  <t t-set="cantidad_microondas" t-value="0"/>
+  <t t-set="compra_microondas" t-value="0"/>
+  <t t-set="inversion_microondas" t-value="0"/>
+  <t t-set="venta_microondas" t-value="0"/>
+  <t t-set="ganancia_microondas" t-value="0"/>
+
+  <t t-set="cantidad_negativos" t-value="0"/>
+  <t t-set="compra_negativos" t-value="0"/>
+  <t t-set="inversion_negativos" t-value="0"/>
+  <t t-set="venta_negativos" t-value="0"/>
+  <t t-set="ganancia_negativos" t-value="0"/>
+
+  <t t-set="cantidad_papel_periodico" t-value="0"/>
+  <t t-set="compra_papel_periodico" t-value="0"/>
+  <t t-set="inversion_papel_periodico" t-value="0"/>
+  <t t-set="venta_papel_periodico" t-value="0"/>
+  <t t-set="ganancia_papel_periodico" t-value="0"/>
+
+  <t t-set="cantidad_papel_primera" t-value="0"/>
+  <t t-set="compra_papel_primera" t-value="0"/>
+  <t t-set="inversion_papel_primera" t-value="0"/>
+  <t t-set="venta_papel_primera" t-value="0"/>
+  <t t-set="ganancia_papel_primera" t-value="0"/>
+
+  <t t-set="cantidad_papel_segunda" t-value="0"/>
+  <t t-set="compra_papel_segunda" t-value="0"/>
+  <t t-set="inversion_papel_segunda" t-value="0"/>
+  <t t-set="venta_papel_segunda" t-value="0"/>
+  <t t-set="ganancia_papel_segunda" t-value="0"/>
+
+  <t t-set="cantidad_plastico_lavadora" t-value="0"/>
+  <t t-set="compra_plastico_lavadora" t-value="0"/>
+  <t t-set="inversion_plastico_lavadora" t-value="0"/>
+  <t t-set="venta_plastico_lavadora" t-value="0"/>
+  <t t-set="ganancia_plastico_lavadora" t-value="0"/>
+
+  <t t-set="cantidad_plastico_pet" t-value="0"/>
+  <t t-set="compra_plastico_pet" t-value="0"/>
+  <t t-set="inversion_plastico_pet" t-value="0"/>
+  <t t-set="venta_plastico_pet" t-value="0"/>
+  <t t-set="ganancia_plastico_pet" t-value="0"/>
+
+  <t t-set="cantidad_rad_cob_alu" t-value="0"/>
+  <t t-set="compra_rad_cob_alu" t-value="0"/>
+  <t t-set="inversion_rad_cob_alu" t-value="0"/>
+  <t t-set="venta_rad_cob_alu" t-value="0"/>
+  <t t-set="ganancia_rad_cob_alu" t-value="0"/>
+
+  <t t-set="cantidad_rad_cob_bro" t-value="0"/>
+  <t t-set="compra_rad_cob_bro" t-value="0"/>
+  <t t-set="inversion_rad_cob_bro" t-value="0"/>
+  <t t-set="venta_rad_cob_bro" t-value="0"/>
+  <t t-set="ganancia_rad_cob_bro" t-value="0"/>
+
+  <t t-set="cantidad_tar_comp" t-value="0"/>
+  <t t-set="compra_tar_comp" t-value="0"/>
+  <t t-set="inversion_tar_comp" t-value="0"/>
+  <t t-set="venta_tar_comp" t-value="0"/>
+  <t t-set="ganancia_tar_comp" t-value="0"/>
+
+  <t t-set="cantidad_tetrabrick" t-value="0"/>
+  <t t-set="compra_tetrabrick" t-value="0"/>
+  <t t-set="inversion_tetrabrick" t-value="0"/>
+  <t t-set="venta_tetrabrick" t-value="0"/>
+  <t t-set="ganancia_tetrabrick" t-value="0"/>
+
+  <t t-set="cantidad_vidrio" t-value="0"/>
+  <t t-set="compra_vidrio" t-value="0"/>
+  <t t-set="inversion_vidrio" t-value="0"/>
+  <t t-set="venta_vidrio" t-value="0"/>
+  <t t-set="ganancia_vidrio" t-value="0"/>
+
+<!-- Fin de Variables -->
+
+<!-- Procesamiento de Productos -->
+
+<t t-foreach="o.factura_ids" t-as="i">
+    <t t-foreach="i.order_line" t-as="b">
+
+        <t t-if="b.name == '[AI] Acero Inoxidable' ">
+            <t t-set="cantidad_acero_inoxidable" t-value="cantidad_acero_inoxidable + b.product_qty"/>
+            <t t-set="inversion_acero_inoxidable" t-value="inversion_acero_inoxidable + b.price_subtotal"/>
+            <t t-set="venta_acero_inoxidable" t-value="b.product_id.precio_venta_informe"/>
+            <t t-set="compra_acero_inoxidable" t-value="inversion_acero_inoxidable / cantidad_acero_inoxidable"/>
+            <t t-set="ganancia_acero_inoxidable" t-value=" ( cantidad_acero_inoxidable * venta_acero_inoxidable ) - inversion_acero_inoxidable"/>
+        </t>
+
+        <t t-if="b.name == '[AL] Aluminio' ">
+            <t t-set="cantidad_aluminio" t-value="cantidad_aluminio + b.product_qty"/>
+            <t t-set="inversion_aluminio" t-value="inversion_aluminio + b.price_subtotal"/>
+            <t t-set="venta_aluminio" t-value="b.product_id.precio_venta_informe"/>
+            <t t-set="compra_aluminio" t-value="inversion_aluminio / cantidad_aluminio"/>
+            <t t-set="ganancia_aluminio" t-value=" ( cantidad_aluminio * venta_aluminio ) - inversion_aluminio"/>
+        </t>
+
+        <t t-if="b.name == '[CH] Chatarra' ">
+            <t t-set="cantidad_chatarra" t-value="cantidad_chatarra + b.product_qty"/>
+            <t t-set="inversion_chatarra" t-value="inversion_chatarra + b.price_subtotal"/>
+            <t t-set="venta_chatarra" t-value="b.product_id.precio_venta_informe"/>
+            <t t-set="compra_chatarra" t-value="inversion_chatarra / cantidad_chatarra"/>
+            <t t-set="ganancia_chatarra" t-value=" ( cantidad_chatarra * venta_chatarra ) - inversion_chatarra"/>
+        </t>
+
+        <t t-if="b.name == '[BA] Bateria' ">
+            <t t-set="cantidad_bateria" t-value="cantidad_bateria + b.product_qty"/>
+            <t t-set="inversion_bateria" t-value="inversion_bateria + b.price_subtotal"/>
+            <t t-set="venta_bateria" t-value="b.product_id.precio_venta_informe"/>
+            <t t-set="compra_bateria" t-value="inversion_bateria / cantidad_bateria"/>
+            <t t-set="ganancia_bateria" t-value=" ( cantidad_bateria * venta_bateria ) - inversion_bateria"/>
+        </t>
+
+        <t t-if="b.name == '[BR] Bronce' ">
+            <t t-set="cantidad_bronce" t-value="cantidad_bronce + b.product_qty"/>
+            <t t-set="inversion_bronce" t-value="inversion_bronce + b.price_subtotal"/>
+            <t t-set="venta_bronce" t-value="b.product_id.precio_venta_informe"/>
+            <t t-set="compra_bronce" t-value="inversion_bronce / cantidad_bronce"/>
+            <t t-set="ganancia_bronce" t-value=" ( cantidad_bronce * venta_bronce ) - inversion_bronce"/>
+        </t>
+
+        <t t-if="b.name == '[CP] Caja Plastica' ">
+            <t t-set="cantidad_caja_plastica" t-value="cantidad_caja_plastica + b.product_qty"/>
+            <t t-set="inversion_caja_plastica" t-value="inversion_caja_plastica + b.price_subtotal"/>
+            <t t-set="venta_caja_plastica" t-value="b.product_id.precio_venta_informe"/>
+            <t t-set="compra_caja_plastica" t-value="inversion_caja_plastica / cantidad_caja_plastica"/>
+            <t t-set="ganancia_caja_plastica" t-value=" ( cantidad_caja_plastica * venta_caja_plastica ) - inversion_caja_plastica"/>
+        </t>
+
+        <t t-if="b.name == '[CA] Carton' ">
+            <t t-set="cantidad_carton" t-value="cantidad_carton + b.product_qty"/>
+            <t t-set="inversion_carton" t-value="inversion_carton + b.price_subtotal"/>
+            <t t-set="venta_carton" t-value="b.product_id.precio_venta_informe"/>
+            <t t-set="compra_carton" t-value="inversion_carton / cantidad_carton"/>
+            <t t-set="ganancia_carton" t-value=" ( cantidad_carton * venta_carton ) - inversion_carton"/>
+        </t>
+
+        <t t-if="b.name == '[CG] Catalizador Generico' ">
+            <t t-set="cantidad_catalizador_generico" t-value="cantidad_catalizador_generico + b.product_qty"/>
+            <t t-set="inversion_catalizador_generico" t-value="inversion_catalizador_generico + b.price_subtotal"/>
+            <t t-set="venta_catalizador_generico" t-value="b.product_id.precio_venta_informe"/>
+            <t t-set="compra_catalizador_generico" t-value="inversion_catalizador_generico / cantidad_catalizador_generico"/>
+            <t t-set="ganancia_catalizador_generico" t-value=" ( cantidad_catalizador_generico * venta_catalizador_generico ) - inversion_catalizador_generico"/>
+        </t>
+
+        <t t-if="b.name == '[CR] Catalizador Original' ">
+            <t t-set="cantidad_catalizador_original" t-value="cantidad_catalizador_original + b.product_qty"/>
+            <t t-set="inversion_catalizador_original" t-value="inversion_catalizador_original + b.price_subtotal"/>
+            <t t-set="venta_catalizador_original" t-value="b.product_id.precio_venta_informe"/>
+            <t t-set="compra_catalizador_original" t-value="inversion_catalizador_original / cantidad_catalizador_original"/>
+            <t t-set="ganancia_catalizador_original" t-value=" ( cantidad_catalizador_original * venta_catalizador_original ) - inversion_catalizador_original"/>
+        </t>
+
+        <t t-if="b.name == '[CO] Cobre' ">
+            <t t-set="cantidad_cobre" t-value="cantidad_cobre + b.product_qty"/>
+            <t t-set="inversion_cobre" t-value="inversion_cobre + b.price_subtotal"/>
+            <t t-set="venta_cobre" t-value="b.product_id.precio_venta_informe"/>
+            <t t-set="compra_cobre" t-value="inversion_cobre / cantidad_cobre"/>
+            <t t-set="ganancia_cobre" t-value=" ( cantidad_cobre * venta_cobre ) - inversion_cobre"/>
+        </t>
+
+        <t t-if="b.name == '[MI] Microondas' ">
+            <t t-set="cantidad_microondas" t-value="cantidad_microondas + b.product_qty"/>
+            <t t-set="inversion_microondas" t-value="inversion_microondas + b.price_subtotal"/>
+            <t t-set="venta_microondas" t-value="b.product_id.precio_venta_informe"/>
+            <t t-set="compra_microondas" t-value="inversion_microondas / cantidad_microondas"/>
+            <t t-set="ganancia_microondas" t-value=" ( cantidad_microondas * venta_microondas ) - inversion_microondas"/>
+        </t>
+
+        <t t-if="b.name == '[NE] Negativos' ">
+            <t t-set="cantidad_negativos" t-value="cantidad_negativos + b.product_qty"/>
+            <t t-set="inversion_negativos" t-value="inversion_negativos + b.price_subtotal"/>
+            <t t-set="venta_negativos" t-value="b.product_id.precio_venta_informe"/>
+            <t t-set="compra_negativos" t-value="inversion_negativos / cantidad_negativos"/>
+            <t t-set="ganancia_negativos" t-value=" ( cantidad_negativos * venta_negativos ) - inversion_negativos"/>
+        </t>
+
+        <t t-if="b.name == '[PE] Papel Periodico' ">
+            <t t-set="cantidad_papel_periodico" t-value="cantidad_papel_periodico + b.product_qty"/>
+            <t t-set="inversion_papel_periodico" t-value="inversion_papel_periodico + b.price_subtotal"/>
+            <t t-set="venta_papel_periodico" t-value="b.product_id.precio_venta_informe"/>
+            <t t-set="compra_papel_periodico" t-value="inversion_papel_periodico / cantidad_papel_periodico"/>
+            <t t-set="ganancia_papel_periodico" t-value=" ( cantidad_papel_periodico * venta_papel_periodico ) - inversion_papel_periodico"/>
+        </t>
+
+        <t t-if="b.name == '[PP] Papel Primera' ">
+            <t t-set="cantidad_papel_primera" t-value="cantidad_papel_primera + b.product_qty"/>
+            <t t-set="inversion_papel_primera" t-value="inversion_papel_primera + b.price_subtotal"/>
+            <t t-set="venta_papel_primera" t-value="b.product_id.precio_venta_informe"/>
+            <t t-set="compra_papel_primera" t-value="inversion_papel_primera / cantidad_papel_primera"/>
+            <t t-set="ganancia_papel_primera" t-value=" ( cantidad_papel_primera * venta_papel_primera ) - inversion_papel_primera"/>
+        </t>
+
+        <t t-if="b.name == '[PS] Papel Segunda' ">
+            <t t-set="cantidad_papel_segunda" t-value="cantidad_papel_segunda + b.product_qty"/>
+            <t t-set="inversion_papel_segunda" t-value="inversion_papel_segunda + b.price_subtotal"/>
+            <t t-set="venta_papel_segunda" t-value="b.product_id.precio_venta_informe"/>
+            <t t-set="compra_papel_segunda" t-value="inversion_papel_segunda / cantidad_papel_segunda"/>
+            <t t-set="ganancia_papel_segunda" t-value=" ( cantidad_papel_segunda * venta_papel_segunda ) - inversion_papel_segunda"/>
+        </t>
+
+        <t t-if="b.name == '[PL] Plastico Lavadora' ">
+            <t t-set="cantidad_plastico_lavadora" t-value="cantidad_plastico_lavadora + b.product_qty"/>
+            <t t-set="inversion_plastico_lavadora" t-value="inversion_plastico_lavadora + b.price_subtotal"/>
+            <t t-set="venta_plastico_lavadora" t-value="b.product_id.precio_venta_informe"/>
+            <t t-set="compra_plastico_lavadora" t-value="inversion_plastico_lavadora / cantidad_plastico_lavadora"/>
+            <t t-set="ganancia_plastico_lavadora" t-value=" ( cantidad_plastico_lavadora * venta_plastico_lavadora ) - inversion_plastico_lavadora"/>
+        </t>
+
+        <t t-if="b.name == '[PT] Plastico Pet' ">
+            <t t-set="cantidad_plastico_pet" t-value="cantidad_plastico_pet + b.product_qty"/>
+            <t t-set="inversion_plastico_pet" t-value="inversion_plastico_pet + b.price_subtotal"/>
+            <t t-set="venta_plastico_pet" t-value="b.product_id.precio_venta_informe"/>
+            <t t-set="compra_plastico_pet" t-value="inversion_plastico_pet / cantidad_plastico_pet"/>
+            <t t-set="ganancia_plastico_pet" t-value=" ( cantidad_plastico_pet * venta_plastico_pet ) - inversion_plastico_pet"/>
+        </t>
+
+        <t t-if="b.name == '[R1]  Radiador (Cobre/Aluminio) ' ">
+            <t t-set="cantidad_rad_cob_alu" t-value="cantidad_rad_cob_alu + b.product_qty"/>
+            <t t-set="inversion_rad_cob_alu" t-value="inversion_rad_cob_alu + b.price_subtotal"/>
+            <t t-set="venta_rad_cob_alu" t-value="b.product_id.precio_venta_informe"/>
+            <t t-set="compra_rad_cob_alu" t-value="inversion_rad_cob_alu / cantidad_rad_cob_alu"/>
+            <t t-set="ganancia_rad_cob_alu" t-value=" ( cantidad_rad_cob_alu * venta_rad_cob_alu ) - inversion_rad_cob_alu"/>
+        </t>
+
+        <t t-if="b.name == '[R2] Radiador (Cobre/Bronce)' ">
+            <t t-set="cantidad_rad_cob_bro" t-value="cantidad_rad_cob_bro + b.product_qty"/>
+            <t t-set="inversion_rad_cob_bro" t-value="inversion_rad_cob_bro + b.price_subtotal"/>
+            <t t-set="venta_rad_cob_bro" t-value="b.product_id.precio_venta_informe"/>
+            <t t-set="compra_rad_cob_bro" t-value="inversion_rad_cob_bro / cantidad_rad_cob_bro"/>
+            <t t-set="ganancia_rad_cob_bro" t-value=" ( cantidad_rad_cob_bro * venta_rad_cob_bro ) - inversion_rad_cob_bro"/>
+        </t>
+
+        <t t-if="b.name == '[TC] Tar_Comp' ">
+            <t t-set="cantidad_tar_comp" t-value="cantidad_tar_comp + b.product_qty"/>
+            <t t-set="inversion_tar_comp" t-value="inversion_tar_comp + b.price_subtotal"/>
+            <t t-set="venta_tar_comp" t-value="b.product_id.precio_venta_informe"/>
+            <t t-set="compra_tar_comp" t-value="inversion_tar_comp / cantidad_tar_comp"/>
+            <t t-set="ganancia_tar_comp" t-value=" ( cantidad_tar_comp * venta_tar_comp ) - inversion_tar_comp"/>
+        </t>
+
+        <t t-if="b.name == '[TE] Tetrabrick' ">
+            <t t-set="cantidad_tetrabrick" t-value="cantidad_tetrabrick + b.product_qty"/>
+            <t t-set="inversion_tetrabrick" t-value="inversion_tetrabrick + b.price_subtotal"/>
+            <t t-set="venta_tetrabrick" t-value="b.product_id.precio_venta_informe"/>
+            <t t-set="compra_tetrabrick" t-value="inversion_tetrabrick / cantidad_tetrabrick"/>
+            <t t-set="ganancia_tetrabrick" t-value=" ( cantidad_tetrabrick * venta_tetrabrick ) - inversion_tetrabrick"/>
+        </t>
+
+        <t t-if="b.name == '[VI] Vidrio' ">
+            <t t-set="cantidad_vidrio" t-value="cantidad_vidrio + b.product_qty"/>
+            <t t-set="inversion_vidrio" t-value="inversion_vidrio + b.price_subtotal"/>
+            <t t-set="venta_vidrio" t-value="b.product_id.precio_venta_informe"/>
+            <t t-set="compra_vidrio" t-value="inversion_vidrio / cantidad_vidrio"/>
+            <t t-set="ganancia_vidrio" t-value=" ( cantidad_vidrio * venta_vidrio ) - inversion_vidrio"/>
+        </t>
+
+    </t>     
+</t>
+<!-- Fin Procesamiento de Productos -->
+
+
+<div align="center">
+    <h3> Resumen Diario <span t-field="o.fecha"/></h3>
+</div>
+
+
+<table style="border: 2px solid green; text-align: center; align=center; width:100%">
+    <tr>
+        <th colspan="6" style="text-align: center; background-color: #D8D8D8; border: 2px solid green"> Detalles de compra por producto </th>
+    </tr>
+    <tr>
+        <th  style="text-align: center;border: 2px solid green"> Producto </th>
+        <th  style="text-align: center;border: 2px solid green"> Cantidad </th>
+        <th  style="text-align: center;border: 2px solid green"> Precio Compra </th>
+        <th  style="text-align: center;border: 2px solid green"> Precio Venta </th> 
+        <th  style="text-align: center;border: 2px solid green"> Inversión </th>
+        <th  style="text-align: center;border: 2px solid green"> Ganancia </th>        
+    </tr>
+
+    <t t-if="cantidad_chatarra > 0 ">
+      <tr>
+          <td style="text-align: center;border: 2px solid green"> Chatarra </td>
+          <td style="text-align: center;border: 2px solid green">  <t t-esc="cantidad_chatarra"/> </td>
+          <td style="text-align: center;border: 2px solid green"> ₡ <t t-esc="'{0:,.2f}'.format(int(compra_chatarra))"/> </td>
+          <td style="text-align: center;border: 2px solid green"> ₡ <t t-esc="'{0:,.2f}'.format(int(venta_chatarra))"/>   </td> 
+          <td style="text-align: center;border: 2px solid green"> ₡ <t t-esc="'{0:,.2f}'.format(int(inversion_chatarra))"/></td>
+          <td style="text-align: center;border: 2px solid green"> ₡ <t t-esc="'{0:,.2f}'.format(int(ganancia_chatarra))"/> </td>        
+      </tr>
+    </t>
+
+    <t t-if="cantidad_aluminio > 0 ">
+      <tr>
+          <td style="text-align: center;border: 2px solid green"> Aluminio </td>
+          <td style="text-align: center;border: 2px solid green">  <t t-esc="cantidad_aluminio"/> </td>
+          <td style="text-align: center;border: 2px solid green"> ₡ <t t-esc="'{0:,.2f}'.format(int(compra_aluminio))"/> </td>
+          <td style="text-align: center;border: 2px solid green"> ₡ <t t-esc="'{0:,.2f}'.format(int(venta_aluminio))"/>   </td> 
+          <td style="text-align: center;border: 2px solid green"> ₡ <t t-esc="'{0:,.2f}'.format(int(inversion_aluminio))"/></td>
+          <td style="text-align: center;border: 2px solid green"> ₡ <t t-esc="'{0:,.2f}'.format(int(ganancia_aluminio))"/> </td>        
+      </tr>
+    </t>
+
+    <t t-if="cantidad_acero_inoxidable > 0 ">
+      <tr>
+          <td style="text-align: center;border: 2px solid green"> Acero Inoxidable </td>
+          <td style="text-align: center;border: 2px solid green">  <t t-esc="cantidad_acero_inoxidable"/> </td>
+          <td style="text-align: center;border: 2px solid green"> ₡ <t t-esc="'{0:,.2f}'.format(int(compra_acero_inoxidable))"/> </td>
+          <td style="text-align: center;border: 2px solid green"> ₡ <t t-esc="'{0:,.2f}'.format(int(venta_acero_inoxidable))"/>   </td> 
+          <td style="text-align: center;border: 2px solid green"> ₡ <t t-esc="'{0:,.2f}'.format(int(inversion_acero_inoxidable))"/></td>
+          <td style="text-align: center;border: 2px solid green"> ₡ <t t-esc="'{0:,.2f}'.format(int(ganancia_acero_inoxidable))"/> </td>       
+      </tr>
+    </t>
+
+    <t t-if="cantidad_bateria > 0 ">
+      <tr>
+          <td style="text-align: center;border: 2px solid green"> Bateria </td>
+          <td style="text-align: center;border: 2px solid green">  <t t-esc="cantidad_bateria"/> </td>
+          <td style="text-align: center;border: 2px solid green"> ₡ <t t-esc="'{0:,.2f}'.format(int(compra_bateria))"/> </td>
+          <td style="text-align: center;border: 2px solid green"> ₡ <t t-esc="'{0:,.2f}'.format(int(venta_bateria))"/>   </td> 
+          <td style="text-align: center;border: 2px solid green"> ₡ <t t-esc="'{0:,.2f}'.format(int(inversion_bateria))"/></td>
+          <td style="text-align: center;border: 2px solid green"> ₡ <t t-esc="'{0:,.2f}'.format(int(ganancia_bateria))"/> </td>         
+      </tr>
+    </t>
+
+
+    <t t-if="cantidad_bronce > 0 ">
+      <tr>
+          <td style="text-align: center;border: 2px solid green"> Bronce </td>
+          <td style="text-align: center;border: 2px solid green">  <t t-esc="cantidad_bronce"/> </td>
+           <td style="text-align: center;border: 2px solid green"> ₡ <t t-esc="'{0:,.2f}'.format(int(compra_bronce))"/> </td>
+          <td style="text-align: center;border: 2px solid green"> ₡ <t t-esc="'{0:,.2f}'.format(int(venta_bronce))"/>   </td> 
+          <td style="text-align: center;border: 2px solid green"> ₡ <t t-esc="'{0:,.2f}'.format(int(inversion_bronce))"/></td>
+          <td style="text-align: center;border: 2px solid green"> ₡ <t t-esc="'{0:,.2f}'.format(int(ganancia_bronce))"/> </td>         
+      </tr>
+    </t> 
+
+    <t t-if="cantidad_caja_plastica > 0 ">
+      <tr>
+          <td style="text-align: center;border: 2px solid green"> Caja Plastica </td>
+          <td style="text-align: center;border: 2px solid green">  <t t-esc="cantidad_caja_plastica"/> </td>
+          <td style="text-align: center;border: 2px solid green"> ₡ <t t-esc="'{0:,.2f}'.format(int(compra_caja_plastica))"/> </td>
+          <td style="text-align: center;border: 2px solid green"> ₡ <t t-esc="'{0:,.2f}'.format(int(venta_caja_plastica))"/>   </td> 
+          <td style="text-align: center;border: 2px solid green"> ₡ <t t-esc="'{0:,.2f}'.format(int(inversion_caja_plastica))"/></td>
+          <td style="text-align: center;border: 2px solid green"> ₡ <t t-esc="'{0:,.2f}'.format(int(ganancia_caja_plastica))"/> </td>            
+      </tr>
+    </t>
+
+    <t t-if="cantidad_carton > 0 ">
+      <tr>
+          <td style="text-align: center;border: 2px solid green"> Cartón </td>
+          <td style="text-align: center;border: 2px solid green">  <t t-esc="cantidad_carton"/> </td>
+          <td style="text-align: center;border: 2px solid green"> ₡ <t t-esc="'{0:,.2f}'.format(int(compra_carton))"/> </td>
+          <td style="text-align: center;border: 2px solid green"> ₡ <t t-esc="'{0:,.2f}'.format(int(venta_carton))"/>   </td> 
+          <td style="text-align: center;border: 2px solid green"> ₡ <t t-esc="'{0:,.2f}'.format(int(inversion_carton))"/></td>
+          <td style="text-align: center;border: 2px solid green"> ₡ <t t-esc="'{0:,.2f}'.format(int(ganancia_carton))"/> </td>        
+      </tr>
+    </t>
+
+    <t t-if="cantidad_catalizador_generico > 0 ">
+      <tr>
+          <td style="text-align: center;border: 2px solid green"> Catalizador Genérico </td>
+          <td style="text-align: center;border: 2px solid green">  <t t-esc="cantidad_catalizador_generico"/> </td>
+          <td style="text-align: center;border: 2px solid green"> ₡ <t t-esc="'{0:,.2f}'.format(int(compra_catalizador_generico))"/> </td>
+          <td style="text-align: center;border: 2px solid green"> ₡ <t t-esc="'{0:,.2f}'.format(int(venta_catalizador_generico))"/>   </td> 
+          <td style="text-align: center;border: 2px solid green"> ₡ <t t-esc="'{0:,.2f}'.format(int(inversion_catalizador_generico))"/></td>
+          <td style="text-align: center;border: 2px solid green"> ₡ <t t-esc="'{0:,.2f}'.format(int(ganancia_catalizador_generico))"/> </td>         
+      </tr>
+    </t>   
+
+    <t t-if="cantidad_catalizador_original > 0 ">
+      <tr>
+          <td style="text-align: center;border: 2px solid green"> Catalizador Original </td>
+          <td style="text-align: center;border: 2px solid green">  <t t-esc="cantidad_catalizador_original"/> </td>
+          <td style="text-align: center;border: 2px solid green"> ₡ <t t-esc="'{0:,.2f}'.format(int(compra_catalizador_generico))"/> </td>
+          <td style="text-align: center;border: 2px solid green"> ₡ <t t-esc="'{0:,.2f}'.format(int(venta_catalizador_generico))"/>   </td> 
+          <td style="text-align: center;border: 2px solid green"> ₡ <t t-esc="'{0:,.2f}'.format(int(inversion_catalizador_generico))"/></td>
+          <td style="text-align: center;border: 2px solid green"> ₡ <t t-esc="'{0:,.2f}'.format(int(ganancia_catalizador_generico))"/> </td>         
+      </tr>
+    </t>
+
+    <t t-if="cantidad_cobre > 0 ">
+      <tr>
+         <td style="text-align: center;border: 2px solid green"> Cobre </td>
+         <td style="text-align: center;border: 2px solid green">  <t t-esc="cantidad_cobre"/> </td>
+          <td style="text-align: center;border: 2px solid green"> ₡ <t t-esc="'{0:,.2f}'.format(int(compra_cobre))"/> </td>
+          <td style="text-align: center;border: 2px solid green"> ₡ <t t-esc="'{0:,.2f}'.format(int(venta_cobre))"/>   </td> 
+          <td style="text-align: center;border: 2px solid green"> ₡ <t t-esc="'{0:,.2f}'.format(int(inversion_cobre))"/></td>
+          <td style="text-align: center;border: 2px solid green"> ₡ <t t-esc="'{0:,.2f}'.format(int(ganancia_cobre))"/> </td>         
+      </tr>
+    </t>
+   
+    <t t-if="cantidad_microondas > 0 ">
+      <tr>
+          <td style="text-align: center;border: 2px solid green"> Microondas </td>
+          <td style="text-align: center;border: 2px solid green">  <t t-esc="cantidad_microondas"/> </td>
+          <td style="text-align: center;border: 2px solid green"> ₡ <t t-esc="'{0:,.2f}'.format(int(compra_microondas))"/> </td>
+          <td style="text-align: center;border: 2px solid green"> ₡ <t t-esc="'{0:,.2f}'.format(int(venta_microondas))"/>   </td> 
+          <td style="text-align: center;border: 2px solid green"> ₡ <t t-esc="'{0:,.2f}'.format(int(inversion_microondas))"/></td>
+          <td style="text-align: center;border: 2px solid green"> ₡ <t t-esc="'{0:,.2f}'.format(int(ganancia_microondas))"/> </td>      
+      </tr>
+    </t>
+
+    <t t-if="cantidad_negativos > 0 ">
+      <tr>
+          <td style="text-align: center;border: 2px solid green"> Negativos </td>
+          <td style="text-align: center;border: 2px solid green">  <t t-esc="cantidad_negativos"/> </td>
+          <td style="text-align: center;border: 2px solid green"> ₡ <t t-esc="'{0:,.2f}'.format(int(compra_negativos))"/> </td>
+          <td style="text-align: center;border: 2px solid green"> ₡ <t t-esc="'{0:,.2f}'.format(int(venta_negativos))"/>   </td> 
+          <td style="text-align: center;border: 2px solid green"> ₡ <t t-esc="'{0:,.2f}'.format(int(inversion_negativos))"/></td>
+          <td style="text-align: center;border: 2px solid green"> ₡ <t t-esc="'{0:,.2f}'.format(int(ganancia_negativos))"/> </td>         
+      </tr>
+    </t>
+
+    <t t-if="cantidad_papel_Periodico > 0 ">
+      <tr>
+          <td style="text-align: center;border: 2px solid green"> Papel Periódico </td>
+          <td style="text-align: center;border: 2px solid green">  <t t-esc="cantidad_papel_periodico"/> </td>
+          <td style="text-align: center;border: 2px solid green"> ₡ <t t-esc="'{0:,.2f}'.format(int(compra_papel_periodico))"/> </td>
+          <td style="text-align: center;border: 2px solid green"> ₡ <t t-esc="'{0:,.2f}'.format(int(venta_papel_periodico))"/>   </td> 
+          <td style="text-align: center;border: 2px solid green"> ₡ <t t-esc="'{0:,.2f}'.format(int(inversion_papel_periodico))"/></td>
+          <td style="text-align: center;border: 2px solid green"> ₡ <t t-esc="'{0:,.2f}'.format(int(ganancia_papel_periodico))"/> </td>        
+      </tr>
+    </t>
+
+    <t t-if="cantidad_papel_primera > 0 ">
+      <tr>
+          <td style="text-align: center;border: 2px solid green"> Papel Primera </td>
+          <td style="text-align: center;border: 2px solid green">  <t t-esc="cantidad_papel_primera"/> </td>
+          <td style="text-align: center;border: 2px solid green"> ₡ <t t-esc="'{0:,.2f}'.format(int(compra_papel_primera))"/> </td>
+          <td style="text-align: center;border: 2px solid green"> ₡ <t t-esc="'{0:,.2f}'.format(int(venta_papel_primera))"/>   </td> 
+          <td style="text-align: center;border: 2px solid green"> ₡ <t t-esc="'{0:,.2f}'.format(int(inversion_papel_primera))"/></td>
+          <td style="text-align: center;border: 2px solid green"> ₡ <t t-esc="'{0:,.2f}'.format(int(ganancia_papel_primera))"/> </td>        
+      </tr>
+    </t>
+
+    <t t-if="cantidad_papel_segunda > 0 ">
+      <tr>
+          <td style="text-align: center;border: 2px solid green"> Papel Segunda </td>
+          <td style="text-align: center;border: 2px solid green">  <t t-esc="cantidad_papel_segunda"/> </td>
+          <td style="text-align: center;border: 2px solid green"> ₡ <t t-esc="'{0:,.2f}'.format(int(compra_papel_segunda))"/> </td>
+          <td style="text-align: center;border: 2px solid green"> ₡ <t t-esc="'{0:,.2f}'.format(int(venta_papel_segunda))"/>   </td> 
+          <td style="text-align: center;border: 2px solid green"> ₡ <t t-esc="'{0:,.2f}'.format(int(inversion_papel_segunda))"/></td>
+          <td style="text-align: center;border: 2px solid green"> ₡ <t t-esc="'{0:,.2f}'.format(int(ganancia_papel_segunda))"/> </td>       
+      </tr>
+    </t>
+
+    <t t-if="cantidad_plastico_lavadora > 0 ">
+      <tr>
+          <td style="text-align: center;border: 2px solid green"> Plastico Lavadora </td>
+          <td style="text-align: center;border: 2px solid green">  <t t-esc="cantidad_plastico_lavadora"/> </td>
+          <td style="text-align: center;border: 2px solid green"> ₡ <t t-esc="'{0:,.2f}'.format(int(compra_plastico_lavadora))"/> </td>
+          <td style="text-align: center;border: 2px solid green"> ₡ <t t-esc="'{0:,.2f}'.format(int(venta_plastico_lavadora))"/>   </td> 
+          <td style="text-align: center;border: 2px solid green"> ₡ <t t-esc="'{0:,.2f}'.format(int(inversion_plastico_lavadora))"/></td>
+          <td style="text-align: center;border: 2px solid green"> ₡ <t t-esc="'{0:,.2f}'.format(int(ganancia_plastico_lavadora))"/> </td>        
+      </tr>
+    </t>
+
+    <t t-if="cantidad_plastico_pet > 0 ">
+      <tr>
+          <td style="text-align: center;border: 2px solid green"> Plastico Pet </td>
+          <td style="text-align: center;border: 2px solid green">  <t t-esc="cantidad_plastico_pet"/> </td>
+          <td style="text-align: center;border: 2px solid green"> ₡ <t t-esc="'{0:,.2f}'.format(int(compra_plastico_pet))"/> </td>
+          <td style="text-align: center;border: 2px solid green"> ₡ <t t-esc="'{0:,.2f}'.format(int(venta_plastico_pet))"/>   </td> 
+          <td style="text-align: center;border: 2px solid green"> ₡ <t t-esc="'{0:,.2f}'.format(int(inversion_plastico_pet))"/></td>
+          <td style="text-align: center;border: 2px solid green"> ₡ <t t-esc="'{0:,.2f}'.format(int(ganancia_plastico_pet))"/> </td>        
+      </tr>
+    </t>
+
+    <t t-if="cantidad_rad_cob_alu > 0 ">
+      <tr>
+          <td style="text-align: center;border: 2px solid green"> Radiador (Cobre / Aluminio) </td>
+          <td style="text-align: center;border: 2px solid green">  <t t-esc="cantidad_rad_cob_alu"/> </td>
+          <td style="text-align: center;border: 2px solid green"> ₡ <t t-esc="'{0:,.2f}'.format(int(compra_rad_cob_alu))"/> </td>
+          <td style="text-align: center;border: 2px solid green"> ₡ <t t-esc="'{0:,.2f}'.format(int(venta_rad_cob_alu))"/>   </td> 
+          <td style="text-align: center;border: 2px solid green"> ₡ <t t-esc="'{0:,.2f}'.format(int(inversion_rad_cob_alu))"/></td>
+          <td style="text-align: center;border: 2px solid green"> ₡ <t t-esc="'{0:,.2f}'.format(int(ganancia_rad_cob_alu))"/> </td>        
+      </tr>
+    </t>
+
+    <t t-if="cantidad_rad_cob_bro > 0 ">
+      <tr>
+          <td style="text-align: center;border: 2px solid green"> Radiador (Cobre / Bronce)</td>
+          <td style="text-align: center;border: 2px solid green">  <t t-esc="cantidad_rad_cob_bro"/> </td>
+          <td style="text-align: center;border: 2px solid green"> ₡ <t t-esc="'{0:,.2f}'.format(int(compra_rad_cob_bro))"/> </td>
+          <td style="text-align: center;border: 2px solid green"> ₡ <t t-esc="'{0:,.2f}'.format(int(venta_rad_cob_bro))"/>   </td> 
+          <td style="text-align: center;border: 2px solid green"> ₡ <t t-esc="'{0:,.2f}'.format(int(inversion_rad_cob_bro))"/></td>
+          <td style="text-align: center;border: 2px solid green"> ₡ <t t-esc="'{0:,.2f}'.format(int(ganancia_rad_cob_bro))"/> </td>       
+      </tr>
+    </t>
+
+    <t t-if="cantidad_tar_comp > 0 ">
+      <tr>
+          <td style="text-align: center;border: 2px solid green"> Tarjeta Computadora </td>
+          <td style="text-align: center;border: 2px solid green">  <t t-esc="cantidad_tar_comp"/> </td>
+          <td style="text-align: center;border: 2px solid green"> ₡ <t t-esc="'{0:,.2f}'.format(int(compra_tar_comp))"/> </td>
+          <td style="text-align: center;border: 2px solid green"> ₡ <t t-esc="'{0:,.2f}'.format(int(venta_tar_comp))"/>   </td> 
+          <td style="text-align: center;border: 2px solid green"> ₡ <t t-esc="'{0:,.2f}'.format(int(inversion_tar_comp))"/></td>
+          <td style="text-align: center;border: 2px solid green"> ₡ <t t-esc="'{0:,.2f}'.format(int(ganancia_tar_comp))"/> </td>       
+      </tr>
+    </t>
+
+    <t t-if="cantidad_tetrabrick > 0 ">
+      <tr>
+          <td style="text-align: center;border: 2px solid green"> Tetrabrick </td>
+          <td style="text-align: center;border: 2px solid green">  <t t-esc="cantidad_tetrabrick"/> </td>
+          <td style="text-align: center;border: 2px solid green"> ₡ <t t-esc="'{0:,.2f}'.format(int(compra_tetrabrick))"/> </td>
+          <td style="text-align: center;border: 2px solid green"> ₡ <t t-esc="'{0:,.2f}'.format(int(venta_tetrabrick))"/>   </td> 
+          <td style="text-align: center;border: 2px solid green"> ₡ <t t-esc="'{0:,.2f}'.format(int(inversion_tetrabrick))"/></td>
+          <td style="text-align: center;border: 2px solid green"> ₡ <t t-esc="'{0:,.2f}'.format(int(ganancia_tetrabrick))"/> </td>       
+      </tr>
+    </t>
+
+    <t t-if="cantidad_vidrio > 0 ">
+      <tr>
+          <td style="text-align: center;border: 2px solid green"> Vidrio </td>
+          <td style="text-align: center;border: 2px solid green">  <t t-esc="cantidad_vidrio"/> </td>
+          <td style="text-align: center;border: 2px solid green"> ₡ <t t-esc="'{0:,.2f}'.format(int(compra_vidrio))"/> </td>
+          <td style="text-align: center;border: 2px solid green"> ₡ <t t-esc="'{0:,.2f}'.format(int(venta_vidrio))"/>   </td> 
+          <td style="text-align: center;border: 2px solid green"> ₡ <t t-esc="'{0:,.2f}'.format(int(inversion_vidrio))"/></td>
+          <td style="text-align: center;border: 2px solid green"> ₡ <t t-esc="'{0:,.2f}'.format(int(ganancia_vidrio))"/> </td>         
+      </tr>
+    </t>
+
+<t t-set="total_inversion" t-value="inversion_chatarra + inversion_aluminio + inversion_acero_inoxidable + inversion_bateria + inversion_bronce + inversion_caja_plastica + inversion_carton + inversion_catalizador_generico + inversion_catalizador_original + inversion_cobre + inversion_microondas + inversion_negativos + inversion_papel_periodico + inversion_papel_primera + inversion_papel_segunda + inversion_plastico_lavadora + inversion_plastico_pet + inversion_rad_cob_alu + inversion_rad_cob_bro + inversion_tar_comp + inversion_tetrabrick + inversion_vidrio" />
+
+<t t-set="total_ganancia" t-value="ganancia_chatarra + ganancia_aluminio + ganancia_acero_inoxidable + ganancia_bateria + ganancia_bronce + ganancia_caja_plastica + ganancia_carton + ganancia_catalizador_generico + ganancia_catalizador_original + ganancia_cobre + ganancia_microondas + ganancia_negativos + ganancia_papel_periodico + ganancia_papel_primera + ganancia_papel_segunda + ganancia_plastico_lavadora + ganancia_plastico_pet + ganancia_rad_cob_alu + ganancia_rad_cob_bro + ganancia_tar_comp + ganancia_tetrabrick + ganancia_vidrio" />
+
+    <tr>
+        <td colspan="4" style="text-align: center; background-color: #D8D8D8; border: 2px solid green"> TOTAL </td>
+        <td style="text-align: center;border: 2px solid green"> ₡ <t t-esc="'{0:,.2f}'.format(int(total_inversion))"/> </td>  
+        <td style="text-align: center;border: 2px solid green"> ₡ <t t-esc="'{0:,.2f}'.format(int(total_ganancia))"/>  </td>       
+    </tr>
+
+</table>
+<br/>
+
+<!-- Procesamiento de Gastos --> 
+ <t t-foreach="o.gasto_id" t-as="i">
+    <t t-set="total_gastos" t-value="total_gastos + i.monto"/>    
+      </t>
+
+<t t-if="total_gastos > 0 ">
+  <table style="border: 2px solid green; text-align: center; align=center; width:50%">
+      <tr>
+          <th colspan="2" style="text-align: center; background-color: #D8D8D8; border: 2px solid green"> Resumen de Gastos </th>
+      </tr>
+
+      <t t-foreach="o.gasto_id" t-as="i">
+  
+          <tr>
+              <td style="border: 2px solid green;"> <t t-esc="i.name"/></td>
+              <td style="border: 2px solid green;"> ₡ <t t-esc="'{0:,.2f}'.format(int(i.monto))"/> </td>
+          </tr>    
+      </t>
+
+        <tr>
+          <td style="border: 2px solid green;font-weight: bold; background-color: #D8D8D8 "> Total  </td>
+          <td style="border: 2px solid green;font-weight: bold; background-color: #D8D8D8 "> ₡ <t t-esc="'{0:,.2f}'.format(int(total_gastos))"/>  </td>
+        </tr>
+  </table>
+ </t>
+<br/>
+<!-- Resumen Final --> 
+  <table style="border: 2px solid green; text-align: center; align=center; width:50%">
+      <tr>
+          <th colspan="2" style="text-align: center; background-color: #D8D8D8; border: 2px solid green"> Resumen del día </th>
+      </tr>
+      <tr>
+        <td style="border: 2px solid green;"> Compras del día</td>
+              <td style="border: 2px solid green;"> ₡ <t t-esc="'{0:,.2f}'.format(int(total_inversion))"/> </td>
+      </tr> 
+      <tr>
+        <td style="border: 2px solid green;"> Gastos del día</td>
+        <td style="border: 2px solid green;"> ₡ <t t-esc="'{0:,.2f}'.format(int(total_gastos))"/></td>
+      </tr> 
+      <tr>
+        <td style="border: 2px solid green;"> Ventas Proyectadas</td>
+        <td style="border: 2px solid green;"> ₡ <t t-esc="'{0:,.2f}'.format(int(total_ganancia))"/></td>
+      </tr>    
+      <tr>
+          <t t-set="total_general_inversion" t-value="total_inversion + total_gastos"/>
+          <td style="border: 2px solid green;font-weight: bold; background-color: #D8D8D8 "> Balance  </td>
+          <td style="border: 2px solid green;font-weight: bold; background-color: #D8D8D8 "> ₡ <t t-esc="'{0:,.2f}'.format(int(total_ganancia - total_general_inversion))"/>  </td>
+      </tr>
+  </table>
+
+</div>
+      </t>
+    </template>
+  </data>
+</openerp>
+

@@ -73,6 +73,8 @@
 			<group >
 			<field  name="cajero"/>
 			<field  name="fecha"/>
+			<field  name="bloqueo_tipo_cierre"/>
+			<field  name="tipo" attrs="{'readonly':[('bloqueo_tipo_cierre','=','bloqueado')]}"/>
 <!--	
 			<field  name="pizarra_id"  attrs="{'readonly': [('state','in',('lost'))]}"/>
 -->
@@ -154,8 +156,13 @@
    						
     			</page>
 				
--->				<page string="Facturas" >
-        		<field name="factura_ids"  attrs="{'readonly': [('state','in',('lost'))]}"/>  
+-->				<page string="Facturas" attrs="{'invisible': [('tipo','=','caja_chica')]}"  >
+        		<field name="factura_ids_caja_regular"   />  
+        		 
+				</page>
+
+				<page string="Facturas" attrs="{'invisible': [('tipo','=','regular')]}"  >
+        		<field name="factura_ids_caja_chica"  />  
 				</page>
 <!--
 				<page string="Gastos" >
@@ -180,9 +187,10 @@
 		<field name="view_type">tree</field>
 		<field name="model">cierre</field>
 		<field name="arch" type="xml">
-			<tree string="Cierre de Caja" colors="blue:state == 'new';black:state in ('assigned');gray:state == 'lost'">
+			<tree string="Cierre de Caja" colors="blue:state == 'new';black:state in ('assigned')">
 			<field name="fecha" />
 			<field  name="cajero"/>
+			<field  name="tipo"/>
 <!--			<field  name="revisado" string="Revisado por"/>
 -->			<field  name="dinero_balance"/>
 			<field  name="state" string="Estado"/>
@@ -190,6 +198,27 @@
 		</field>
 	</record>
 
+<!--Group by and filter by-->
+	<record id="gasto_search_view" model="ir.ui.view">
+		<field name="name">Filtros y Grupos Cierre de Caja</field>
+		<field name="model">cierre</field>
+		<field name="arch" type="xml">
+			<search string="Cierre de Caja">
+			<group string="Agrupar Por">
+			<filter string="Fecha"  icon="terp-go-today" context="{'group_by':'fecha'}" help="Agrupar por Fecha"/>
+			<filter string="Cajero" icon="terp-go-today" context="{'group_by':'cajero'}" help="Agrupar por Cajero"/>
+			<filter string="Estado" icon="terp-go-today" context="{'group_by':'state'}" help="Agrupar por Estado"/>
+			<filter string="Tipo" icon="terp-go-today" context="{'group_by':'state'}" help="Agrupar por Tipo"/>
+			</group>
+			<group string="Filtrar Por">
+			<filter string="Fecha"  icon="terp-go-today" context="{'filter_by':'fecha'}" help="Agrupar por Fecha"/>
+			<filter string="Cajero" icon="terp-go-today" context="{'filter_by':'cajero'}" help="Agrupar por Cajero"/>
+			<filter string="Estado" icon="terp-go-today" context="{'filter_by':'state'}" help="Agrupar por Estado"/>
+			<filter string="Tipo" icon="terp-go-today" context="{'filter_by':'state'}" help="Agrupar por Tipo"/>
+			</group>
+			</search>
+		</field>
+	</record>
 
 <!--Menus-->
 		<menuitem id="cierrecaja" name="Cierre de Caja"/>

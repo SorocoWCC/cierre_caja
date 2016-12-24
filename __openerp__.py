@@ -26,6 +26,9 @@
         # 'security/ir.model.access.csv',
         'templates.xml',
         'cierre_workflow.xml',
+        'cierre_caja_report.xml',       
+        'views/report_cierre_caja.xml',
+        'views/report_resumen_diario.xml',
     ],
     # only loaded in demonstration mode
     'demo': [

@@ -84,12 +84,20 @@ class dinero(models.Model):
 
 class cierre(models.Model):
     _name = 'cierre'
-    state = fields.Selection ([('new','En proceso'), ('assigned','Esperando Revision'),('lost','Revisado')], string='state', readonly=True)
+    state = fields.Selection ([('inicio', 'Nuevo'), ('new','En proceso'), ('assigned','Esperando Revision'),('lost','Revisado')], string='state', readonly=True)
     name = fields.Char(string='Name')
     fecha = fields.Char(string='Fecha', readonly=True)
+    tipo = fields.Selection ([('regular','Regular'), ('caja_chica','Caja Chica')], string='Tipo', required=True)
+    # Convierte a reaonly el tipo de caja para evitar varios cierres abiertos al mismo tiempo
+    bloqueo_tipo_cierre = fields.Char(compute='_action_bloqueo', readonly=True, string="Bloqueo")
     cajero = fields.Char(compute='_action_cajero', string="Cajero", readonly=True, store=True )
     revisado = fields.Char(string="Revisado por :", readonly=True, store=True, default="Nadie")
-    factura_ids = fields.One2many(comodel_name='purchase.order', inverse_name='cierre_id', string="Facturas")
+    # Agrupa todas las facturas para el reporte diario
+    factura_ids = fields.One2many(comodel_name='purchase.order', inverse_name='cierre_id', string="Facturas", readonly=True)
+    # Agrupa todas las facturas para el reporte diario
+    factura_ids_caja_regular = fields.One2many(comodel_name='purchase.order', inverse_name='cierre_id', string="Facturas",  domain=[('pago', '=', 'regular')], readonly=True)
+    # Agrupa solamente facturas de caja chica
+    factura_ids_caja_chica = fields.One2many(comodel_name='purchase.order', inverse_name='cierre_id_caja_chica', string="Facturas", readonly=True)
     ingreso_ids = fields.One2many(comodel_name='ingreso', inverse_name='cierre_id', string="Ingresos de Dinero")
     salida_ids = fields.One2many(comodel_name='salida',inverse_name='cierre_id', string="Salidas de Dinero")
     gasto_id = fields.One2many(comodel_name='gasto',inverse_name='cierre_id', string="Gastos")
@@ -114,11 +122,18 @@ class cierre(models.Model):
 
 	    }
 
-# Nombre del cajero
+    # Nombre del cajero
     @api.one
     @api.depends('name')
     def _action_cajero(self):
-		self.cajero = str(self.env.user.name)
+      self.cajero = str(self.env.user.name)
+
+    # Bloqueo campo tipo cierre
+    @api.one
+    @api.depends('name')
+    def _action_bloqueo(self):
+      self.bloqueo_tipo_cierre = "bloqueado"
+
 
 # Dinero Compra Regular / Sistema
     @api.one
@@ -143,11 +158,11 @@ class cierre(models.Model):
     @api.one
     @api.depends('ingreso_ids')
     def _dinero_ingreso_caja(self):
-	total= 0
-	for ingreso in self.ingreso_ids:
-      		if  ingreso.tipo_ingreso == 'caja':
-			total += int(ingreso.monto_ingreso)
-	self.dinero_ingreso_caja= total
+      total= 0
+      for ingreso in self.ingreso_ids:
+        if  ingreso.tipo_ingreso == 'caja':
+          total += int(ingreso.monto_ingreso)
+      self.dinero_ingreso_caja= total
 
 # Dinero Ingreso BNS
     @api.one
@@ -214,11 +229,15 @@ class cierre(models.Model):
 # Validacion para la creacion de un objeto cierre
     @api.one
     @api.constrains('name')
-    def _check_cierre(self):
-    	if len(self.env['cierre'].search([('state', '=', 'new')])) > 1 :
-    		raise Warning ("Un nuevo cierre no puede ser creado ya que existe uno en proceso")
+    def _check_cierre(self): 
+        cierres_caja_chica=self.env['cierre'].search([['state', '=', 'new'], ['tipo', '=', 'caja_chica']])
+        cierres_regular=self.env['cierre'].search([['state', '=', 'new'], ['tipo', '=', 'regular']])
 
-	
+        if len(cierres_caja_chica) > 1 :    
+            raise Warning ("Error: Un nuevo cierre tipo caja chica no puede ser creado ya que existe uno en proceso")
+        if len(cierres_regular) > 1 :    
+            raise Warning ("Error: Un nuevo cierre tipo regular no puede ser creado ya que existe uno en proceso")
+
 # Revisado Por
     @api.one
     @api.depends('state')
@@ -240,25 +259,27 @@ class purchase_order(models.Model):
     _name = 'purchase.order'
     _inherit = 'purchase.order'
     cierre_id= fields.Many2one(comodel_name='cierre', string='Cierre', delegate=True, readonly=True)
-    activator = fields.Char(compute='_action_cierre', string="Action cierre" )
+    cierre_id_caja_chica= fields.Many2one(comodel_name='cierre', string='Cierre Caja chica', readonly=True)
+    cierre_id_caja_regular= fields.Many2one(comodel_name='cierre', string='Cierre Caja chica', readonly=True)
 
-# Default Cierre (Complete automaticamente el campo cierre)
     def _action_cierre(self, cr, uid, context=None):
-	res = self.pool.get('cierre').search(cr, uid, [('state','=','new')], context=context)
-	if len(res) > 0:
-		return res[0]
-	else:
-    		raise Warning ("Por favor proceda a crear un cierre de caja")
+      res = self.pool.get('cierre').search(cr, uid, [('state','=','new'), ('tipo','=','regular')], context=context)
+      if len(res) > 0:
+        return res[0]
+      else:
+        raise Warning ("Por favor proceda a crear un cierre de caja")
+
+    def _action_cierre_caja_chica(self, cr, uid, context=None):
+      res = self.pool.get('cierre').search(cr, uid, [('state','=','new'), ('tipo','=','caja_chica')], context=context)
+      if len(res) > 0:
+        return res[0]
     _defaults = {
     'cierre_id': _action_cierre,
+    'cierre_id_caja_regular': _action_cierre,
+    'cierre_id_caja_chica': _action_cierre_caja_chica,
     'pago': 'regular',
-	    }
+      }
 
-
-# Revisado Por
-    @api.one
-    def action_chapi(self):
-	self.order_line.create({'product_id': '1', 'price_unit':'5', 'order_id' : self.id, 'name': 'Chatarra', 'date_planned': '05/06/2015'})
 #--------------FIN PURCHASE ORDER---------------
 
 #--------------GASTO---------------
@@ -269,7 +290,7 @@ class gasto(models.Model):
 
 # Default Cierre (Complete automaticamente el campo cierre)
     def _action_cierre_gasto(self, cr, uid, context=None):
-	res = self.pool.get('cierre').search(cr, uid, [('state','=','new')], context=context)
+	res = self.pool.get('cierre').search(cr, uid, [('state','=','new'), ('tipo','=','regular')], context=context)
 	if len(res) > 0:
 		return res[0]
 	else:
@@ -288,7 +309,7 @@ class empleado_allowance(models.Model):
 
 # Default Cierre (Complete automaticamente el campo cierre)
     def _action_cierre_empleado_allowance(self, cr, uid, context=None):
-        res = self.pool.get('cierre').search(cr, uid, [('state','=','new')], context=context)
+        res = self.pool.get('cierre').search(cr, uid, [('state','=','new'), ('tipo','=','regular')], context=context)
         if len(res) > 0:
             return res[0]
         else:
@@ -306,7 +327,7 @@ class cliente_allowance(models.Model):
 
 # Default Cierre (Complete automaticamente el campo cierre)
     def _action_cierre_cliente_allowance(self, cr, uid, context=None):
-        res = self.pool.get('cierre').search(cr, uid, [('state','=','new')], context=context)
+        res = self.pool.get('cierre').search(cr, uid, [('state','=','new'), ('tipo','=','regular')], context=context)
         if len(res) > 0:
             return res[0]
         else:

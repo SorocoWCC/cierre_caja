@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <report 
+            string="Cierre de Caja" 
+            id="custom_report_cierre_caja" 
+            model="cierre" 
+            report_type="qweb-pdf"
+            name="cierre_caja.report_cierre_caja_document" 
+            file="Cierre de Caja" 
+        />  
+
+        <report 
+            string="Resumen Diario" 
+            id="custom_report_resumen_diario" 
+            model="cierre" 
+            report_type="qweb-pdf"
+            name="cierre_caja.report_resumen_diario_document" 
+            file="Resumen Diario" 
+        />
+
+        <record id="paperformat_lowmargin" model="report.paperformat">
+            <field name="name">European A4 low margin</field>
+            <field name="default" eval="True" />
+            <field name="format">A4</field>
+            <field name="page_height">0</field>
+            <field name="page_width">0</field>
+            <field name="orientation">Portrait</field>
+            <field name="margin_top">10</field>
+            <field name="margin_bottom">4</field>
+            <field name="margin_left">4</field>
+            <field name="margin_right">4</field>
+            <field name="header_line" eval="False" />
+            <field name="header_spacing">0</field>
+            <field name="dpi">90</field>
+        </record>
+
+        <record id="cierre_caja.custom_report_cierre_caja" model="ir.actions.report.xml">
+            <field name="paperformat_id" ref="cierre_caja.paperformat_lowmargin" />
+        </record>
+      
+        <record id="cierre_caja.custom_report_resumen_diario" model="ir.actions.report.xml">
+            <field name="paperformat_id" ref="cierre_caja.paperformat_lowmargin" />
+        </record>
+
+    </data>
+</openerp>
