@@ -97,7 +97,7 @@ class cierre(models.Model):
     # Agrupa todas las facturas para el reporte diario
     factura_ids_caja_regular = fields.One2many(comodel_name='purchase.order', inverse_name='cierre_id', string="Facturas",  domain=[('pago', '=', 'regular')], readonly=True)
     # Agrupa solamente facturas de caja chica
-    factura_ids_caja_chica = fields.One2many(comodel_name='purchase.order', inverse_name='cierre_id_caja_chica', string="Facturas", readonly=True)
+    factura_ids_caja_chica = fields.One2many(comodel_name='purchase.order', inverse_name='cierre_id_caja_chica', string="Facturas", domain=[('pago', '=', 'caja_chica')], readonly=True)
     ingreso_ids = fields.One2many(comodel_name='ingreso', inverse_name='cierre_id', string="Ingresos de Dinero")
     salida_ids = fields.One2many(comodel_name='salida',inverse_name='cierre_id', string="Salidas de Dinero")
     gasto_id = fields.One2many(comodel_name='gasto',inverse_name='cierre_id', string="Gastos")
@@ -137,13 +137,20 @@ class cierre(models.Model):
 
 # Dinero Compra Regular / Sistema
     @api.one
-    @api.depends('factura_ids', 'factura_ids.state')
+    @api.depends('factura_ids', 'factura_ids.state', 'factura_ids_caja_chica.state', 'factura_ids_caja_regular.state')
     def _dinero_compra_regular(self):
-	total= 0
-	for factura in self.factura_ids:
-		if str(factura.pago) == "regular" and str(factura.state) == "done":	  
-			total += float(factura.amount_total)
-	self.dinero_compra_regular= total
+      total= 0
+      if str(self.tipo) == "regular" :
+        for factura in self.factura_ids:
+          # Calculo de compra sistema para caja regular
+          if str(factura.pago) == "regular" and str(factura.state) == "done":     
+            total += float(factura.amount_total)        
+      else:
+        for factura in self.factura_ids_caja_chica:
+          # Calculo de compra sistema para caja regular
+          if str(factura.pago) == "caja_chica" and str(factura.state) == "done":     
+            total += float(factura.amount_total) 
+      self.dinero_compra_regular= total
 
 # Dinero Ingreso Total
     @api.one
@@ -157,7 +164,7 @@ class cierre(models.Model):
 # Dinero Ingreso Caja
     @api.one
     @api.depends('ingreso_ids')
-    def _dinero_ingreso_caja(self):
+    def _dinero_ingreso_caja(self):        
       total= 0
       for ingreso in self.ingreso_ids:
         if  ingreso.tipo_ingreso == 'caja':
@@ -271,7 +278,7 @@ class purchase_order(models.Model):
 
     def _action_cierre_caja_chica(self, cr, uid, context=None):
       res = self.pool.get('cierre').search(cr, uid, [('state','=','new'), ('tipo','=','caja_chica')], context=context)
-      if len(res) > 0:
+      if len(res) > 0 :
         return res[0]
     _defaults = {
     'cierre_id': _action_cierre,

@@ -156,12 +156,12 @@
    						
     			</page>
 				
--->				<page string="Facturas" attrs="{'invisible': [('tipo','=','caja_chica')]}"  >
+-->				<page string="Facturas Regular" attrs="{'invisible': [('tipo','=','caja_chica')]}"  >
         		<field name="factura_ids_caja_regular"   />  
         		 
 				</page>
 
-				<page string="Facturas" attrs="{'invisible': [('tipo','=','regular')]}"  >
+				<page string="Facturas Caja Chica" attrs="{'invisible': [('tipo','=','regular')]}"  >
         		<field name="factura_ids_caja_chica"  />  
 				</page>
 <!--
