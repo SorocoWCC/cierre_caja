@@ -137,18 +137,18 @@ class cierre(models.Model):
 
 # Dinero Compra Regular / Sistema
     @api.one
-    @api.depends('factura_ids', 'factura_ids.state', 'factura_ids_caja_chica.state', 'factura_ids_caja_regular.state')
+    @api.depends('factura_ids', 'factura_ids_caja_chica', 'factura_ids.state', 'factura_ids_caja_chica.state', 'factura_ids_caja_regular.state', 'factura_ids_caja_chica.pago_caja')
     def _dinero_compra_regular(self):
       total= 0
       if str(self.tipo) == "regular" :
         for factura in self.factura_ids:
           # Calculo de compra sistema para caja regular
-          if str(factura.pago) == "regular" and str(factura.state) == "done":     
+          if str(factura.pago) == "regular" and str(factura.pago_caja) == "pagado":     
             total += float(factura.amount_total)        
       else:
         for factura in self.factura_ids_caja_chica:
           # Calculo de compra sistema para caja regular
-          if str(factura.pago) == "caja_chica" and str(factura.state) == "done":     
+          if str(factura.pago) == "caja_chica" and str(factura.pago_caja) == "pagado":     
             total += float(factura.amount_total) 
       self.dinero_compra_regular= total
 

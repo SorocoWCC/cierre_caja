@@ -124,6 +124,26 @@
                 <th style="background-color: #D8D8D8;" >₡ <t t-esc="'{0:,.2f}'.format(int(o.dinero_balance))"/> </th>
               </tr> 
             </table>  
+
+            <br/>
+
+            <table>
+              <tr>
+                <th colspan="3">Facturas</th>
+              </tr>
+              <tr>
+                <th>Numero</th>
+                <th>Cliente</th>
+                <th>Total</th>
+              </tr>
+              <t t-foreach="o.factura_ids_caja_chica" t-as="i">
+                <tr>
+                <td>  <t t-esc="i.name"/> </td>
+                <td>  <t t-esc="i.partner_id.name"/> </td>
+                <td> ₡ <t t-esc="'{0:,.2f}'.format(int(i.amount_total))"/> </td>
+              </tr>
+              </t>
+            </table>
           </t> 
         </div>
       </t>
