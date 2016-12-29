@@ -139,7 +139,7 @@ class cierre(models.Model):
 
 # Dinero Compra Regular / Sistema
     @api.one
-    @api.depends('factura_ids', 'factura_ids_caja_chica', 'factura_ids.state', 'factura_ids_caja_chica.state', 'factura_ids_caja_regular.state', 'factura_ids_caja_chica.pago_caja')
+    @api.depends('factura_ids', 'factura_ids_caja_chica', 'factura_ids.state', 'factura_ids_caja_chica.state', 'factura_ids_caja_regular.state', 'factura_ids_caja_chica.pago_caja', 'factura_ids_caja_regular.pago_caja', 'factura_ids.pago_caja')
     def _dinero_compra_regular(self):
       total= 0
       if str(self.tipo) == "regular" :

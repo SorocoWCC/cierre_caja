@@ -73,8 +73,7 @@
                 <th style="background-color: #D8D8D8;" >₡ <t t-esc="'{0:,.2f}'.format(int(o.dinero_balance))"/> </th>
               </tr> 
             </table>  
-          </t> 
-          <br/>
+
 <!--Variables -->
           <t t-set="cantidad_acero_inoxidable" t-value="0"/>
           <t t-set="cantidad_aluminio" t-value="0"/>
@@ -195,7 +194,7 @@
         </t>     
 
 <!-- Fin Procesamiento de Productos -->
-
+        <br/>
         <table>
             <tr>
                 <th colspan="2"> Resumen Compras Ventana </th>
@@ -359,6 +358,17 @@
               </tr>
             </t>
         </table>
+
+
+
+          </t> 
+          <br/>
+
+
+
+
+
+
 
         <t t-if="o.tipo == 'caja_chica' ">
             <div align="center">
