@@ -285,7 +285,7 @@
             <t t-set="ganancia_plastico_pet" t-value=" ( cantidad_plastico_pet * venta_plastico_pet ) - inversion_plastico_pet"/>
         </t>
 
-        <t t-if="b.name == '[R1]  Radiador (Cobre/Aluminio) ' ">
+        <t t-if="b.name == '[R1]  Radiador (Cobre/Aluminio)' ">
             <t t-set="cantidad_rad_cob_alu" t-value="cantidad_rad_cob_alu + b.product_qty"/>
             <t t-set="inversion_rad_cob_alu" t-value="inversion_rad_cob_alu + b.price_subtotal"/>
             <t t-set="venta_rad_cob_alu" t-value="b.product_id.precio_venta_informe"/>
@@ -629,30 +629,6 @@
         </tr>
   </table>
  </t>
-<br/>
-<!-- Resumen Final --> 
-  <table style="border: 2px solid green; text-align: center; align=center; width:50%">
-      <tr>
-          <th colspan="2" style="text-align: center; background-color: #D8D8D8; border: 2px solid green"> Resumen del día </th>
-      </tr>
-      <tr>
-        <td style="border: 2px solid green;"> Compras del día</td>
-              <td style="border: 2px solid green;"> ₡ <t t-esc="'{0:,.2f}'.format(int(total_inversion))"/> </td>
-      </tr> 
-      <tr>
-        <td style="border: 2px solid green;"> Gastos del día</td>
-        <td style="border: 2px solid green;"> ₡ <t t-esc="'{0:,.2f}'.format(int(total_gastos))"/></td>
-      </tr> 
-      <tr>
-        <td style="border: 2px solid green;"> Ventas Proyectadas</td>
-        <td style="border: 2px solid green;"> ₡ <t t-esc="'{0:,.2f}'.format(int(total_ganancia))"/></td>
-      </tr>    
-      <tr>
-          <t t-set="total_general_inversion" t-value="total_inversion + total_gastos"/>
-          <td style="border: 2px solid green;font-weight: bold; background-color: #D8D8D8 "> Balance  </td>
-          <td style="border: 2px solid green;font-weight: bold; background-color: #D8D8D8 "> ₡ <t t-esc="'{0:,.2f}'.format(int(total_ganancia - total_general_inversion))"/>  </td>
-      </tr>
-  </table>
 
 </div>
       </t>

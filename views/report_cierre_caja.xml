@@ -19,7 +19,7 @@
 
             td {
               vertical-align: left;
-              font-size: 12px; 
+              font-size: 14px; 
             }
           </style>       
 
@@ -74,7 +74,293 @@
               </tr> 
             </table>  
           </t> 
-          <t t-if="o.tipo == 'caja_chica' ">
+          <br/>
+<!--Variables -->
+          <t t-set="cantidad_acero_inoxidable" t-value="0"/>
+          <t t-set="cantidad_aluminio" t-value="0"/>
+          <t t-set="cantidad_chatarra" t-value="0"/>
+          <t t-set="cantidad_bateria" t-value="0"/>
+          <t t-set="cantidad_bronce" t-value="0"/>
+          <t t-set="cantidad_caja_plastica" t-value="0"/>
+          <t t-set="cantidad_carton" t-value="0"/>
+          <t t-set="cantidad_catalizador_generico" t-value="0"/>
+          <t t-set="cantidad_catalizador_original" t-value="0"/>
+          <t t-set="cantidad_cobre" t-value="0"/>
+          <t t-set="cantidad_microondas" t-value="0"/>
+          <t t-set="cantidad_negativos" t-value="0"/>
+          <t t-set="cantidad_papel_periodico" t-value="0"/>
+          <t t-set="cantidad_papel_primera" t-value="0"/>
+          <t t-set="cantidad_papel_segunda" t-value="0"/>
+          <t t-set="cantidad_plastico_lavadora" t-value="0"/>
+          <t t-set="cantidad_plastico_pet" t-value="0"/>
+          <t t-set="cantidad_rad_cob_alu" t-value="0"/>
+          <t t-set="cantidad_rad_cob_bro" t-value="0"/>
+          <t t-set="cantidad_tar_comp" t-value="0"/>
+          <t t-set="cantidad_tetrabrick" t-value="0"/>
+          <t t-set="cantidad_vidrio" t-value="0"/>
+
+<!-- Fin de Variables -->
+
+<!-- Procesamiento de Productos -->
+
+        <t t-foreach="o.compra_ids" t-as="b">
+
+          <t t-if="b.product_id.name == 'Acero Inoxidable' ">
+              <t t-set="cantidad_acero_inoxidable" t-value="cantidad_acero_inoxidable + b.cantidad"/>
+          </t>
+
+          <t t-if="b.product_id.name == 'Aluminio' "> 
+              <t t-set="cantidad_aluminio" t-value="cantidad_aluminio + b.cantidad"/>
+          </t>
+
+          <t t-if="b.product_id.name == 'Chatarra' ">
+              <t t-set="cantidad_chatarra" t-value="cantidad_chatarra + b.cantidad"/>
+          </t>
+
+          <t t-if="b.product_id.name == 'Bateria' ">
+              <t t-set="cantidad_bateria" t-value="cantidad_bateria + b.cantidad"/>
+          </t>
+
+          <t t-if="b.product_id.name == 'Bronce' ">
+              <t t-set="cantidad_bronce" t-value="cantidad_bronce + b.cantidad"/>
+          </t>
+
+          <t t-if="b.product_id.name == 'Caja Plastica' ">
+              <t t-set="cantidad_caja_plastica" t-value="cantidad_caja_plastica + b.cantidad"/>
+          </t>
+
+          <t t-if="b.product_id.name == 'Carton' ">
+              <t t-set="cantidad_carton" t-value="cantidad_carton + b.cantidad"/>
+          </t>
+
+          <t t-if="b.product_id.name == 'Catalizador Generico' ">
+              <t t-set="cantidad_catalizador_generico" t-value="cantidad_catalizador_generico + b.cantidad"/>
+          </t>
+
+          <t t-if="b.product_id.name == 'Catalizador Original' ">
+              <t t-set="cantidad_catalizador_original" t-value="cantidad_catalizador_original + b.cantidad"/>
+          </t>
+
+          <t t-if="b.product_id.name == 'Cobre' ">
+              <t t-set="cantidad_cobre" t-value="cantidad_cobre + b.cantidad"/>
+          </t>
+
+          <t t-if="b.product_id.name == 'Microondas' ">
+              <t t-set="cantidad_microondas" t-value="cantidad_microondas + b.cantidad"/>
+          </t>
+
+          <t t-if="b.product_id.name == 'Negativos' ">
+              <t t-set="cantidad_negativos" t-value="cantidad_negativos + b.cantidad"/>
+          </t>
+
+          <t t-if="b.product_id.name == 'Papel Periodico' ">
+              <t t-set="cantidad_papel_periodico" t-value="cantidad_papel_periodico + b.cantidad"/>
+          </t>
+
+          <t t-if="b.product_id.name == 'Papel Primera' ">
+              <t t-set="cantidad_papel_primera" t-value="cantidad_papel_primera + b.cantidad"/>
+          </t>
+
+          <t t-if="b.product_id.name == 'Papel Segunda' ">
+              <t t-set="cantidad_papel_segunda" t-value="cantidad_papel_segunda + b.cantidad"/>
+          </t>
+
+          <t t-if="b.product_id.name == 'Plastico Lavadora' ">
+              <t t-set="cantidad_plastico_lavadora" t-value="cantidad_plastico_lavadora + b.cantidad"/>
+          </t>
+
+          <t t-if="b.product_id.name == 'Plastico Pet' ">
+              <t t-set="cantidad_plastico_pet" t-value="cantidad_plastico_pet + b.cantidad"/>
+          </t>
+
+          <t t-if="b.product_id.name == 'Radiador (Cobre/Aluminio)' ">
+              <t t-set="cantidad_rad_cob_alu" t-value="cantidad_rad_cob_alu + b.cantidad"/>
+          </t>
+
+          <t t-if="b.product_id.name == 'Radiador (Cobre/Bronce)' ">
+              <t t-set="cantidad_rad_cob_bro" t-value="cantidad_rad_cob_bro + b.cantidad"/>
+          </t>
+
+          <t t-if="b.product_id.name == 'Tar_Comp' ">
+              <t t-set="cantidad_tar_comp" t-value="cantidad_tar_comp + b.cantidad"/>
+          </t>
+
+          <t t-if="b.product_id.name == 'Tetrabrick' ">
+              <t t-set="cantidad_tetrabrick" t-value="cantidad_tetrabrick + b.cantidad"/>
+          </t>
+
+          <t t-if="b.product_id.name == 'Vidrio' ">
+              <t t-set="cantidad_vidrio" t-value="cantidad_vidrio + b.cantidad"/>
+          </t>
+        </t>     
+
+<!-- Fin Procesamiento de Productos -->
+
+        <table>
+            <tr>
+                <th colspan="2"> Resumen Compras Ventana </th>
+            </tr>
+            <tr>
+                <th  > Producto </th>
+                <th  > Cantidad </th>       
+            </tr>
+
+            <t t-if="cantidad_chatarra > 0 ">
+              <tr>
+                  <td > Chatarra </td>
+                  <td >  <t t-esc="cantidad_chatarra"/> </td>       
+              </tr>
+            </t>
+
+            <t t-if="cantidad_aluminio > 0 ">
+              <tr>
+                  <td > Aluminio </td>
+                  <td >  <t t-esc="cantidad_aluminio"/> </td>      
+              </tr>
+            </t>
+
+            <t t-if="cantidad_acero_inoxidable > 0 ">
+              <tr>
+                  <td > Acero Inoxidable </td>
+                  <td >  <t t-esc="cantidad_acero_inoxidable"/> </td>     
+              </tr>
+            </t>
+
+            <t t-if="cantidad_bateria > 0 ">
+              <tr>
+                  <td > Bateria </td>
+                  <td >  <t t-esc="cantidad_bateria"/> </td>        
+              </tr>
+            </t>
+
+
+            <t t-if="cantidad_bronce > 0 ">
+              <tr>
+                  <td > Bronce </td>
+                  <td >  <t t-esc="cantidad_bronce"/> </td>       
+              </tr>
+            </t> 
+
+            <t t-if="cantidad_caja_plastica > 0 ">
+              <tr>
+                  <td > Caja Plastica </td>          
+              </tr>
+            </t>
+
+            <t t-if="cantidad_carton > 0 ">
+              <tr>
+                  <td > Cartón </td>
+                  <td >  <t t-esc="cantidad_carton"/> </td>      
+              </tr>
+            </t>
+
+            <t t-if="cantidad_catalizador_generico > 0 ">
+              <tr>
+                  <td > Catalizador Genérico </td>
+                  <td >  <t t-esc="cantidad_catalizador_generico"/> </td> 
+              </tr>
+            </t>   
+
+            <t t-if="cantidad_catalizador_original > 0 ">
+              <tr>
+                  <td > Catalizador Original </td>
+                  <td >  <t t-esc="cantidad_catalizador_original"/> </td>       
+              </tr>
+            </t>
+
+            <t t-if="cantidad_cobre > 0 ">
+              <tr>
+                 <td > Cobre </td>
+                 <td >  <t t-esc="cantidad_cobre"/> </td>        
+              </tr>
+            </t>
+           
+            <t t-if="cantidad_microondas > 0 ">
+              <tr>
+                  <td > Microondas </td>
+                  <td >  <t t-esc="cantidad_microondas"/> </td>    
+              </tr>
+            </t>
+
+            <t t-if="cantidad_negativos > 0 ">
+              <tr>
+                  <td > Negativos </td>
+                  <td >  <t t-esc="cantidad_negativos"/> </td>        
+              </tr>
+            </t>
+
+            <t t-if="cantidad_papel_Periodico > 0 ">
+              <tr>
+                  <td > Papel Periódico </td>
+                  <td >  <t t-esc="cantidad_papel_periodico"/> </td>      
+              </tr>
+            </t>
+
+            <t t-if="cantidad_papel_primera > 0 ">
+              <tr>
+                  <td > Papel Primera </td>
+                  <td >  <t t-esc="cantidad_papel_primera"/> </td>       
+              </tr>
+            </t>
+
+            <t t-if="cantidad_papel_segunda > 0 ">
+              <tr>
+                  <td > Papel Segunda </td>
+                  <td >  <t t-esc="cantidad_papel_segunda"/> </td>      
+              </tr>
+            </t>
+
+            <t t-if="cantidad_plastico_lavadora > 0 ">
+              <tr>
+                  <td > Plastico Lavadora </td>
+                  <td >  <t t-esc="cantidad_plastico_lavadora"/> </td>       
+              </tr>
+            </t>
+
+            <t t-if="cantidad_plastico_pet > 0 ">
+              <tr>
+                  <td > Plastico Pet </td>
+                  <td >  <t t-esc="cantidad_plastico_pet"/> </td>      
+              </tr>
+            </t>
+
+            <t t-if="cantidad_rad_cob_alu > 0 ">
+              <tr>
+                  <td > Radiador (Cobre / Aluminio) </td>
+                  <td >  <t t-esc="cantidad_rad_cob_alu"/> </td>       
+              </tr>
+            </t>
+
+            <t t-if="cantidad_rad_cob_bro > 0 ">
+              <tr>
+                  <td > Radiador (Cobre / Bronce)</td>
+                  <td >  <t t-esc="cantidad_rad_cob_bro"/> </td>     
+              </tr>
+            </t>
+
+            <t t-if="cantidad_tar_comp > 0 ">
+              <tr>
+                  <td > Tarjeta Computadora </td>
+                  <td >  <t t-esc="cantidad_tar_comp"/> </td>      
+              </tr>
+            </t>
+
+            <t t-if="cantidad_tetrabrick > 0 ">
+              <tr>
+                  <td > Tetrabrick </td>
+                  <td >  <t t-esc="cantidad_tetrabrick"/> </td>      
+              </tr>
+            </t>
+
+            <t t-if="cantidad_vidrio > 0 ">
+              <tr>
+                  <td > Vidrio </td>
+                  <td >  <t t-esc="cantidad_vidrio"/> </td>        
+              </tr>
+            </t>
+        </table>
+
+        <t t-if="o.tipo == 'caja_chica' ">
             <div align="center">
               <h4> Cierre Caja - Caja Chica - <span t-field="o.fecha"/></h4>
             </div>
@@ -144,7 +430,7 @@
               </tr>
               </t>
             </table>
-          </t> 
+        </t> 
         </div>
       </t>
     </template>

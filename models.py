@@ -14,6 +14,8 @@ class compra(models.Model):
     monto = fields.Integer('Monto:', required=True)
     notas = fields.Text('Observaciones')
     cierre_id = fields.Many2one(comodel_name='cierre', string='Cierre', delegate=True)
+    product_id = fields.Many2one(comodel_name='product.product', string='Producto', delegate=True)
+    cantidad = fields.Float('Cantidad:', required=True)
     cajero = fields.Char(compute='_action_cajero', string="Cajero", readonly=True, store=True )
     _defaults = {
     'tipo': 'ventana'

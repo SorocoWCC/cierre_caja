@@ -130,6 +130,8 @@
    						<tree editable="bottom">
 			        			<field name="cajero"/> 
         						<field name="tipo"/>  
+        						<field name="product_id"/> 
+        						<field name="cantidad"/> 
 			    				<field name="monto"  sum="True"/>                               
   				 		</tree>
 					</field>
