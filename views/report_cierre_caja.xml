@@ -74,30 +74,142 @@
               </tr> 
             </table>  
 
-<!--Variables -->
-          <t t-set="cantidad_acero_inoxidable" t-value="0"/>
-          <t t-set="cantidad_aluminio" t-value="0"/>
-          <t t-set="cantidad_chatarra" t-value="0"/>
-          <t t-set="cantidad_bateria" t-value="0"/>
-          <t t-set="cantidad_bronce" t-value="0"/>
-          <t t-set="cantidad_caja_plastica" t-value="0"/>
-          <t t-set="cantidad_carton" t-value="0"/>
-          <t t-set="cantidad_catalizador_generico" t-value="0"/>
-          <t t-set="cantidad_catalizador_original" t-value="0"/>
-          <t t-set="cantidad_cobre" t-value="0"/>
-          <t t-set="cantidad_microondas" t-value="0"/>
-          <t t-set="cantidad_negativos" t-value="0"/>
-          <t t-set="cantidad_papel_periodico" t-value="0"/>
-          <t t-set="cantidad_papel_primera" t-value="0"/>
-          <t t-set="cantidad_papel_segunda" t-value="0"/>
-          <t t-set="cantidad_plastico_lavadora" t-value="0"/>
-          <t t-set="cantidad_plastico_pet" t-value="0"/>
-          <t t-set="cantidad_rad_cob_alu" t-value="0"/>
-          <t t-set="cantidad_rad_cob_bro" t-value="0"/>
-          <t t-set="cantidad_tar_comp" t-value="0"/>
-          <t t-set="cantidad_tetrabrick" t-value="0"/>
-          <t t-set="cantidad_vidrio" t-value="0"/>
+<!-- Variables -->
+  <t t-set="total_gastos" t-value="0"/>
+  <t t-set="total_inversion" t-value="0"/>
+  <t t-set="total_ganancia" t-value="0"/>
 
+  <t t-set="cantidad_acero_inoxidable" t-value="0"/>
+  <t t-set="compra_acero_inoxidable" t-value="0"/>
+  <t t-set="inversion_acero_inoxidable" t-value="0"/>
+  <t t-set="venta_acero_inoxidable" t-value="0"/>
+  <t t-set="ganancia_acero_inoxidable" t-value="0"/>
+
+  <t t-set="cantidad_aluminio" t-value="0"/>
+  <t t-set="compra_aluminio" t-value="0"/>
+  <t t-set="inversion_aluminio" t-value="0"/>
+  <t t-set="venta_aluminio" t-value="0"/>
+  <t t-set="ganancia_aluminio" t-value="0"/>
+
+  <t t-set="cantidad_chatarra" t-value="0"/>
+  <t t-set="compra_chatarra" t-value="0"/>
+  <t t-set="inversion_chatarra" t-value="0"/>
+  <t t-set="venta_chatarra" t-value="0"/>
+  <t t-set="ganancia_chatarra" t-value="0"/>
+
+  <t t-set="cantidad_bateria" t-value="0"/>
+  <t t-set="compra_bateria" t-value="0"/>
+  <t t-set="inversion_bateria" t-value="0"/>
+  <t t-set="venta_bateria" t-value="0"/>
+  <t t-set="ganancia_bateria" t-value="0"/>
+
+  <t t-set="cantidad_bronce" t-value="0"/>
+  <t t-set="compra_bronce" t-value="0"/>
+  <t t-set="inversion_bronce" t-value="0"/>
+  <t t-set="venta_bronce" t-value="0"/>
+  <t t-set="ganancia_bronce" t-value="0"/>
+
+  <t t-set="cantidad_caja_plastica" t-value="0"/>
+  <t t-set="compra_caja_plastica" t-value="0"/>
+  <t t-set="inversion_caja_plastica" t-value="0"/>
+  <t t-set="venta_caja_plastica" t-value="0"/>
+  <t t-set="ganancia_caja_plastica" t-value="0"/>
+
+  <t t-set="cantidad_carton" t-value="0"/>
+  <t t-set="compra_carton" t-value="0"/>
+  <t t-set="inversion_carton" t-value="0"/>
+  <t t-set="venta_carton" t-value="0"/>
+  <t t-set="ganancia_carton" t-value="0"/>
+
+  <t t-set="cantidad_catalizador_generico" t-value="0"/>
+  <t t-set="compra_catalizador_generico" t-value="0"/>
+  <t t-set="inversion_catalizador_generico" t-value="0"/>
+  <t t-set="venta_catalizador_generico" t-value="0"/>
+  <t t-set="ganancia_catalizador_generico" t-value="0"/>
+
+  <t t-set="cantidad_catalizador_original" t-value="0"/>
+  <t t-set="compra_catalizador_original" t-value="0"/>
+  <t t-set="inversion_catalizador_original" t-value="0"/>
+  <t t-set="venta_catalizador_original" t-value="0"/>
+  <t t-set="ganancia_catalizador_original" t-value="0"/>
+
+  <t t-set="cantidad_cobre" t-value="0"/>
+  <t t-set="compra_cobre" t-value="0"/>
+  <t t-set="inversion_cobre" t-value="0"/>
+  <t t-set="venta_cobre" t-value="0"/>
+  <t t-set="ganancia_cobre" t-value="0"/>
+
+  <t t-set="cantidad_microondas" t-value="0"/>
+  <t t-set="compra_microondas" t-value="0"/>
+  <t t-set="inversion_microondas" t-value="0"/>
+  <t t-set="venta_microondas" t-value="0"/>
+  <t t-set="ganancia_microondas" t-value="0"/>
+
+  <t t-set="cantidad_negativos" t-value="0"/>
+  <t t-set="compra_negativos" t-value="0"/>
+  <t t-set="inversion_negativos" t-value="0"/>
+  <t t-set="venta_negativos" t-value="0"/>
+  <t t-set="ganancia_negativos" t-value="0"/>
+
+  <t t-set="cantidad_papel_periodico" t-value="0"/>
+  <t t-set="compra_papel_periodico" t-value="0"/>
+  <t t-set="inversion_papel_periodico" t-value="0"/>
+  <t t-set="venta_papel_periodico" t-value="0"/>
+  <t t-set="ganancia_papel_periodico" t-value="0"/>
+
+  <t t-set="cantidad_papel_primera" t-value="0"/>
+  <t t-set="compra_papel_primera" t-value="0"/>
+  <t t-set="inversion_papel_primera" t-value="0"/>
+  <t t-set="venta_papel_primera" t-value="0"/>
+  <t t-set="ganancia_papel_primera" t-value="0"/>
+
+  <t t-set="cantidad_papel_segunda" t-value="0"/>
+  <t t-set="compra_papel_segunda" t-value="0"/>
+  <t t-set="inversion_papel_segunda" t-value="0"/>
+  <t t-set="venta_papel_segunda" t-value="0"/>
+  <t t-set="ganancia_papel_segunda" t-value="0"/>
+
+  <t t-set="cantidad_plastico_lavadora" t-value="0"/>
+  <t t-set="compra_plastico_lavadora" t-value="0"/>
+  <t t-set="inversion_plastico_lavadora" t-value="0"/>
+  <t t-set="venta_plastico_lavadora" t-value="0"/>
+  <t t-set="ganancia_plastico_lavadora" t-value="0"/>
+
+  <t t-set="cantidad_plastico_pet" t-value="0"/>
+  <t t-set="compra_plastico_pet" t-value="0"/>
+  <t t-set="inversion_plastico_pet" t-value="0"/>
+  <t t-set="venta_plastico_pet" t-value="0"/>
+  <t t-set="ganancia_plastico_pet" t-value="0"/>
+
+  <t t-set="cantidad_rad_cob_alu" t-value="0"/>
+  <t t-set="compra_rad_cob_alu" t-value="0"/>
+  <t t-set="inversion_rad_cob_alu" t-value="0"/>
+  <t t-set="venta_rad_cob_alu" t-value="0"/>
+  <t t-set="ganancia_rad_cob_alu" t-value="0"/>
+
+  <t t-set="cantidad_rad_cob_bro" t-value="0"/>
+  <t t-set="compra_rad_cob_bro" t-value="0"/>
+  <t t-set="inversion_rad_cob_bro" t-value="0"/>
+  <t t-set="venta_rad_cob_bro" t-value="0"/>
+  <t t-set="ganancia_rad_cob_bro" t-value="0"/>
+
+  <t t-set="cantidad_tar_comp" t-value="0"/>
+  <t t-set="compra_tar_comp" t-value="0"/>
+  <t t-set="inversion_tar_comp" t-value="0"/>
+  <t t-set="venta_tar_comp" t-value="0"/>
+  <t t-set="ganancia_tar_comp" t-value="0"/>
+
+  <t t-set="cantidad_tetrabrick" t-value="0"/>
+  <t t-set="compra_tetrabrick" t-value="0"/>
+  <t t-set="inversion_tetrabrick" t-value="0"/>
+  <t t-set="venta_tetrabrick" t-value="0"/>
+  <t t-set="ganancia_tetrabrick" t-value="0"/>
+
+  <t t-set="cantidad_vidrio" t-value="0"/>
+  <t t-set="compra_vidrio" t-value="0"/>
+  <t t-set="inversion_vidrio" t-value="0"/>
+  <t t-set="venta_vidrio" t-value="0"/>
+  <t t-set="ganancia_vidrio" t-value="0"/>
 <!-- Fin de Variables -->
 
 <!-- Procesamiento de Productos -->
@@ -106,90 +218,112 @@
 
           <t t-if="b.product_id.name == 'Acero Inoxidable' ">
               <t t-set="cantidad_acero_inoxidable" t-value="cantidad_acero_inoxidable + b.cantidad"/>
+              <t t-set="inversion_acero_inoxidable" t-value="inversion_acero_inoxidable + b.monto"/>
           </t>
 
           <t t-if="b.product_id.name == 'Aluminio' "> 
               <t t-set="cantidad_aluminio" t-value="cantidad_aluminio + b.cantidad"/>
+              <t t-set="inversion_aluminio" t-value="inversion_aluminio + b.monto"/>
           </t>
 
           <t t-if="b.product_id.name == 'Chatarra' ">
               <t t-set="cantidad_chatarra" t-value="cantidad_chatarra + b.cantidad"/>
+              <t t-set="inversion_chatarra" t-value="inversion_chatarra + b.monto"/>
           </t>
 
           <t t-if="b.product_id.name == 'Bateria' ">
               <t t-set="cantidad_bateria" t-value="cantidad_bateria + b.cantidad"/>
+              <t t-set="inversion_bateria" t-value="inversion_bateria + b.monto"/>
           </t>
 
           <t t-if="b.product_id.name == 'Bronce' ">
               <t t-set="cantidad_bronce" t-value="cantidad_bronce + b.cantidad"/>
+              <t t-set="inversion_bronce" t-value="inversion_bronce + b.monto"/>
           </t>
 
           <t t-if="b.product_id.name == 'Caja Plastica' ">
               <t t-set="cantidad_caja_plastica" t-value="cantidad_caja_plastica + b.cantidad"/>
+              <t t-set="inversion_caja_plastica" t-value="inversion_caja_plastica + b.monto"/>
           </t>
 
           <t t-if="b.product_id.name == 'Carton' ">
               <t t-set="cantidad_carton" t-value="cantidad_carton + b.cantidad"/>
+              <t t-set="inversion_carton" t-value="inversion_carton + b.monto"/>
           </t>
 
           <t t-if="b.product_id.name == 'Catalizador Generico' ">
               <t t-set="cantidad_catalizador_generico" t-value="cantidad_catalizador_generico + b.cantidad"/>
+              <t t-set="inversion_catalizador_generico" t-value="inversion_catalizador_generico + b.monto"/>
           </t>
 
           <t t-if="b.product_id.name == 'Catalizador Original' ">
               <t t-set="cantidad_catalizador_original" t-value="cantidad_catalizador_original + b.cantidad"/>
+              <t t-set="inversion_catalizador_original" t-value="inversion_catalizador_original + b.monto"/>
           </t>
 
           <t t-if="b.product_id.name == 'Cobre' ">
               <t t-set="cantidad_cobre" t-value="cantidad_cobre + b.cantidad"/>
+              <t t-set="inversion_cobre" t-value="inversion_cobre + b.monto"/>
           </t>
 
           <t t-if="b.product_id.name == 'Microondas' ">
               <t t-set="cantidad_microondas" t-value="cantidad_microondas + b.cantidad"/>
+              <t t-set="inversion_microondas" t-value="inversion_microondas + b.monto"/>
           </t>
 
           <t t-if="b.product_id.name == 'Negativos' ">
               <t t-set="cantidad_negativos" t-value="cantidad_negativos + b.cantidad"/>
+              <t t-set="inversion_negativos" t-value="inversion_negativos + b.monto"/>
           </t>
 
           <t t-if="b.product_id.name == 'Papel Periodico' ">
               <t t-set="cantidad_papel_periodico" t-value="cantidad_papel_periodico + b.cantidad"/>
+              <t t-set="inversion_papel_periodico" t-value="inversion_papel_periodico + b.monto"/>
           </t>
 
           <t t-if="b.product_id.name == 'Papel Primera' ">
               <t t-set="cantidad_papel_primera" t-value="cantidad_papel_primera + b.cantidad"/>
+              <t t-set="inversion_papel_primera" t-value="inversion_papel_primera + b.monto"/>
           </t>
 
           <t t-if="b.product_id.name == 'Papel Segunda' ">
               <t t-set="cantidad_papel_segunda" t-value="cantidad_papel_segunda + b.cantidad"/>
+              <t t-set="inversion_papel_segunda" t-value="inversion_papel_segunda + b.monto"/>
           </t>
 
           <t t-if="b.product_id.name == 'Plastico Lavadora' ">
               <t t-set="cantidad_plastico_lavadora" t-value="cantidad_plastico_lavadora + b.cantidad"/>
+              <t t-set="inversion_plastico_lavadora" t-value="inversion_plastico_lavadora + b.monto"/>
           </t>
 
           <t t-if="b.product_id.name == 'Plastico Pet' ">
               <t t-set="cantidad_plastico_pet" t-value="cantidad_plastico_pet + b.cantidad"/>
+              <t t-set="inversion_plastico_pet" t-value="inversion_plastico_pet + b.monto"/>
           </t>
-
           <t t-if="b.product_id.name == 'Radiador (Cobre/Aluminio)' ">
               <t t-set="cantidad_rad_cob_alu" t-value="cantidad_rad_cob_alu + b.cantidad"/>
+              <t t-set="inversion_rad_cob_alu" t-value="inversion_rad_cob_alu + b.monto"/>
           </t>
 
           <t t-if="b.product_id.name == 'Radiador (Cobre/Bronce)' ">
               <t t-set="cantidad_rad_cob_bro" t-value="cantidad_rad_cob_bro + b.cantidad"/>
+              <t t-set="inversion_rad_cob_bro" t-value="inversion_rad_cob_bro + b.monto"/>
           </t>
 
           <t t-if="b.product_id.name == 'Tar_Comp' ">
               <t t-set="cantidad_tar_comp" t-value="cantidad_tar_comp + b.cantidad"/>
+              <t t-set="inversion_acero_inoxidable" t-value="inversion_acero_inoxidable + b.monto"/>
+              <t t-set="inversion_tar_comp" t-value="inversion_tar_comp + b.monto"/>
           </t>
 
           <t t-if="b.product_id.name == 'Tetrabrick' ">
               <t t-set="cantidad_tetrabrick" t-value="cantidad_tetrabrick + b.cantidad"/>
+              <t t-set="inversion_tetrabrick" t-value="inversion_tetrabrick + b.monto"/>
           </t>
 
           <t t-if="b.product_id.name == 'Vidrio' ">
               <t t-set="cantidad_vidrio" t-value="cantidad_vidrio + b.cantidad"/>
+              <t t-set="inversion_vidrio" t-value="inversion_vidrio + b.monto"/>
           </t>
         </t>     
 
@@ -197,38 +331,43 @@
         <br/>
         <table>
             <tr>
-                <th colspan="2"> Resumen Compras Ventana </th>
+                <th colspan="3"> Resumen Compras Ventana </th>
             </tr>
             <tr>
                 <th  > Producto </th>
-                <th  > Cantidad </th>       
+                <th  > Cantidad </th>
+                <th  > Precio Promedio </th>       
             </tr>
 
             <t t-if="cantidad_chatarra > 0 ">
               <tr>
                   <td > Chatarra </td>
-                  <td >  <t t-esc="cantidad_chatarra"/> </td>       
+                  <td >  <t t-esc="cantidad_chatarra"/> </td>
+                  <td> ₡ <t t-esc="'{0:,.2f}'.format(int(inversion_chatarra / cantidad_chatarra))"/> </td>      
               </tr>
             </t>
 
             <t t-if="cantidad_aluminio > 0 ">
               <tr>
                   <td > Aluminio </td>
-                  <td >  <t t-esc="cantidad_aluminio"/> </td>      
+                  <td >  <t t-esc="cantidad_aluminio"/> </td> 
+                  <td> ₡ <t t-esc="'{0:,.2f}'.format(int(inversion_aluminio / cantidad_aluminio))"/>  </td>  
               </tr>
             </t>
 
             <t t-if="cantidad_acero_inoxidable > 0 ">
               <tr>
                   <td > Acero Inoxidable </td>
-                  <td >  <t t-esc="cantidad_acero_inoxidable"/> </td>     
+                  <td >  <t t-esc="cantidad_acero_inoxidable"/> </td>
+                  <td> ₡ <t t-esc="'{0:,.2f}'.format(int(inversion_acero_inoxidable / cantidad_acero_inoxidable))"/> </td>  
               </tr>
             </t>
 
             <t t-if="cantidad_bateria > 0 ">
               <tr>
                   <td > Bateria </td>
-                  <td >  <t t-esc="cantidad_bateria"/> </td>        
+                  <td >  <t t-esc="cantidad_bateria"/> </td>      
+                  <td> ₡ <t t-esc="'{0:,.2f}'.format(int(inversion_bateria / cantidad_bateria))"/>  </td>
               </tr>
             </t>
 
@@ -237,19 +376,23 @@
               <tr>
                   <td > Bronce </td>
                   <td >  <t t-esc="cantidad_bronce"/> </td>       
+                  <td> ₡ <t t-esc="'{0:,.2f}'.format(int(inversion_bronce / cantidad_bronce))"/>  </td>
               </tr>
             </t> 
 
             <t t-if="cantidad_caja_plastica > 0 ">
               <tr>
-                  <td > Caja Plastica </td>          
+                  <td > Caja Plastica </td>    
+                  <td >  <t t-esc="cantidad_caja_plastica"/> </td> 
+                  <td> ₡ <t t-esc="'{0:,.2f}'.format(int(inversion_caja_plastica / cantidad_caja_plastica))"/> </td>     
               </tr>
             </t>
 
             <t t-if="cantidad_carton > 0 ">
               <tr>
                   <td > Cartón </td>
-                  <td >  <t t-esc="cantidad_carton"/> </td>      
+                  <td >  <t t-esc="cantidad_carton"/> </td>  
+                  <td> ₡ <t t-esc="'{0:,.2f}'.format(int(inversion_carton / cantidad_carton))"/> </td>
               </tr>
             </t>
 
@@ -257,13 +400,15 @@
               <tr>
                   <td > Catalizador Genérico </td>
                   <td >  <t t-esc="cantidad_catalizador_generico"/> </td> 
+                  <td> ₡ <t t-esc="'{0:,.2f}'.format(int(inversion_catalizador_generico / cantidad_catalizador_generico))"/>  </td>
               </tr>
             </t>   
 
             <t t-if="cantidad_catalizador_original > 0 ">
               <tr>
                   <td > Catalizador Original </td>
-                  <td >  <t t-esc="cantidad_catalizador_original"/> </td>       
+                  <td >  <t t-esc="cantidad_catalizador_original"/> </td>  
+                  <td> ₡ <t t-esc="'{0:,.2f}'.format(int(inversion_catalizador_original / cantidad_catalizador_original))"/>   </td>    
               </tr>
             </t>
 
@@ -271,6 +416,7 @@
               <tr>
                  <td > Cobre </td>
                  <td >  <t t-esc="cantidad_cobre"/> </td>        
+                 <td> ₡ <t t-esc="'{0:,.2f}'.format(int(inversion_cobre / cantidad_cobre))"/>  </td>
               </tr>
             </t>
            
@@ -278,6 +424,7 @@
               <tr>
                   <td > Microondas </td>
                   <td >  <t t-esc="cantidad_microondas"/> </td>    
+                  <td> ₡ <t t-esc="'{0:,.2f}'.format(int(inversion_microondas / cantidad_microondas))"/>  </td>
               </tr>
             </t>
 
@@ -285,13 +432,15 @@
               <tr>
                   <td > Negativos </td>
                   <td >  <t t-esc="cantidad_negativos"/> </td>        
+                  <td> ₡ <t t-esc="'{0:,.2f}'.format(int(inversion_negativos / cantidad_negativos))"/>  </td>
               </tr>
             </t>
 
-            <t t-if="cantidad_papel_Periodico > 0 ">
+            <t t-if="cantidad_papel_periodico > 0 ">
               <tr>
                   <td > Papel Periódico </td>
                   <td >  <t t-esc="cantidad_papel_periodico"/> </td>      
+                  <td> ₡ <t t-esc="'{0:,.2f}'.format(int(inversion_papel_periodico / cantidad_papel_periodico))"/>  </td>
               </tr>
             </t>
 
@@ -299,6 +448,7 @@
               <tr>
                   <td > Papel Primera </td>
                   <td >  <t t-esc="cantidad_papel_primera"/> </td>       
+                  <td> ₡ <t t-esc="'{0:,.2f}'.format(int(inversion_papel_primera / cantidad_papel_primera))"/>  </td>
               </tr>
             </t>
 
@@ -306,48 +456,55 @@
               <tr>
                   <td > Papel Segunda </td>
                   <td >  <t t-esc="cantidad_papel_segunda"/> </td>      
+                  <td> ₡ <t t-esc="'{0:,.2f}'.format(int(inversion_papel_segunda / cantidad_papel_segunda))"/>  </td>
               </tr>
             </t>
 
             <t t-if="cantidad_plastico_lavadora > 0 ">
               <tr>
                   <td > Plastico Lavadora </td>
-                  <td >  <t t-esc="cantidad_plastico_lavadora"/> </td>       
+                  <td >  <t t-esc="cantidad_plastico_lavadora"/> </td>   
+                  <td> ₡ <t t-esc="'{0:,.2f}'.format(int(inversion_plastico_lavadora / cantidad_plastico_lavadora))"/>   </td>  
               </tr>
             </t>
 
             <t t-if="cantidad_plastico_pet > 0 ">
               <tr>
                   <td > Plastico Pet </td>
-                  <td >  <t t-esc="cantidad_plastico_pet"/> </td>      
+                  <td >  <t t-esc="cantidad_plastico_pet"/> </td>     
+                  <td> ₡ <t t-esc="'{0:,.2f}'.format(int(inversion_plastico_pet / cantidad_plastico_pet))"/>   </td>
               </tr>
             </t>
 
             <t t-if="cantidad_rad_cob_alu > 0 ">
               <tr>
                   <td > Radiador (Cobre / Aluminio) </td>
-                  <td >  <t t-esc="cantidad_rad_cob_alu"/> </td>       
+                  <td >  <t t-esc="cantidad_rad_cob_alu"/> </td> 
+                  <td> ₡ <t t-esc="'{0:,.2f}'.format(int(inversion_rad_cob_alu / cantidad_rad_cob_alu))"/>  </td>      
               </tr>
             </t>
 
             <t t-if="cantidad_rad_cob_bro > 0 ">
               <tr>
                   <td > Radiador (Cobre / Bronce)</td>
-                  <td >  <t t-esc="cantidad_rad_cob_bro"/> </td>     
+                  <td >  <t t-esc="cantidad_rad_cob_bro"/> </td>  
+                  <td> ₡ <t t-esc="'{0:,.2f}'.format(int(inversion_rad_cob_bro / cantidad_rad_cob_bro))"/> </td>  
               </tr>
             </t>
 
             <t t-if="cantidad_tar_comp > 0 ">
               <tr>
                   <td > Tarjeta Computadora </td>
-                  <td >  <t t-esc="cantidad_tar_comp"/> </td>      
+                  <td >  <t t-esc="cantidad_tar_comp"/> </td>  
+                  <td> ₡ <t t-esc="'{0:,.2f}'.format(int(inversion_tar_comp / cantidad_tar_comp))"/>   </td>   
               </tr>
             </t>
 
             <t t-if="cantidad_tetrabrick > 0 ">
               <tr>
                   <td > Tetrabrick </td>
-                  <td >  <t t-esc="cantidad_tetrabrick"/> </td>      
+                  <td >  <t t-esc="cantidad_tetrabrick"/> </td>     
+                  <td> ₡ <t t-esc="'{0:,.2f}'.format(int(inversion_tetrabrick / cantidad_tetrabrick))"/>   </td>
               </tr>
             </t>
 
@@ -355,20 +512,13 @@
               <tr>
                   <td > Vidrio </td>
                   <td >  <t t-esc="cantidad_vidrio"/> </td>        
+                  <td> ₡ <t t-esc="'{0:,.2f}'.format(int(inversion_vidrio / cantidad_vidrio))"/> </td>
               </tr>
             </t>
         </table>
 
-
-
           </t> 
           <br/>
-
-
-
-
-
-
 
         <t t-if="o.tipo == 'caja_chica' ">
             <div align="center">

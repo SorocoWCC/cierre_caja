@@ -1,5 +1,10 @@
 # -*- coding: utf-8 -*-
  
+import pytz 
+from openerp import fields
+from datetime import date
+from openerp import fields
+from openerp.tools import DEFAULT_SERVER_DATE_FORMAT, DEFAULT_SERVER_DATETIME_FORMAT, DATETIME_FORMATS_MAP
 from openerp import models, fields, api
 from openerp.exceptions import Warning
 import time
@@ -120,8 +125,7 @@ class cierre(models.Model):
     _defaults = {
     'state': 'new',
     'name': fields.Date.today(),
-    'fecha': fields.Date.today(),	
-
+    'fecha': fields.Date.today(), 
 	    }
 
     # Nombre del cajero
@@ -129,6 +133,7 @@ class cierre(models.Model):
     @api.depends('name')
     def _action_cajero(self):
       self.cajero = str(self.env.user.name)
+      print "Esta es la fecha --------> " + str(fields.Date.context_today(self))
 
     # Bloqueo campo tipo cierre
     @api.one
@@ -267,7 +272,7 @@ class cierre(models.Model):
 class purchase_order(models.Model):
     _name = 'purchase.order'
     _inherit = 'purchase.order'
-    cierre_id= fields.Many2one(comodel_name='cierre', string='Cierre', delegate=True, readonly=True)
+    cierre_id= fields.Many2one(comodel_name='cierre', string='Cierre', readonly=True)
     cierre_id_caja_chica= fields.Many2one(comodel_name='cierre', string='Cierre Caja chica', readonly=True)
     cierre_id_caja_regular= fields.Many2one(comodel_name='cierre', string='Cierre Caja chica', readonly=True)
 
@@ -283,9 +288,6 @@ class purchase_order(models.Model):
       if len(res) > 0 :
         return res[0]
     _defaults = {
-    'cierre_id': _action_cierre,
-    'cierre_id_caja_regular': _action_cierre,
-    'cierre_id_caja_chica': _action_cierre_caja_chica,
     'pago': 'regular',
       }
 
