@@ -64,7 +64,8 @@
  
  	 <button name="action_revisado" string="Listo Para Revisar" type="object" attrs="{'invisible': ['|', ('state','=','assigned'), ('state','=', 'lost')]}" class="oe_highlight" />
  	 <button name="action_revisado" string="Revisado" type="object" attrs="{'invisible': ['|', ('state','=','new'), ('state','=', 'lost')]}" class="oe_highlight" />
-	 	<field name="state" widget="statusbar"  statusbar_colors='{"new":"red","won":"red"}'/>
+ 	  <button name="action_facturar" string="Facturar" type="object" attrs="{'invisible': ['|', ('state','=','new'), ('state','=', 'lost')]}" class="oe_highlight" />
+	 <field name="state" widget="statusbar"  statusbar_colors='{"new":"red","won":"red"}'/>
 
 
             </header>
@@ -72,12 +73,9 @@
 	<group>			
 			<group >
 			<field  name="cajero"/>
-			<field  name="fecha"/>
+			<field  name="fecha"  attrs="{'readonly': [('state','in',('lost', 'assigned'))]}"/>
 			<field  name="bloqueo_tipo_cierre"/>
 			<field  name="tipo" attrs="{'readonly':[('bloqueo_tipo_cierre','=','bloqueado')]}"/>
-<!--	
-			<field  name="pizarra_id"  attrs="{'readonly': [('state','in',('lost'))]}"/>
--->
 			</group>
 
 			<group >
@@ -137,7 +135,20 @@
 					</field>
 
     				</page>
-				
+		 		<page string="Inventario" attrs="{'invisible':[('state','=','new')] , 'readonly': [('state','in',('lost'))]}">
+					<field name="inventario_ids" widget="one2many_list" colspan="4" nolabel="1" attrs="{'readonly': [('state','in',('lost'))]}">
+   						<tree editable="bottom">
+			        			<field name="cajero"/>  
+        						<field name="product_id"/>
+        						<field name="precio_promedio"/> 
+        						<field name="cantidad_compra"/> 
+        						<field name="cantidad"/> 
+        						<field name="diferencia"/>                               
+  				 		</tree>
+					</field>
+
+    				</page>
+
 				<page string="Retorno de Dinero" >
 					<field name="dinero_ids" widget="one2many_list" colspan="4" nolabel="1" attrs="{'readonly': [('state','in',('lost'))]}" >
    						<tree editable="bottom">

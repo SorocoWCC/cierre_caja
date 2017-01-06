@@ -32,6 +32,31 @@ class compra(models.Model):
     def _action_cajero(self):
 		self.cajero = str(self.env.user.name)
 
+class inventario(models.Model):
+    _name = "inventario"
+    _description = "Inventario Ventana"
+    name = fields.Char(string="Name", default="Naide")
+    cierre_id = fields.Many2one(comodel_name='cierre', string='Cierre', delegate=True)
+    product_id = fields.Many2one(comodel_name='product.product', string='Producto', delegate=True, readonly=True)
+    cantidad = fields.Float('Cantidad Inventario:', required=True)
+    diferencia = fields.Float(compute='action_diferencia', string="Diferencia", readonly=True, store=True )
+    cantidad_compra = fields.Float('Cantidad Compras:', readonly=True)
+    precio_promedio = fields.Float(string="Precio Promedio", readonly=True, store=True)
+    cajero = fields.Char(compute='_action_cajero', string="Cajero", readonly=True, store=True )
+
+# Nombre del cajero
+    @api.one
+    @api.depends('name')
+    def _action_cajero(self):
+        self.cajero = str(self.env.user.name)
+
+# Calculo de diferencia entre la compra y el inventario
+    @api.one
+    @api.depends('cantidad')
+    def action_diferencia(self):
+        self.diferencia = self.cantidad - self.cantidad_compra
+
+
 class salida(models.Model):
     _name = "salida"
     detalle = fields.Char('Detalle:', size=70, required=True)
@@ -93,7 +118,7 @@ class cierre(models.Model):
     _name = 'cierre'
     state = fields.Selection ([('inicio', 'Nuevo'), ('new','En proceso'), ('assigned','Esperando Revision'),('lost','Revisado')], string='state', readonly=True)
     name = fields.Char(string='Name')
-    fecha = fields.Char(string='Fecha', readonly=True)
+    fecha = fields.Date(string='Fecha')
     tipo = fields.Selection ([('regular','Regular'), ('caja_chica','Caja Chica')], string='Tipo', required=True)
     # Convierte a reaonly el tipo de caja para evitar varios cierres abiertos al mismo tiempo
     bloqueo_tipo_cierre = fields.Char(compute='_action_bloqueo', readonly=True, string="Bloqueo")
@@ -111,6 +136,7 @@ class cierre(models.Model):
     empleado_allowance_id = fields.One2many(comodel_name='empleado.allowance',inverse_name='cierre_id', string="Prestamos Empleados")
     cliente_amortizable_id = fields.One2many(comodel_name='cliente.amortizable',inverse_name='cierre_id', string="Prestamos Clientes")
     compra_ids = fields.One2many(comodel_name='compra',inverse_name='cierre_id', string="Compras Diarias")
+    inventario_ids = fields.One2many(comodel_name='inventario',inverse_name='cierre_id', string="Inventario")
     dinero_ids = fields.One2many(comodel_name='dinero',inverse_name='cierre_id', string="Dinero Retorno")
     dinero_ingreso = fields.Float(compute='_dinero_ingreso', store=True, string="TOTAL")
     dinero_ingreso_caja = fields.Float(compute='_dinero_ingreso_caja', store=True, string="Dinero Caja")
@@ -122,6 +148,8 @@ class cierre(models.Model):
     dinero_retorno = fields.Float(compute='_dinero_retorno', store=True, string="Dinero Retorno")
     dinero_salida_total = fields.Float(compute='_dinero_salida_total', store=True, string="TOTAL")
     dinero_balance = fields.Float(compute='_dinero_balance', store=True, string="BALANCE")
+    # Indica si la factura de ventana fue creada
+    factura = fields.Char( string="Factura", readonly=True, store=True, default='False' ) 
     _defaults = {
     'state': 'new',
     'name': fields.Date.today(),
@@ -133,7 +161,6 @@ class cierre(models.Model):
     @api.depends('name')
     def _action_cajero(self):
       self.cajero = str(self.env.user.name)
-      print "Esta es la fecha --------> " + str(fields.Date.context_today(self))
 
     # Bloqueo campo tipo cierre
     @api.one
@@ -252,20 +279,76 @@ class cierre(models.Model):
         if len(cierres_regular) > 1 :    
             raise Warning ("Error: Un nuevo cierre tipo regular no puede ser creado ya que existe uno en proceso")
 
-# Revisado Por
+# Revisado Por y Generar Inventario
     @api.one
     @api.depends('state')
     def action_revisado(self):
-	if str(self.state) == "new" :
-		self.state = "assigned"
-		return	
-#    	self.revisado = str(self.env.user.name)
-	if str(self.cajero) == str(self.env.user.name) and str(self.state) == "assigned" :
-    		raise Warning ("El cierre de caja no puede ser revisado por el Cajero")
-	else:
-		self.state = "lost"
-		self.revisado = str(self.env.user.name)
+        if str(self.state) == "new" :
+            self.state = "assigned"
+            # Generar Inventario
+            if self.tipo == "regular":
+                # Ingresa los productos en la seccion de inventario
+                for i in self.compra_ids :
+                    existencia_producto= self.inventario_ids.search([('product_id.name', '=', str(i.product_id.name))])
+                    if len(existencia_producto) == 0 :
+                    # Calcula la cantidad y precio promedio de producto comprado en la ventana
+                        cantidad_producto_ventana = 0
+                        inversion = 0
+                        for prod in self.compra_ids :
+                            if prod.product_id.name == i.product_id.name:
+                                cantidad_producto_ventana += prod.cantidad
+                                inversion +=prod.monto
+                        self.inventario_ids.create({'cierre_id': self.id, 'product_id': i.product_id.id, 'cantidad': 0, 'cantidad_compra': cantidad_producto_ventana,
+                        'precio_promedio': float(inversion / cantidad_producto_ventana)})
+            return	
+        # Warning
+        if str(self.cajero) == str(self.env.user.name) and str(self.state) == "assigned" :
+            raise Warning ("El cierre de caja no puede ser revisado por el Cajero")
+        # Marca el cierre de caja como revisado
+        else:
+            self.state = "lost"
+            self.revisado = str(self.env.user.name)   
 
+# Generar Factura de Varios
+    @api.one
+    def action_facturar(self):
+        # Valida que sea un cierre regular para crear la factura
+        if self.tipo == 'regular' :
+            # Valida si la factura ya fue creada
+            if self.factura == "False" :
+                # Crea la orden de compra
+                proveedor = cierres_caja_chica=self.env['res.partner'].search([['name', '=', 'Compra de la ventana']])
+                purchase_order = self.env['purchase.order']
+                purchase_order.create({'partner_id': proveedor.id , 'location_id': 1, 'pricelist_id': 1, 'pago': 'muy'})
+                # Buscar la Orden de compra de la ventana
+                compra_ventana= self.env['purchase.order'].search([('partner_id', '=', proveedor.id), ('state', '=', 'draft')])
+                self.factura= compra_ventana.name
+                for i in self.inventario_ids:
+                    compra_ventana.order_line.create({'product_id': int(i.product_id), 'product_qty' : float(i.cantidad), 'price_unit': float(i.precio_promedio), 
+                    'order_id' : compra_ventana.id, 'name': str(i.product_id.name), 'date_planned': str(fields.Date.today())})
+            else:
+                raise Warning ("Error: La factura ya fue creada " + str(self.factura)) 
+        else:
+            raise Warning ("Error: No es posible crear la factura de ventana para un cierre tipo caja chica")
+
+# Calculo de Inventario
+    @api.one
+    @api.depends('state')
+    def action_inventario(self):
+        # Ingresa los productos en la seccion de inventario
+        for i in self.compra_ids :
+            existencia_producto= self.inventario_ids.search([('product_id.name', '=', str(i.product_id.name))])
+            if len(existencia_producto) == 0 :
+                # Calcula la cantidad y precio promedio de producto comprado en la ventana
+                cantidad_producto_ventana = 0
+                inversion = 0
+                for prod in self.compra_ids :
+                    if prod.product_id.name == i.product_id.name:
+                        cantidad_producto_ventana += prod.cantidad
+                        inversion +=prod.monto
+
+                self.inventario_ids.create({'cierre_id': self.id, 'product_id': i.product_id.id, 'cantidad': 0, 'cantidad_compra': cantidad_producto_ventana,
+                'precio_promedio': float(inversion / cantidad_producto_ventana)})
 
 #--------------PURCHASE ORDER---------------
 

@@ -329,194 +329,219 @@
 
 <!-- Fin Procesamiento de Productos -->
         <br/>
-        <table>
-            <tr>
-                <th colspan="3"> Resumen Compras Ventana </th>
-            </tr>
-            <tr>
-                <th  > Producto </th>
-                <th  > Cantidad </th>
-                <th  > Precio Promedio </th>       
-            </tr>
+        <t t-if="o.factura == 'False' ">
+            <table>
+                <tr>
+                    <th colspan="3"> Resumen Compras Ventana </th>
+                </tr>
+                <tr>
+                    <th  > Producto </th>
+                    <th  > Cantidad </th>
+                    <th  > Precio Promedio </th>       
+                </tr>
 
-            <t t-if="cantidad_chatarra > 0 ">
-              <tr>
-                  <td > Chatarra </td>
-                  <td >  <t t-esc="cantidad_chatarra"/> </td>
-                  <td> ₡ <t t-esc="'{0:,.2f}'.format(int(inversion_chatarra / cantidad_chatarra))"/> </td>      
-              </tr>
-            </t>
+                <t t-if="cantidad_chatarra > 0 ">
+                  <tr>
+                      <td > Chatarra </td>
+                      <td >  <t t-esc="cantidad_chatarra"/> </td>
+                      <td> ₡ <t t-esc="'{0:,.2f}'.format(int(inversion_chatarra / cantidad_chatarra))"/> </td>      
+                  </tr>
+                </t>
 
-            <t t-if="cantidad_aluminio > 0 ">
-              <tr>
-                  <td > Aluminio </td>
-                  <td >  <t t-esc="cantidad_aluminio"/> </td> 
-                  <td> ₡ <t t-esc="'{0:,.2f}'.format(int(inversion_aluminio / cantidad_aluminio))"/>  </td>  
-              </tr>
-            </t>
+                <t t-if="cantidad_aluminio > 0 ">
+                  <tr>
+                      <td > Aluminio </td>
+                      <td >  <t t-esc="cantidad_aluminio"/> </td> 
+                      <td> ₡ <t t-esc="'{0:,.2f}'.format(int(inversion_aluminio / cantidad_aluminio))"/>  </td>  
+                  </tr>
+                </t>
 
-            <t t-if="cantidad_acero_inoxidable > 0 ">
-              <tr>
-                  <td > Acero Inoxidable </td>
-                  <td >  <t t-esc="cantidad_acero_inoxidable"/> </td>
-                  <td> ₡ <t t-esc="'{0:,.2f}'.format(int(inversion_acero_inoxidable / cantidad_acero_inoxidable))"/> </td>  
-              </tr>
-            </t>
+                <t t-if="cantidad_acero_inoxidable > 0 ">
+                  <tr>
+                      <td > Acero Inoxidable </td>
+                      <td >  <t t-esc="cantidad_acero_inoxidable"/> </td>
+                      <td> ₡ <t t-esc="'{0:,.2f}'.format(int(inversion_acero_inoxidable / cantidad_acero_inoxidable))"/> </td>  
+                  </tr>
+                </t>
 
-            <t t-if="cantidad_bateria > 0 ">
-              <tr>
-                  <td > Bateria </td>
-                  <td >  <t t-esc="cantidad_bateria"/> </td>      
-                  <td> ₡ <t t-esc="'{0:,.2f}'.format(int(inversion_bateria / cantidad_bateria))"/>  </td>
-              </tr>
-            </t>
+                <t t-if="cantidad_bateria > 0 ">
+                  <tr>
+                      <td > Bateria </td>
+                      <td >  <t t-esc="cantidad_bateria"/> </td>      
+                      <td> ₡ <t t-esc="'{0:,.2f}'.format(int(inversion_bateria / cantidad_bateria))"/>  </td>
+                  </tr>
+                </t>
 
 
-            <t t-if="cantidad_bronce > 0 ">
-              <tr>
-                  <td > Bronce </td>
-                  <td >  <t t-esc="cantidad_bronce"/> </td>       
-                  <td> ₡ <t t-esc="'{0:,.2f}'.format(int(inversion_bronce / cantidad_bronce))"/>  </td>
-              </tr>
-            </t> 
+                <t t-if="cantidad_bronce > 0 ">
+                  <tr>
+                      <td > Bronce </td>
+                      <td >  <t t-esc="cantidad_bronce"/> </td>       
+                      <td> ₡ <t t-esc="'{0:,.2f}'.format(int(inversion_bronce / cantidad_bronce))"/>  </td>
+                  </tr>
+                </t> 
 
-            <t t-if="cantidad_caja_plastica > 0 ">
-              <tr>
-                  <td > Caja Plastica </td>    
-                  <td >  <t t-esc="cantidad_caja_plastica"/> </td> 
-                  <td> ₡ <t t-esc="'{0:,.2f}'.format(int(inversion_caja_plastica / cantidad_caja_plastica))"/> </td>     
-              </tr>
-            </t>
+                <t t-if="cantidad_caja_plastica > 0 ">
+                  <tr>
+                      <td > Caja Plastica </td>    
+                      <td >  <t t-esc="cantidad_caja_plastica"/> </td> 
+                      <td> ₡ <t t-esc="'{0:,.2f}'.format(int(inversion_caja_plastica / cantidad_caja_plastica))"/> </td>     
+                  </tr>
+                </t>
 
-            <t t-if="cantidad_carton > 0 ">
-              <tr>
-                  <td > Cartón </td>
-                  <td >  <t t-esc="cantidad_carton"/> </td>  
-                  <td> ₡ <t t-esc="'{0:,.2f}'.format(int(inversion_carton / cantidad_carton))"/> </td>
-              </tr>
-            </t>
+                <t t-if="cantidad_carton > 0 ">
+                  <tr>
+                      <td > Cartón </td>
+                      <td >  <t t-esc="cantidad_carton"/> </td>  
+                      <td> ₡ <t t-esc="'{0:,.2f}'.format(int(inversion_carton / cantidad_carton))"/> </td>
+                  </tr>
+                </t>
 
-            <t t-if="cantidad_catalizador_generico > 0 ">
-              <tr>
-                  <td > Catalizador Genérico </td>
-                  <td >  <t t-esc="cantidad_catalizador_generico"/> </td> 
-                  <td> ₡ <t t-esc="'{0:,.2f}'.format(int(inversion_catalizador_generico / cantidad_catalizador_generico))"/>  </td>
-              </tr>
-            </t>   
+                <t t-if="cantidad_catalizador_generico > 0 ">
+                  <tr>
+                      <td > Catalizador Genérico </td>
+                      <td >  <t t-esc="cantidad_catalizador_generico"/> </td> 
+                      <td> ₡ <t t-esc="'{0:,.2f}'.format(int(inversion_catalizador_generico / cantidad_catalizador_generico))"/>  </td>
+                  </tr>
+                </t>   
 
-            <t t-if="cantidad_catalizador_original > 0 ">
-              <tr>
-                  <td > Catalizador Original </td>
-                  <td >  <t t-esc="cantidad_catalizador_original"/> </td>  
-                  <td> ₡ <t t-esc="'{0:,.2f}'.format(int(inversion_catalizador_original / cantidad_catalizador_original))"/>   </td>    
-              </tr>
-            </t>
+                <t t-if="cantidad_catalizador_original > 0 ">
+                  <tr>
+                      <td > Catalizador Original </td>
+                      <td >  <t t-esc="cantidad_catalizador_original"/> </td>  
+                      <td> ₡ <t t-esc="'{0:,.2f}'.format(int(inversion_catalizador_original / cantidad_catalizador_original))"/>   </td>    
+                  </tr>
+                </t>
 
-            <t t-if="cantidad_cobre > 0 ">
-              <tr>
-                 <td > Cobre </td>
-                 <td >  <t t-esc="cantidad_cobre"/> </td>        
-                 <td> ₡ <t t-esc="'{0:,.2f}'.format(int(inversion_cobre / cantidad_cobre))"/>  </td>
-              </tr>
-            </t>
-           
-            <t t-if="cantidad_microondas > 0 ">
-              <tr>
-                  <td > Microondas </td>
-                  <td >  <t t-esc="cantidad_microondas"/> </td>    
-                  <td> ₡ <t t-esc="'{0:,.2f}'.format(int(inversion_microondas / cantidad_microondas))"/>  </td>
-              </tr>
-            </t>
+                <t t-if="cantidad_cobre > 0 ">
+                  <tr>
+                     <td > Cobre </td>
+                     <td >  <t t-esc="cantidad_cobre"/> </td>        
+                     <td> ₡ <t t-esc="'{0:,.2f}'.format(int(inversion_cobre / cantidad_cobre))"/>  </td>
+                  </tr>
+                </t>
+               
+                <t t-if="cantidad_microondas > 0 ">
+                  <tr>
+                      <td > Microondas </td>
+                      <td >  <t t-esc="cantidad_microondas"/> </td>    
+                      <td> ₡ <t t-esc="'{0:,.2f}'.format(int(inversion_microondas / cantidad_microondas))"/>  </td>
+                  </tr>
+                </t>
 
-            <t t-if="cantidad_negativos > 0 ">
-              <tr>
-                  <td > Negativos </td>
-                  <td >  <t t-esc="cantidad_negativos"/> </td>        
-                  <td> ₡ <t t-esc="'{0:,.2f}'.format(int(inversion_negativos / cantidad_negativos))"/>  </td>
-              </tr>
-            </t>
+                <t t-if="cantidad_negativos > 0 ">
+                  <tr>
+                      <td > Negativos </td>
+                      <td >  <t t-esc="cantidad_negativos"/> </td>        
+                      <td> ₡ <t t-esc="'{0:,.2f}'.format(int(inversion_negativos / cantidad_negativos))"/>  </td>
+                  </tr>
+                </t>
 
-            <t t-if="cantidad_papel_periodico > 0 ">
-              <tr>
-                  <td > Papel Periódico </td>
-                  <td >  <t t-esc="cantidad_papel_periodico"/> </td>      
-                  <td> ₡ <t t-esc="'{0:,.2f}'.format(int(inversion_papel_periodico / cantidad_papel_periodico))"/>  </td>
-              </tr>
-            </t>
+                <t t-if="cantidad_papel_periodico > 0 ">
+                  <tr>
+                      <td > Papel Periódico </td>
+                      <td >  <t t-esc="cantidad_papel_periodico"/> </td>      
+                      <td> ₡ <t t-esc="'{0:,.2f}'.format(int(inversion_papel_periodico / cantidad_papel_periodico))"/>  </td>
+                  </tr>
+                </t>
 
-            <t t-if="cantidad_papel_primera > 0 ">
-              <tr>
-                  <td > Papel Primera </td>
-                  <td >  <t t-esc="cantidad_papel_primera"/> </td>       
-                  <td> ₡ <t t-esc="'{0:,.2f}'.format(int(inversion_papel_primera / cantidad_papel_primera))"/>  </td>
-              </tr>
-            </t>
+                <t t-if="cantidad_papel_primera > 0 ">
+                  <tr>
+                      <td > Papel Primera </td>
+                      <td >  <t t-esc="cantidad_papel_primera"/> </td>       
+                      <td> ₡ <t t-esc="'{0:,.2f}'.format(int(inversion_papel_primera / cantidad_papel_primera))"/>  </td>
+                  </tr>
+                </t>
 
-            <t t-if="cantidad_papel_segunda > 0 ">
-              <tr>
-                  <td > Papel Segunda </td>
-                  <td >  <t t-esc="cantidad_papel_segunda"/> </td>      
-                  <td> ₡ <t t-esc="'{0:,.2f}'.format(int(inversion_papel_segunda / cantidad_papel_segunda))"/>  </td>
-              </tr>
-            </t>
+                <t t-if="cantidad_papel_segunda > 0 ">
+                  <tr>
+                      <td > Papel Segunda </td>
+                      <td >  <t t-esc="cantidad_papel_segunda"/> </td>      
+                      <td> ₡ <t t-esc="'{0:,.2f}'.format(int(inversion_papel_segunda / cantidad_papel_segunda))"/>  </td>
+                  </tr>
+                </t>
 
-            <t t-if="cantidad_plastico_lavadora > 0 ">
-              <tr>
-                  <td > Plastico Lavadora </td>
-                  <td >  <t t-esc="cantidad_plastico_lavadora"/> </td>   
-                  <td> ₡ <t t-esc="'{0:,.2f}'.format(int(inversion_plastico_lavadora / cantidad_plastico_lavadora))"/>   </td>  
-              </tr>
-            </t>
+                <t t-if="cantidad_plastico_lavadora > 0 ">
+                  <tr>
+                      <td > Plastico Lavadora </td>
+                      <td >  <t t-esc="cantidad_plastico_lavadora"/> </td>   
+                      <td> ₡ <t t-esc="'{0:,.2f}'.format(int(inversion_plastico_lavadora / cantidad_plastico_lavadora))"/>   </td>  
+                  </tr>
+                </t>
 
-            <t t-if="cantidad_plastico_pet > 0 ">
-              <tr>
-                  <td > Plastico Pet </td>
-                  <td >  <t t-esc="cantidad_plastico_pet"/> </td>     
-                  <td> ₡ <t t-esc="'{0:,.2f}'.format(int(inversion_plastico_pet / cantidad_plastico_pet))"/>   </td>
-              </tr>
-            </t>
+                <t t-if="cantidad_plastico_pet > 0 ">
+                  <tr>
+                      <td > Plastico Pet </td>
+                      <td >  <t t-esc="cantidad_plastico_pet"/> </td>     
+                      <td> ₡ <t t-esc="'{0:,.2f}'.format(int(inversion_plastico_pet / cantidad_plastico_pet))"/>   </td>
+                  </tr>
+                </t>
 
-            <t t-if="cantidad_rad_cob_alu > 0 ">
-              <tr>
-                  <td > Radiador (Cobre / Aluminio) </td>
-                  <td >  <t t-esc="cantidad_rad_cob_alu"/> </td> 
-                  <td> ₡ <t t-esc="'{0:,.2f}'.format(int(inversion_rad_cob_alu / cantidad_rad_cob_alu))"/>  </td>      
-              </tr>
-            </t>
+                <t t-if="cantidad_rad_cob_alu > 0 ">
+                  <tr>
+                      <td > Radiador (Cobre / Aluminio) </td>
+                      <td >  <t t-esc="cantidad_rad_cob_alu"/> </td> 
+                      <td> ₡ <t t-esc="'{0:,.2f}'.format(int(inversion_rad_cob_alu / cantidad_rad_cob_alu))"/>  </td>      
+                  </tr>
+                </t>
 
-            <t t-if="cantidad_rad_cob_bro > 0 ">
-              <tr>
-                  <td > Radiador (Cobre / Bronce)</td>
-                  <td >  <t t-esc="cantidad_rad_cob_bro"/> </td>  
-                  <td> ₡ <t t-esc="'{0:,.2f}'.format(int(inversion_rad_cob_bro / cantidad_rad_cob_bro))"/> </td>  
-              </tr>
-            </t>
+                <t t-if="cantidad_rad_cob_bro > 0 ">
+                  <tr>
+                      <td > Radiador (Cobre / Bronce)</td>
+                      <td >  <t t-esc="cantidad_rad_cob_bro"/> </td>  
+                      <td> ₡ <t t-esc="'{0:,.2f}'.format(int(inversion_rad_cob_bro / cantidad_rad_cob_bro))"/> </td>  
+                  </tr>
+                </t>
 
-            <t t-if="cantidad_tar_comp > 0 ">
-              <tr>
-                  <td > Tarjeta Computadora </td>
-                  <td >  <t t-esc="cantidad_tar_comp"/> </td>  
-                  <td> ₡ <t t-esc="'{0:,.2f}'.format(int(inversion_tar_comp / cantidad_tar_comp))"/>   </td>   
-              </tr>
-            </t>
+                <t t-if="cantidad_tar_comp > 0 ">
+                  <tr>
+                      <td > Tarjeta Computadora </td>
+                      <td >  <t t-esc="cantidad_tar_comp"/> </td>  
+                      <td> ₡ <t t-esc="'{0:,.2f}'.format(int(inversion_tar_comp / cantidad_tar_comp))"/>   </td>   
+                  </tr>
+                </t>
 
-            <t t-if="cantidad_tetrabrick > 0 ">
-              <tr>
-                  <td > Tetrabrick </td>
-                  <td >  <t t-esc="cantidad_tetrabrick"/> </td>     
-                  <td> ₡ <t t-esc="'{0:,.2f}'.format(int(inversion_tetrabrick / cantidad_tetrabrick))"/>   </td>
-              </tr>
-            </t>
+                <t t-if="cantidad_tetrabrick > 0 ">
+                  <tr>
+                      <td > Tetrabrick </td>
+                      <td >  <t t-esc="cantidad_tetrabrick"/> </td>     
+                      <td> ₡ <t t-esc="'{0:,.2f}'.format(int(inversion_tetrabrick / cantidad_tetrabrick))"/>   </td>
+                  </tr>
+                </t>
 
-            <t t-if="cantidad_vidrio > 0 ">
-              <tr>
-                  <td > Vidrio </td>
-                  <td >  <t t-esc="cantidad_vidrio"/> </td>        
-                  <td> ₡ <t t-esc="'{0:,.2f}'.format(int(inversion_vidrio / cantidad_vidrio))"/> </td>
-              </tr>
-            </t>
-        </table>
+                <t t-if="cantidad_vidrio > 0 ">
+                  <tr>
+                      <td > Vidrio </td>
+                      <td >  <t t-esc="cantidad_vidrio"/> </td>        
+                      <td> ₡ <t t-esc="'{0:,.2f}'.format(int(inversion_vidrio / cantidad_vidrio))"/> </td>
+                  </tr>
+                </t>
+            </table>
+        </t>
 
+        <t t-if="o.factura != 'False' ">
+            <table>
+                <tr>
+                    <th colspan="5"> Resumen Compras Ventana </th>
+                </tr>
+                <tr>
+                    <th > Producto </th>
+                    <th > Precio Promedio </th> 
+                    <th > Cantidad Compra</th>
+                    <th > Cantidad Inventario </th>
+                    <th > Diferencia </th>                        
+                </tr>
+                <t t-foreach="o.inventario_ids" t-as="b">
+                    <tr>
+                       <td>  <t t-esc="b.product_id.name"/> </td> 
+                       <td>₡ <t t-esc="'{0:,.2f}'.format(int(b.precio_promedio))"/> </td>
+                       <td> <t t-esc="'{0:,.2f}'.format(int(b.cantidad_compra))"/> </td>
+                       <td> <t t-esc="'{0:,.2f}'.format(int(b.cantidad))"/> </td>
+                       <td> <t t-esc="'{0:,.2f}'.format(int(b.diferencia))"/> </td>
+                    </tr>
+                </t>
+            </table>
+        </t>
           </t> 
           <br/>
 
