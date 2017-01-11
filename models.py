@@ -168,6 +168,11 @@ class cierre(models.Model):
     def _action_bloqueo(self):
       self.bloqueo_tipo_cierre = "bloqueado"
 
+    # Actualizar el campo name para que sea igual que la fecha
+    @api.one
+    @api.depends('fecha')
+    def _action_bloqueo(self):
+      self.name = self.fecha
 
 # Dinero Compra Regular / Sistema
     @api.one
@@ -287,10 +292,15 @@ class cierre(models.Model):
             self.state = "assigned"
             # Generar Inventario
             if self.tipo == "regular":
-                # Ingresa los productos en la seccion de inventario
+                # Valida si los productos ya fueron ingresados en la seccion de inventario
                 for i in self.compra_ids :
-                    existencia_producto= self.inventario_ids.search([('product_id.name', '=', str(i.product_id.name))])
-                    if len(existencia_producto) == 0 :
+                    validacion = 0
+                    producto = i.product_id.name
+                    for b in self.inventario_ids:
+                        if b.product_id.name == i.product_id.name :
+                            validacion = 1
+                   # Ingresa los productos en la seccion de inventarios 
+                    if validacion == 0 :
                     # Calcula la cantidad y precio promedio de producto comprado en la ventana
                         cantidad_producto_ventana = 0
                         inversion = 0
@@ -300,14 +310,14 @@ class cierre(models.Model):
                                 inversion +=prod.monto
                         self.inventario_ids.create({'cierre_id': self.id, 'product_id': i.product_id.id, 'cantidad': 0, 'cantidad_compra': cantidad_producto_ventana,
                         'precio_promedio': float(inversion / cantidad_producto_ventana)})
-            return	
+            return  
         # Warning
         if str(self.cajero) == str(self.env.user.name) and str(self.state) == "assigned" :
             raise Warning ("El cierre de caja no puede ser revisado por el Cajero")
         # Marca el cierre de caja como revisado
         else:
             self.state = "lost"
-            self.revisado = str(self.env.user.name)   
+            self.revisado = str(self.env.user.name)  
 
 # Generar Factura de Varios
     @api.one
@@ -326,6 +336,7 @@ class cierre(models.Model):
                 for i in self.inventario_ids:
                     compra_ventana.order_line.create({'product_id': int(i.product_id), 'product_qty' : float(i.cantidad), 'price_unit': float(i.precio_promedio), 
                     'order_id' : compra_ventana.id, 'name': str(i.product_id.name), 'date_planned': str(fields.Date.today())})
+
             else:
                 raise Warning ("Error: La factura ya fue creada " + str(self.factura)) 
         else:
@@ -336,7 +347,8 @@ class cierre(models.Model):
     @api.depends('state')
     def action_inventario(self):
         # Ingresa los productos en la seccion de inventario
-        for i in self.compra_ids :
+        cierre= self.env['cierre'].search([('state', '=', 'assigned'), ('tipo', '=', 'regular')])
+        for i in cierre.compra_ids :
             existencia_producto= self.inventario_ids.search([('product_id.name', '=', str(i.product_id.name))])
             if len(existencia_producto) == 0 :
                 # Calcula la cantidad y precio promedio de producto comprado en la ventana
