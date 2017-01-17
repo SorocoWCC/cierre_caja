@@ -25,7 +25,7 @@ class compra(models.Model):
     _defaults = {
     'tipo': 'ventana',
     'cajero':  lambda self,cr,uid, context: self.pool.get('res.users').browse(cr, uid, uid, context).name
-    }	
+    }   
 
 
 class inventario(models.Model):
@@ -73,7 +73,7 @@ class ingreso(models.Model):
     cajero = fields.Char(string="Cajero", readonly=True, store=True )
     _defaults = {
     'cajero':  lambda self,cr,uid, context: self.pool.get('res.users').browse(cr, uid, uid, context).name
-    }	
+    }   
 
 class dinero(models.Model):
     _name = 'dinero'
@@ -84,16 +84,16 @@ class dinero(models.Model):
     cajero = fields.Char(string="Cajero", readonly=True, store=True )
     _defaults = {
     'cajero':  lambda self,cr,uid, context: self.pool.get('res.users').browse(cr, uid, uid, context).name
-    }	
+    }   
 
 # Cantidad Dinero
     @api.one
     @api.depends('denominacion')
     def _retorno_dinero(self):
-	total= 0
-	if int(self.denominacion) > 0 :
-		total = self.total / int(self.denominacion)
-	self.cantidad= total
+    total= 0
+    if int(self.denominacion) > 0 :
+        total = self.total / int(self.denominacion)
+    self.cantidad= total
 
 class cierre(models.Model):
     _name = 'cierre'
@@ -136,7 +136,7 @@ class cierre(models.Model):
     'name': fields.Date.today(),
     'fecha': fields.Date.today(), 
     'cajero':  lambda self,cr,uid, context: self.pool.get('res.users').browse(cr, uid, uid, context).name
-	    }
+        }
 
     # Bloqueo campo tipo cierre
     @api.one
@@ -171,10 +171,10 @@ class cierre(models.Model):
     @api.one
     @api.depends('ingreso_ids')
     def _dinero_ingreso(self):
-	total= 0
-	for ingreso in self.ingreso_ids:		    
-		total += int(ingreso.monto_ingreso)
-	self.dinero_ingreso= total
+    total= 0
+    for ingreso in self.ingreso_ids:            
+        total += int(ingreso.monto_ingreso)
+    self.dinero_ingreso= total
 
 # Dinero Ingreso Caja
     @api.one
@@ -190,63 +190,63 @@ class cierre(models.Model):
     @api.one
     @api.depends('ingreso_ids')
     def _dinero_ingreso_bns(self):
-	total= 0
-	for ingreso in self.ingreso_ids:
-      		if  ingreso.tipo_ingreso == 'bns':
-			total += int(ingreso.monto_ingreso)
-	self.dinero_ingreso_bns= total
+    total= 0
+    for ingreso in self.ingreso_ids:
+            if  ingreso.tipo_ingreso == 'bns':
+            total += int(ingreso.monto_ingreso)
+    self.dinero_ingreso_bns= total
 
 # Dinero Ingreso Ventas
     @api.one
     @api.depends('ingreso_ids')
     def _dinero_ingreso_ventas(self):
-	total= 0
-	for ingreso in self.ingreso_ids:
-      		if  ingreso.tipo_ingreso == 'ventas':
-			total += int(ingreso.monto_ingreso)
-	self.dinero_ingreso_ventas= total
+    total= 0
+    for ingreso in self.ingreso_ids:
+            if  ingreso.tipo_ingreso == 'ventas':
+            total += int(ingreso.monto_ingreso)
+    self.dinero_ingreso_ventas= total
 
 # Dinero Compra Ventana
     @api.one
     @api.depends('compra_ids')
     def _dinero_compra_ventana(self):
-	total= 0
-	for compra in self.compra_ids:
-		total += int(compra.monto)
-	self.dinero_compra_ventana= total
+    total= 0
+    for compra in self.compra_ids:
+        total += int(compra.monto)
+    self.dinero_compra_ventana= total
 
 # Dinero Salidas
     @api.one
     @api.depends('salida_ids')
     def _dinero_salida(self):
-	total= 0
-	for salida in self.salida_ids:
-		total += int(salida.monto)
-	self.dinero_salida= total
+    total= 0
+    for salida in self.salida_ids:
+        total += int(salida.monto)
+    self.dinero_salida= total
 
 # Dinero Salidas TOTAL
     @api.one
     @api.depends('dinero_compra_ventana', 'dinero_compra_regular', 'dinero_salida')
     def _dinero_salida_total(self):
-	total= self.dinero_compra_ventana + self.dinero_compra_regular + self.dinero_salida
-	self.dinero_salida_total= total
+    total= self.dinero_compra_ventana + self.dinero_compra_regular + self.dinero_salida
+    self.dinero_salida_total= total
 
 # Dinero Retorno
     @api.one
     @api.depends('dinero_ids')
     def _dinero_retorno(self):
-	total= 0
-	for dinero in self.dinero_ids:
-		total += int(dinero.total)
-	self.dinero_retorno= total
+    total= 0
+    for dinero in self.dinero_ids:
+        total += int(dinero.total)
+    self.dinero_retorno= total
 
 # Dinero Balance
     @api.one
     @api.depends('dinero_salida_total', 'dinero_retorno', 'dinero_ingreso')
     def _dinero_balance(self):
-	total= 0
-	total += (float(self.dinero_salida_total) + float(self.dinero_retorno)) - float(self.dinero_ingreso)
-	self.dinero_balance= total
+    total= 0
+    total += (float(self.dinero_salida_total) + float(self.dinero_retorno)) - float(self.dinero_ingreso)
+    self.dinero_balance= total
 
 # Validacion para la creacion de un objeto cierre
     @api.one
@@ -311,7 +311,7 @@ class cierre(models.Model):
                 self.factura= compra_ventana.name
                 for i in self.inventario_ids:
                     compra_ventana.order_line.create({'product_id': int(i.product_id), 'product_qty' : float(i.cantidad), 'price_unit': float(i.precio_promedio), 
-                    'order_id' : compra_ventana.id, 'name': str(i.product_id.name), 'date_planned': str(fields.Date.today()), })
+                    'order_id' : compra_ventana.id, 'name': str(i.product_id.name), 'date_planned': str(fields.Date.today())})
 
             else:
                 raise Warning ("Error: La factura ya fue creada " + str(self.factura)) 
@@ -372,15 +372,15 @@ class gasto(models.Model):
 
 # Default Cierre (Complete automaticamente el campo cierre)
     def _action_cierre_gasto(self, cr, uid, context=None):
-	res = self.pool.get('cierre').search(cr, uid, [('state','=','new'), ('tipo','=','regular')], context=context)
-	if len(res) > 0:
-		return res[0]
-	else:
-    		raise Warning ("Por favor proceda a crear un cierre de caja")
+    res = self.pool.get('cierre').search(cr, uid, [('state','=','new'), ('tipo','=','regular')], context=context)
+    if len(res) > 0:
+        return res[0]
+    else:
+            raise Warning ("Por favor proceda a crear un cierre de caja")
 
     _defaults = {
     'cierre_id': _action_cierre_gasto,
-    }	
+    }   
 
 
 #-------------- Empleado Amortizable ---------------
@@ -418,8 +418,3 @@ class cliente_allowance(models.Model):
     _defaults = {
     'cierre_id': _action_cierre_cliente_allowance,
     }   
-
-
-
-
-
