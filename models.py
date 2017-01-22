@@ -359,12 +359,12 @@ class gasto(models.Model):
 class empleado_allowance(models.Model):
     _name = 'empleado.allowance'
     _inherit = 'empleado.allowance'
-    cierre_id = fields.Many2one(comodel_name='cierre', readonly=True, string='Reporte Diario', delegate=True )
+    cierre_id = fields.Many2one(comodel_name='cierre', readonly=True, string='Reporte Diario' )
 
 
 #-------------- Cliente Allowance ---------------
 class cliente_allowance(models.Model):
     _name = 'cliente.allowance'
     _inherit = 'cliente.allowance'
-    cierre_id = fields.Many2one(comodel_name='cierre', readonly=True, string='Reporte Diario', delegate=True )
+    cierre_id = fields.Many2one(comodel_name='cierre', readonly=True, string='Reporte Diario')
  
