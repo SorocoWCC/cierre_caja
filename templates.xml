@@ -37,7 +37,7 @@
     </field>
 </record>
 
-<!--Vista Heredada de Gasto  -->
+<!--Vista Heredada de Gasto -->
 <record model="ir.ui.view" id="gasto_view_form_inherit">
     <field name="name">gasto_view_form_inherit</field>
     <field name="model">gasto</field>
@@ -45,7 +45,7 @@
     <field name="arch" type="xml">
 
 	<field name="responsable" position="after">
-		<field name="cierre_id" />
+		<field name="cierre_id"  attrs="{'invisible':[('state','=','new')] , 'readonly': [('state','in',('done'))]}"/>
         </field>
 
         </field>
@@ -73,7 +73,7 @@
 	<group>			
 			<group >
 			<field  name="cajero"/>
-			<field  name="fecha"  attrs="{'readonly': [('state','in',('lost', 'assigned'))]}"/>
+			<field  name="fecha" />
 			<field  name="bloqueo_tipo_cierre"/>
 			<field  name="tipo" attrs="{'readonly':[('bloqueo_tipo_cierre','=','bloqueado')]}"/>
 			</group>
