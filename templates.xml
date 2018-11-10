@@ -125,9 +125,10 @@
     				</page>
 		 		<page string="Compras Ventana">
 					<field name="compra_ids" widget="one2many_list" colspan="4" nolabel="1" attrs="{'readonly': [('state','in',('lost'))]}">
-   						<tree editable="bottom">
+   						<tree editable="bottom" default_order='consecutivo desc'>
 			        			<field name="cajero"/> 
         						<field name="tipo"/>  
+        						<field name="consecutivo"/> 
         						<field name="product_id"/> 
         						<field name="cantidad"/> 
 			    				<field name="monto"  sum="True"/>                               
@@ -201,7 +202,7 @@
 		<field name="model">cierre</field>
 		<field name="arch" type="xml">
 			<tree string="Cierre de Caja" colors="blue:state == 'new';black:state in ('assigned')">
-			<field name="fecha" />
+			<field name="fecha"/>
 			<field  name="cajero"/>
 			<field  name="tipo"/>
 <!--			<field  name="revisado" string="Revisado por"/>

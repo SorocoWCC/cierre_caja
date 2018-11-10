@@ -21,6 +21,7 @@ class compra(models.Model):
     cierre_id = fields.Many2one(comodel_name='cierre', string='Cierre', delegate=True)
     product_id = fields.Many2one(comodel_name='product.product', string='Producto', delegate=True)
     cantidad = fields.Float('Cantidad:', required=True)
+    consecutivo = fields.Char('Consecutivo:')
     cajero = fields.Char(string="Cajero", readonly=True, store=True )
     _defaults = {
     'tipo': 'ventana',
@@ -302,11 +303,12 @@ class cierre(models.Model):
                 purchase_order = self.env['purchase.order']
                 purchase_order.create({'partner_id': proveedor.id , 'location_id': 12, 'pricelist_id': 1, 'pago': 'muy'})
                 # Buscar la Orden de compra de la ventana
-                compra_ventana= self.env['purchase.order'].search([('partner_id', '=', proveedor.id), ('state', '=', 'draft')])
+                compra_ventana= self.env['purchase.order'].search([('partner_id', '=', proveedor.id), ('state', '=', 'draft')])[0]
                 self.factura= compra_ventana.name
                 for i in self.inventario_ids:
+                    print "HERE ----> " + str(float(i.cantidad)) + str(i.product_id.name)
                     compra_ventana.order_line.create({'product_id': int(i.product_id), 'product_qty' : float(i.cantidad), 'price_unit': float(i.precio_promedio), 
-                    'order_id' : compra_ventana.id, 'name': str(i.product_id.name), 'date_planned': str(fields.Date.today())})
+                    'order_id' : compra_ventana.id, 'name': str("[" + i.product_id.default_code + '] '+ i.product_id.name), 'date_planned': str(fields.Date.today())})
 
             else:
                 raise Warning ("Error: La factura ya fue creada " + str(self.factura)) 
