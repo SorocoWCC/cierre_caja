@@ -11,7 +11,7 @@ import time
 import yaml
 import json
 
-
+'''
 class compra(models.Model):
     _name = "compra"
     _description = "Compra Diaria"
@@ -27,8 +27,8 @@ class compra(models.Model):
     'tipo': 'ventana',
     'cajero':  lambda self,cr,uid, context: self.pool.get('res.users').browse(cr, uid, uid, context).name
     }   
-
-
+'''
+'''
 class inventario(models.Model):
     _name = "inventario"
     _description = "Inventario Ventana"
@@ -64,7 +64,7 @@ class salida(models.Model):
     'cajero':  lambda self,cr,uid, context: self.pool.get('res.users').browse(cr, uid, uid, context).name
     }
 
-
+'''
 class ingreso(models.Model):
     _name = 'ingreso'
     detalle = fields.Char(string='Detalle/Entregado Por:', required=True)
@@ -75,7 +75,7 @@ class ingreso(models.Model):
     _defaults = {
     'cajero':  lambda self,cr,uid, context: self.pool.get('res.users').browse(cr, uid, uid, context).name
     }   
-
+'''
 class dinero(models.Model):
     _name = 'dinero'
     denominacion = fields.Selection([('1000','1000 (Mil)'), ('2000','2000 (Dos Mil)'), ('5000','5000 (Cinco Mil)'), ('10000','10000 (Diez Mil)'), ('20000','20000 (Veinte Mil)'), ('50000','50000 (Cincuenta Mil)'), ('1','Monedas'), ('500','500 (Quinientos)'), ('100','100 (Cien)'), ('50','50 (Cincuenta)'), ('25','25 (Veinticinco)'), ('10','10 (Diez)'), ('5','5 (Cinco)')], string='Denominacion', required=True)
@@ -95,57 +95,68 @@ class dinero(models.Model):
         if int(self.denominacion) > 0 :
             total = self.total / int(self.denominacion)
         self.cantidad= total
-
+'''
 class cierre(models.Model):
+
+
+    @api.model
+    def _get_name(self):
+        return str(self.env['res.users'].browse(self.env.uid).name + " " + str(fields.Date.today()) )
+
+    _inherit = 'mail.thread'
     _name = 'cierre'
-    state = fields.Selection ([('inicio', 'Nuevo'), ('new','En proceso'), ('assigned','Esperando Revision'),('lost','Revisado')], string='state', readonly=True)
-    name = fields.Char(string='Name')
+    state = fields.Selection ([('nuevo','Nuevo'), ('en_proceso','En proceso'), ('esperando_revision','Esperando Revision'),('revisado','Revisado')], string='state', default='nuevo', readonly=True)
+    name = fields.Char(string='Name', default=_get_name, readonly=True, copy=False)
     fecha = fields.Date(string='Fecha', readonly=True)
-    tipo = fields.Selection ([('regular','Regular'), ('caja_chica','Caja Chica')], string='Tipo', default='regular', required=True)
+    tipo = fields.Selection ([('regular','Regular'), ('caja_chica','Caja Chica')], required=True, string='Tipo')
     # Convierte a reaonly el tipo de caja para evitar varios cierres abiertos al mismo tiempo
-    bloqueo_tipo_cierre = fields.Char(compute='_action_bloqueo', readonly=True, string="Bloqueo")
+    #bloqueo_tipo_cierre = fields.Char(compute='_action_bloqueo', readonly=True, string="Bloqueo")
     cajero = fields.Char(string="Cajero", readonly=True, store=True )
     revisado = fields.Char(string="Revisado por :", readonly=True, store=True, default="Nadie")
     # Agrupa todas las facturas para el reporte diario
-    factura_ids = fields.One2many(comodel_name='purchase.order', inverse_name='cierre_id', string="Facturas", readonly=True)
+    #factura_ids = fields.One2many(comodel_name='purchase.order', inverse_name='cierre_id', string="Facturas", readonly=True)
     # Agrupa todas las facturas para el reporte diario
-    factura_ids_caja_regular = fields.One2many(comodel_name='purchase.order', inverse_name='cierre_id', string="Facturas",  domain=[('pago', '=', 'regular')], readonly=True)
+    #factura_ids_caja_regular = fields.One2many(comodel_name='purchase.order', inverse_name='cierre_id', string="Facturas",  domain=[('pago', '=', 'regular')], readonly=True)
     # Agrupa solamente facturas de caja chica
-    factura_ids_caja_chica = fields.One2many(comodel_name='purchase.order', inverse_name='cierre_id_caja_chica', string="Facturas", domain=[('pago', '=', 'caja_chica')], readonly=True)
+    #factura_ids_caja_chica = fields.One2many(comodel_name='purchase.order', inverse_name='cierre_id_caja_chica', string="Facturas", domain=[('pago', '=', 'caja_chica')], readonly=True)
     ingreso_ids = fields.One2many(comodel_name='ingreso', inverse_name='cierre_id', string="Ingresos de Dinero")
-    salida_ids = fields.One2many(comodel_name='salida',inverse_name='cierre_id', string="Salidas de Dinero")
-    gasto_id = fields.One2many(comodel_name='gasto',inverse_name='cierre_id', string="Gastos")
-    empleado_allowance_id = fields.One2many(comodel_name='empleado.allowance',inverse_name='cierre_id', string="Prestamos Empleados")
-    cliente_amortizable_id = fields.One2many(comodel_name='cliente.amortizable',inverse_name='cierre_id', string="Prestamos Clientes")
-    compra_ids = fields.One2many(comodel_name='compra',inverse_name='cierre_id', string="Compras Diarias")
-    inventario_ids = fields.One2many(comodel_name='inventario',inverse_name='cierre_id', string="Inventario")
-    dinero_ids = fields.One2many(comodel_name='dinero',inverse_name='cierre_id', string="Dinero Retorno")
-    dinero_ingreso = fields.Float(compute='_dinero_ingreso', store=True, string="TOTAL")
-    dinero_ingreso_caja = fields.Float(compute='_dinero_ingreso_caja', store=True, string="Dinero Caja")
-    dinero_ingreso_bns = fields.Float(compute='_dinero_ingreso_bns', store=True, string="Dinero BNS")
-    dinero_ingreso_ventas = fields.Float(compute='_dinero_ingreso_ventas', store=True, string="Dinero Ventas")
-    dinero_salida = fields.Float(compute='_dinero_salida', store=True, string="Salidas/Vales")
-    dinero_compra_ventana = fields.Float(compute='_dinero_compra_ventana', store=True, string="Compra Ventana")
-    dinero_compra_regular = fields.Float(compute='_dinero_compra_regular', store=True, string="Compra Sistema")
-    dinero_retorno = fields.Float(compute='_dinero_retorno', store=True, string="Dinero Retorno")
-    dinero_salida_total = fields.Float(compute='_dinero_salida_total', store=True, string="TOTAL")
-    dinero_balance = fields.Float(compute='_dinero_balance', store=True, string="BALANCE")
+    #salida_ids = fields.One2many(comodel_name='salida',inverse_name='cierre_id', string="Salidas de Dinero")
+    #gasto_id = fields.One2many(comodel_name='gasto',inverse_name='cierre_id', string="Gastos")
+    #empleado_allowance_id = fields.One2many(comodel_name='empleado.allowance',inverse_name='cierre_id', string="Prestamos Empleados")
+    #cliente_amortizable_id = fields.One2many(comodel_name='cliente.amortizable',inverse_name='cierre_id', string="Prestamos Clientes")
+    #compra_ids = fields.One2many(comodel_name='compra',inverse_name='cierre_id', string="Compras Diarias")
+    #inventario_ids = fields.One2many(comodel_name='inventario',inverse_name='cierre_id', string="Inventario")
+    #dinero_ids = fields.One2many(comodel_name='dinero',inverse_name='cierre_id', string="Dinero Retorno")
+    #dinero_ingreso = fields.Float(compute='_dinero_ingreso', store=True, string="TOTAL")
+    #dinero_ingreso_caja = fields.Float(compute='_dinero_ingreso_caja', store=True, string="Dinero Caja")
+    #dinero_ingreso_bns = fields.Float(compute='_dinero_ingreso_bns', store=True, string="Dinero BNS")
+    #dinero_ingreso_ventas = fields.Float(compute='_dinero_ingreso_ventas', store=True, string="Dinero Ventas")
+    #dinero_salida = fields.Float(compute='_dinero_salida', store=True, string="Salidas/Vales")
+    #dinero_compra_ventana = fields.Float(compute='_dinero_compra_ventana', store=True, string="Compra Ventana")
+    #dinero_compra_regular = fields.Float(compute='_dinero_compra_regular', store=True, string="Compra Sistema")
+    #dinero_retorno = fields.Float(compute='_dinero_retorno', store=True, string="Dinero Retorno")
+    #dinero_salida_total = fields.Float(compute='_dinero_salida_total', store=True, string="TOTAL")
+    #dinero_balance = fields.Float(compute='_dinero_balance', store=True, string="BALANCE")
     # Indica si la factura de ventana fue creada
     factura = fields.Char( string="Factura", readonly=True, store=True, default='False' ) 
-    _defaults = {
-    'state': 'new',
-    'name': fields.Date.today(),
-    'fecha': fields.Date.today(), 
-    'cajero':  lambda self,cr,uid, context: self.pool.get('res.users').browse(cr, uid, uid, context).name
-        }
 
-    # Bloqueo campo tipo cierre
+
     @api.one
-    @api.depends('ingreso_ids')
-    def _action_bloqueo(self):
-        if self.dinero_ingreso > 0 :
-            self.bloqueo_tipo_cierre = "bloqueado"
+    @api.constrains('name')
+    def _check_cierre(self): 
+        cierres_caja_chica=self.env['cierre'].search([['state', '=', 'en_proceso'], ['tipo', '=', 'caja_chica']])
+        cierres_regular=self.env['cierre'].search([['state', '=', 'en_proceso'], ['tipo', '=', 'regular']])
 
+        if self.tipo == "caja_chica" and len(cierres_caja_chica) > 0 :    
+            raise Warning ("Error: Un nuevo cierre tipo caja chica no puede ser creado ya que existe uno en proceso")
+        if self.tipo == "regular" and len(cierres_regular) > 0 :    
+            raise Warning ("Error: Un nuevo cierre tipo regular no puede ser creado ya que existe uno en proceso") 
+    
+    @api.multi
+    def action_abrir_caja(self):
+        self.state="en_proceso"
+
+'''
 # Dinero Compra Regular / Sistema
     @api.one
     @api.depends('factura_ids', 'factura_ids_caja_chica', 'factura_ids.state', 'factura_ids_caja_chica.state', 'factura_ids_caja_regular.state', 'factura_ids_caja_chica.pago_caja', 'factura_ids_caja_regular.pago_caja', 'factura_ids.pago_caja')
@@ -243,19 +254,10 @@ class cierre(models.Model):
         total= 0
         total += (float(self.dinero_salida_total) + float(self.dinero_retorno)) - float(self.dinero_ingreso)
         self.dinero_balance= total
-
+'''
 # Validacion para la creacion de un objeto cierre
-    @api.one
-    @api.constrains('name')
-    def _check_cierre(self): 
-        cierres_caja_chica=self.env['cierre'].search([['state', '=', 'new'], ['tipo', '=', 'caja_chica']])
-        cierres_regular=self.env['cierre'].search([['state', '=', 'new'], ['tipo', '=', 'regular']])
 
-        if len(cierres_caja_chica) > 1 :    
-            raise Warning ("Error: Un nuevo cierre tipo caja chica no puede ser creado ya que existe uno en proceso")
-        if len(cierres_regular) > 1 :    
-            raise Warning ("Error: Un nuevo cierre tipo regular no puede ser creado ya que existe uno en proceso")
-
+'''
 # Revisado Por y Generar Inventario
     @api.one
     @api.depends('state')
@@ -306,7 +308,7 @@ class cierre(models.Model):
                 compra_ventana= self.env['purchase.order'].search([('partner_id', '=', proveedor.id), ('state', '=', 'draft')])[0]
                 self.factura= compra_ventana.name
                 for i in self.inventario_ids:
-                    print "HERE ----> " + str(float(i.cantidad)) + str(i.product_id.name)
+                    print("HERE ----> " + str(float(i.cantidad)) + str(i.product_id.name))
                     compra_ventana.order_line.create({'product_id': int(i.product_id), 'product_qty' : float(i.cantidad), 'price_unit': float(i.precio_promedio), 
                     'order_id' : compra_ventana.id, 'name': str("[" + i.product_id.default_code + '] '+ i.product_id.name), 'date_planned': str(fields.Date.today())})
 
@@ -334,9 +336,9 @@ class cierre(models.Model):
 
                 self.inventario_ids.create({'cierre_id': self.id, 'product_id': i.product_id.id, 'cantidad': 0, 'cantidad_compra': cantidad_producto_ventana,
                 'precio_promedio': float(inversion / cantidad_producto_ventana)})
-
+'''
 #--------------PURCHASE ORDER---------------
-
+'''
 class purchase_order(models.Model):
     _name = 'purchase.order'
     _inherit = 'purchase.order'
@@ -347,26 +349,29 @@ class purchase_order(models.Model):
     _defaults = {
     'pago': 'regular',
       }
-
+'''
 #--------------FIN PURCHASE ORDER---------------
 
 #--------------GASTO---------------
+'''
 class gasto(models.Model):
     _name = 'gasto'
     _inherit = 'gasto'
     cierre_id = fields.Many2one(comodel_name='cierre', string='Reporte Diario', delegate=True )
-
+'''
 
 #-------------- Empleado Amortizable ---------------
+'''
 class empleado_allowance(models.Model):
     _name = 'empleado.allowance'
     _inherit = 'empleado.allowance'
     cierre_id = fields.Many2one(comodel_name='cierre', readonly=True, string='Reporte Diario' )
-
+'''
 
 #-------------- Cliente Allowance ---------------
+'''
 class cliente_allowance(models.Model):
     _name = 'cliente.allowance'
     _inherit = 'cliente.allowance'
-    cierre_id = fields.Many2one(comodel_name='cierre', readonly=True, string='Reporte Diario')
- 
+cierre_id = fields.Many2one(comodel_name='cierre', readonly=True, string='Reporte Diario')
+'''

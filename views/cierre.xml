@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <!--Action para Cierre de Caja-->
+        <record id="cierre_action" model="ir.actions.act_window">
+            <field name="name">Cierre De Caja</field>
+            <field name="res_model">cierre</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">Presione aquí para crear un cierre de caja.</p>
+            </field>
+        </record>
+        <!-- Vista Formulario Receptor-->
+        <record id="fe_receptor_form_view" model="ir.ui.view">
+            <field name="name">Cierre de Caja</field>
+            <field name="view_type">form</field>
+            <field name="model">cierre</field>
+            <field name="arch" type="xml">
+                <form string="Cierre de Caja" version="7.0">
+                    <header>
+                        <button attrs="{'invisible':[('state','not in',['nuevo'])]}" class="oe_highlight" name="action_abrir_caja" string="Abrir Caja" type="object"/>
+                        <field name="state" widget="statusbar"/>
+                    </header>
+                    <sheet string="Cierre de Caja">
+                        <h1 class="mt0">
+                            <div>
+                                <field class="oe_inline" name="name"/>
+                            </div>
+                        </h1>
+                        <group>
+                            <group>
+                                <field attrs="{'readonly':[('state','not in',['nuevo'])]}" name="tipo"/>
+                            </group>
+                            <group/>
+                            <group string="Dineros Ingreso"/>
+                            <group string="Dineros Salida"/>
+                        </group>
+                        <notebook>
+                            <page string="Ingresos de Dinero">
+                                <field attrs="{'readonly': [('state','in',('lost'))]}" colspan="4" name="ingreso_ids" nolabel="1" widget="one2many_list">
+                                    <tree editable="bottom">
+                                        <field name="cajero"/>
+                                        <field name="detalle"/>
+                                        <field name="tipo_ingreso"/>
+                                        <field name="monto_ingreso" sum="True"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field groups="base.group_user" name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+        <!-- Top menu item -->
+        <menuitem id="menu_purchase_root_cierre_caja" name="Cierre Caja" sequence="30" web_icon="odoo12-cierre_caja,static/icon.png"/>
+        <!--Menus-->
+        <menuitem id="cierrecaja" name="Cierre de Caja"/>
+        <menuitem id="cierrecaja_menu" name="Cierres" parent="menu_purchase_root_cierre_caja"/>
+        <menuitem action="cierre_action" id="cierre_libro_menu" name="Cierres Diarios" parent="cierrecaja_menu"/>
+    </data>
+</odoo>
