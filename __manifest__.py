@@ -19,14 +19,14 @@
     'version': '0.1',
 
     # any module necessary for this one to work correctly
-    'depends': ['base','purchase'],
+    'depends': ['base','purchase', 'purchase_order_modifications'],
 
     # always loaded
     'data': [
         # 'security/ir.model.access.csv',
         'views/cierre.xml',
         #'views/templates.xml',
-        #'views/purchase_order.xml',
+        'views/purchase_order.xml',
         #'views/product.xml'
 
     ],

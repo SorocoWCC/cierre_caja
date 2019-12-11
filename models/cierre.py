@@ -2,7 +2,9 @@
  
 import pytz 
 from openerp import fields
-from datetime import date
+from datetime import datetime
+from datetime import timedelta  
+from pytz import timezone 
 from openerp import fields
 from openerp.tools import DEFAULT_SERVER_DATE_FORMAT, DEFAULT_SERVER_DATETIME_FORMAT, DATETIME_FORMATS_MAP
 from openerp import models, fields, api
@@ -11,23 +13,7 @@ import time
 import yaml
 import json
 
-'''
-class compra(models.Model):
-    _name = "compra"
-    _description = "Compra Diaria"
-    tipo = fields.Selection([('ventana','Compra Ventana')], string='Tipo de Compra', required=True)
-    monto = fields.Integer('Monto:', required=True)
-    notas = fields.Text('Observaciones')
-    cierre_id = fields.Many2one(comodel_name='cierre', string='Cierre', delegate=True)
-    product_id = fields.Many2one(comodel_name='product.product', string='Producto', delegate=True)
-    cantidad = fields.Float('Cantidad:', required=True)
-    consecutivo = fields.Char('Consecutivo:')
-    cajero = fields.Char(string="Cajero", readonly=True, store=True )
-    _defaults = {
-    'tipo': 'ventana',
-    'cajero':  lambda self,cr,uid, context: self.pool.get('res.users').browse(cr, uid, uid, context).name
-    }   
-'''
+
 '''
 class inventario(models.Model):
     _name = "inventario"
@@ -53,28 +39,8 @@ class inventario(models.Model):
         self.diferencia = self.cantidad - self.cantidad_compra
 
 
-class salida(models.Model):
-    _name = "salida"
-    detalle = fields.Char('Detalle:', size=70, required=True)
-    monto = fields.Integer('Monto:', required=True)
-    notas = fields.Text('Observaciones')
-    cierre_id= fields.Many2one(comodel_name='cierre', string='Cierre', delegate=True)
-    cajero = fields.Char(string="Cajero", readonly=True, store=True )
-    _defaults = {
-    'cajero':  lambda self,cr,uid, context: self.pool.get('res.users').browse(cr, uid, uid, context).name
-    }
-
 '''
-class ingreso(models.Model):
-    _name = 'ingreso'
-    detalle = fields.Char(string='Detalle/Entregado Por:', required=True)
-    tipo_ingreso = fields.Selection([('caja','Caja'), ('bns','BNS'),('ventas','Ventas')], string='Tipo',required=True)
-    monto_ingreso = fields.Integer('Monto:', required=True, type='integer')
-    cierre_id = fields.Many2one(comodel_name='cierre', string='Cierre', delegate=True)
-    cajero = fields.Char(string="Cajero", readonly=True, store=True )
-    _defaults = {
-    'cajero':  lambda self,cr,uid, context: self.pool.get('res.users').browse(cr, uid, uid, context).name
-    }   
+
 '''
 class dinero(models.Model):
     _name = 'dinero'
@@ -114,28 +80,28 @@ class cierre(models.Model):
     cajero = fields.Char(string="Cajero", readonly=True, store=True )
     revisado = fields.Char(string="Revisado por :", readonly=True, store=True, default="Nadie")
     # Agrupa todas las facturas para el reporte diario
-    #factura_ids = fields.One2many(comodel_name='purchase.order', inverse_name='cierre_id', string="Facturas", readonly=True)
+    factura_ids = fields.One2many(comodel_name='purchase.order', inverse_name='cierre_id', string="Facturas", readonly=True)
     # Agrupa todas las facturas para el reporte diario
     #factura_ids_caja_regular = fields.One2many(comodel_name='purchase.order', inverse_name='cierre_id', string="Facturas",  domain=[('pago', '=', 'regular')], readonly=True)
     # Agrupa solamente facturas de caja chica
     #factura_ids_caja_chica = fields.One2many(comodel_name='purchase.order', inverse_name='cierre_id_caja_chica', string="Facturas", domain=[('pago', '=', 'caja_chica')], readonly=True)
     ingreso_ids = fields.One2many(comodel_name='ingreso', inverse_name='cierre_id', string="Ingresos de Dinero")
-    #salida_ids = fields.One2many(comodel_name='salida',inverse_name='cierre_id', string="Salidas de Dinero")
+    salida_ids = fields.One2many(comodel_name='salida',inverse_name='cierre_id', string="Salidas de Dinero")
     #gasto_id = fields.One2many(comodel_name='gasto',inverse_name='cierre_id', string="Gastos")
     #empleado_allowance_id = fields.One2many(comodel_name='empleado.allowance',inverse_name='cierre_id', string="Prestamos Empleados")
     #cliente_amortizable_id = fields.One2many(comodel_name='cliente.amortizable',inverse_name='cierre_id', string="Prestamos Clientes")
-    #compra_ids = fields.One2many(comodel_name='compra',inverse_name='cierre_id', string="Compras Diarias")
+    compra_ids = fields.One2many(comodel_name='compra',inverse_name='cierre_id', string="Compras Ventana")
     #inventario_ids = fields.One2many(comodel_name='inventario',inverse_name='cierre_id', string="Inventario")
     #dinero_ids = fields.One2many(comodel_name='dinero',inverse_name='cierre_id', string="Dinero Retorno")
-    #dinero_ingreso = fields.Float(compute='_dinero_ingreso', store=True, string="TOTAL")
-    #dinero_ingreso_caja = fields.Float(compute='_dinero_ingreso_caja', store=True, string="Dinero Caja")
-    #dinero_ingreso_bns = fields.Float(compute='_dinero_ingreso_bns', store=True, string="Dinero BNS")
-    #dinero_ingreso_ventas = fields.Float(compute='_dinero_ingreso_ventas', store=True, string="Dinero Ventas")
-    #dinero_salida = fields.Float(compute='_dinero_salida', store=True, string="Salidas/Vales")
-    #dinero_compra_ventana = fields.Float(compute='_dinero_compra_ventana', store=True, string="Compra Ventana")
-    #dinero_compra_regular = fields.Float(compute='_dinero_compra_regular', store=True, string="Compra Sistema")
+    total_dinero_ingreso = fields.Float(compute='action_dinero_ingreso', store=True, string="TOTAL")
+    dinero_ingreso_caja = fields.Float(compute='action_dinero_ingreso', store=True, string="Dinero Caja")
+    dinero_ingreso_bns = fields.Float(compute='action_dinero_ingreso', store=True, string="Dinero BNS")
+    dinero_ingreso_ventas = fields.Float(compute='action_dinero_ingreso', store=True, string="Dinero Ventas")
+    dinero_salida = fields.Float(compute='action_dinero_salida', store=True, string="Salidas")
+    dinero_compra_ventana = fields.Float(compute='action_dinero_salida', store=True, string="Compra Ventana")
+    dinero_compra_regular = fields.Float(compute='action_dinero_salida', store=True, string="Compra Sistema")
     #dinero_retorno = fields.Float(compute='_dinero_retorno', store=True, string="Dinero Retorno")
-    #dinero_salida_total = fields.Float(compute='_dinero_salida_total', store=True, string="TOTAL")
+    dinero_salida_total = fields.Float(compute='action_dinero_salida', store=True, string="TOTAL")
     #dinero_balance = fields.Float(compute='_dinero_balance', store=True, string="BALANCE")
     # Indica si la factura de ventana fue creada
     factura = fields.Char( string="Factura", readonly=True, store=True, default='False' ) 
@@ -155,6 +121,55 @@ class cierre(models.Model):
     @api.multi
     def action_abrir_caja(self):
         self.state="en_proceso"
+        self.fecha = str(fields.Date.today())
+        self.cajero = self.env['res.users'].browse(self.env.uid).name
+
+        mensaje = "<p>Cierre de caja abierto por : " + str(self.env.user.name) + " - " + datetime.now(timezone('America/Costa_Rica')).strftime("%Y-%m-%d %H:%M:%S") + "</p>"
+        self.message_post(body=mensaje, content_subtype='html')
+
+    # Dinero Ingreso
+    @api.one
+    @api.depends('ingreso_ids')
+    def action_dinero_ingreso(self):  
+        dinero_caja= 0
+        dinero_bns= 0
+        dinero_ventas=0
+        total=0
+        for ingreso in self.ingreso_ids:
+            print(ingreso.tipo_ingreso)
+            total += int(ingreso.monto_ingreso)
+            if  ingreso.tipo_ingreso == 'caja':
+                dinero_caja += int(ingreso.monto_ingreso)
+            elif ingreso.tipo_ingreso == 'bns':
+                print("Ingresando BNS")
+                dinero_bns += int(ingreso.monto_ingreso)
+            else:
+                dinero_ventas += int(ingreso.monto_ingreso)
+        self.dinero_ingreso_caja= dinero_caja
+        self.dinero_ingreso_bns= dinero_bns
+        self.dinero_ingreso_ventas= dinero_ventas
+        self.total_dinero_ingreso= total
+
+    # Dinero Salidas
+    @api.one
+    @api.depends('salida_ids', 'compra_ids', 'factura_ids.pago_caja' )
+    def action_dinero_salida(self):
+        total= 0
+        for salida in self.salida_ids:
+            total += int(salida.monto)
+        self.dinero_salida= total
+
+        total_compra_ventanta= 0
+        for compra in self.compra_ids:
+            total_compra_ventanta += int(compra.monto)
+        self.dinero_compra_ventana= total_compra_ventanta
+
+        total_compra_facturas = 0
+        for factura in self.factura_ids:
+            total_compra_facturas    += int(factura.amount_total)
+        self.dinero_compra_regular = total_compra_facturas  
+
+        self.dinero_salida_total = total + total_compra_ventanta + total_compra_facturas     
 
 '''
 # Dinero Compra Regular / Sistema
@@ -174,45 +189,6 @@ class cierre(models.Model):
             total += float(factura.amount_total) 
       self.dinero_compra_regular= total
 
-# Dinero Ingreso Total
-    @api.one
-    @api.depends('ingreso_ids')
-    def _dinero_ingreso(self):
-        total= 0
-        for ingreso in self.ingreso_ids:            
-            total += int(ingreso.monto_ingreso)
-        self.dinero_ingreso= total
-
-# Dinero Ingreso Caja
-    @api.one
-    @api.depends('ingreso_ids')
-    def _dinero_ingreso_caja(self):        
-      total= 0
-      for ingreso in self.ingreso_ids:
-        if  ingreso.tipo_ingreso == 'caja':
-          total += int(ingreso.monto_ingreso)
-      self.dinero_ingreso_caja= total
-
-# Dinero Ingreso BNS
-    @api.one
-    @api.depends('ingreso_ids')
-    def _dinero_ingreso_bns(self):
-        total= 0
-        for ingreso in self.ingreso_ids:
-                if  ingreso.tipo_ingreso == 'bns':
-                    total += int(ingreso.monto_ingreso)
-        self.dinero_ingreso_bns= total
-
-# Dinero Ingreso Ventas
-    @api.one
-    @api.depends('ingreso_ids')
-    def _dinero_ingreso_ventas(self):
-        total= 0
-        for ingreso in self.ingreso_ids:
-                if  ingreso.tipo_ingreso == 'ventas':
-                    total += int(ingreso.monto_ingreso)
-        self.dinero_ingreso_ventas= total
-
 # Dinero Compra Ventana
     @api.one
     @api.depends('compra_ids')
@@ -222,14 +198,7 @@ class cierre(models.Model):
             total += int(compra.monto)
         self.dinero_compra_ventana= total
 
-# Dinero Salidas
-    @api.one
-    @api.depends('salida_ids')
-    def _dinero_salida(self):
-        total= 0
-        for salida in self.salida_ids:
-            total += int(salida.monto)
-        self.dinero_salida= total
+
 
 # Dinero Salidas TOTAL
     @api.one

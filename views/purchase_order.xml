@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+  <data>
+
+    <!-- Vista de formulario - Heredada - Invoice -->
+    <record id="sm_purchase_order_cierre_caja" model="ir.ui.view">
+      <field name="name">Inherit Form View - Module: Cierre Caja - Object: Purchase Order</field>
+      <field name="model">purchase.order</field>
+      <field name="inherit_id" ref="purchase.purchase_order_form"/>
+      <field name="arch" type="xml">
+        <field name="date_order" position="after">
+          <field attrs="{'readonly': ['|', ('state','!=', 'draft')]}" name="tipo_pago"/>
+          <field attrs="{'invisible': [('state','=','draft')], 'readonly': [('pago_caja','=', 'pagado')]}" height="150" name="imagen_pago" widget="image"/>
+        </field>
+        <!-- Boton para pagar la factura -->
+        <button name="button_cancel" position="before">
+          <button attrs="{'invisible': [ '|',  ('state','!=', 'purchase'),('pago_caja','=', 'pagado')]}" class="oe_highlight" name="action_quotation_paid" string="Pagar" type="object"/>
+        </button> 
+        <!-- Boton para Cancelar la factura -->
+        <button name="button_cancel" position="attributes">
+          <attribute name="invisible">True</attribute>
+        </button> 
+        
+        <button name="button_cancel" position="before">
+          <button attrs="{'invisible': [ ('pago_caja','=', 'pagado')]}" name="button_cancel" string="Cancelar" type="object"/>
+        </button> 
+        <!-- Botones para calcular peso y tomar fotos -->
+        <notebook position="inside">
+          <page string="Otros">
+            <group>
+              <field name="pagado_por"/>
+              <field name="fecha_pago"/>
+              <field name="pago_caja"/>
+            </group>
+          </page>
+        </notebook>
+      </field>
+    </record>
+
+    <!-- Vista de arbol - Heredada - Purchase Order -->
+    <record id="purchase_view_tree_form" model="ir.ui.view">
+      <field name="name">Inherit Tree View - Module: Cierre Caja - Object: Purchase Order</field>
+      <field name="model">purchase.order</field>
+      <field name="inherit_id" ref="purchase.purchase_order_tree"/>
+      <field name="arch" type="xml">
+        <field name="date_order" position="after">
+          <field name="fecha_pago"/>
+        </field>
+        <field name="state" position="before">
+          <field name="pago_caja"/>
+        </field>
+      </field>
+    </record>
+
+
+
+
+
+  </data>
+</odoo>

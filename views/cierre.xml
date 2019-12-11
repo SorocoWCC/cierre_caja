@@ -11,7 +11,7 @@
                 <p class="oe_view_nocontent_create">Presione aquí para crear un cierre de caja.</p>
             </field>
         </record>
-        <!-- Vista Formulario Receptor-->
+        <!-- Vista Formulario Cierre de Caja-->
         <record id="fe_receptor_form_view" model="ir.ui.view">
             <field name="name">Cierre de Caja</field>
             <field name="view_type">form</field>
@@ -33,17 +33,47 @@
                                 <field attrs="{'readonly':[('state','not in',['nuevo'])]}" name="tipo"/>
                             </group>
                             <group/>
-                            <group string="Dineros Ingreso"/>
-                            <group string="Dineros Salida"/>
+                            <group string="Dineros Ingreso">
+                                <field name="dinero_ingreso_caja"/>
+                                <field name="dinero_ingreso_bns"/>
+                                <field name="dinero_ingreso_ventas"/>
+                                <field name="total_dinero_ingreso"/>
+                            </group>
+                            <group string="Dineros Salida">
+                                <field name="dinero_salida"/>
+                                <field name="dinero_compra_regular"/>
+                                <field name="dinero_compra_ventana"/>
+                                <field name="dinero_salida_total"/>
+                            </group>
                         </group>
                         <notebook>
                             <page string="Ingresos de Dinero">
                                 <field attrs="{'readonly': [('state','in',('lost'))]}" colspan="4" name="ingreso_ids" nolabel="1" widget="one2many_list">
                                     <tree editable="bottom">
-                                        <field name="cajero"/>
                                         <field name="detalle"/>
                                         <field name="tipo_ingreso"/>
                                         <field name="monto_ingreso" sum="True"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="Salidas de Dinero">
+                                <field attrs="{'readonly': [('state','in',('lost'))]}" colspan="4" name="salida_ids" nolabel="1" widget="one2many_list">
+                                    <tree editable="bottom">
+                                        <field name="detalle"/>
+                                        <field name="monto" sum="True"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="Facturas">
+                                <field name="factura_ids"/>
+                            </page>
+                            <page string="Compras Ventana" attrs="{'invisible':[('tipo','=','caja_chica')] , 'readonly': [('state','in',('lost'))]}">
+                        <field attrs="{'readonly': [('state','in',('lost'))]}" colspan="4" name="compra_ids" nolabel="1" widget="one2many_list">
+                                    <tree editable="bottom" default_order='consecutivo desc'>
+                                        <field name="consecutivo"/>
+                                        <field name="product_id"/>
+                                        <field name="cantidad"/>
+                                        <field name="monto" sum="True"/>
                                     </tree>
                                 </field>
                             </page>
@@ -54,6 +84,20 @@
                         <field name="message_ids" widget="mail_thread"/>
                     </div>
                 </form>
+            </field>
+        </record>
+        <!--Tree View Cierre de Caja-->
+        <record id="cierre_tree_view" model="ir.ui.view">
+            <field name="name">cierre.tree.view</field>
+            <field name="view_type">tree</field>
+            <field name="model">cierre</field>
+            <field name="arch" type="xml">
+                <tree colors="blue:state == 'new';black:state in ('assigned')" string="Cierre de Caja">
+                    <field name="fecha"/>
+                    <field name="cajero"/>
+                    <field name="tipo"/>
+                    <field name="state" string="Estado"/>
+                </tree>
             </field>
         </record>
         <!-- Top menu item -->
