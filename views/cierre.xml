@@ -20,6 +20,9 @@
                 <form string="Cierre de Caja" version="7.0">
                     <header>
                         <button attrs="{'invisible':[('state','not in',['nuevo'])]}" class="oe_highlight" name="action_abrir_caja" string="Abrir Caja" type="object"/>
+                        <button attrs="{'invisible':[('state','not in',['en_proceso'])]}" class="oe_highlight" name="action_listo_para_revisar" string="Listo Para Revisar" type="object"/>
+                        <button attrs="{'invisible':[('state','not in',['esperando_revision'])]}" class="oe_highlight" name="action_revisado" string="Revisado" type="object"/>
+                        <button attrs="{'invisible':[('mostrar_boton_facturar','=', False)] }" class="oe_highlight" name="action_facturar" string="Facturar" type="object"/>
                         <field name="state" widget="statusbar"/>
                     </header>
                     <sheet string="Cierre de Caja">
@@ -31,8 +34,13 @@
                         <group>
                             <group>
                                 <field attrs="{'readonly':[('state','not in',['nuevo'])]}" name="tipo"/>
+                                <field invisible="1" name="mostrar_boton_facturar"/>
                             </group>
-                            <group/>
+                            <group>
+                                <field attrs="{'invisible':[('state','not in',['revisado'])]}" name="revisado"/>
+                                <field name="dinero_retorno"/>
+                                <field name="dinero_balance"/>
+                            </group>
                             <group string="Dineros Ingreso">
                                 <field name="dinero_ingreso_caja"/>
                                 <field name="dinero_ingreso_bns"/>
@@ -48,7 +56,7 @@
                         </group>
                         <notebook>
                             <page string="Ingresos de Dinero">
-                                <field attrs="{'readonly': [('state','in',('lost'))]}" colspan="4" name="ingreso_ids" nolabel="1" widget="one2many_list">
+                                <field name="ingreso_ids" colspan="4"  nolabel="1" widget="one2many_list" attrs="{'readonly':[('state','not in',['en_proceso'])]}" >
                                     <tree editable="bottom">
                                         <field name="detalle"/>
                                         <field name="tipo_ingreso"/>
@@ -56,7 +64,7 @@
                                     </tree>
                                 </field>
                             </page>
-                            <page string="Salidas de Dinero">
+                            <page string="Salidas de Dinero" attrs="{'readonly':[('state','not in',['en_proceso'])]}">
                                 <field attrs="{'readonly': [('state','in',('lost'))]}" colspan="4" name="salida_ids" nolabel="1" widget="one2many_list">
                                     <tree editable="bottom">
                                         <field name="detalle"/>
@@ -67,13 +75,33 @@
                             <page string="Facturas">
                                 <field name="factura_ids"/>
                             </page>
-                            <page string="Compras Ventana" attrs="{'invisible':[('tipo','=','caja_chica')] , 'readonly': [('state','in',('lost'))]}">
-                        <field attrs="{'readonly': [('state','in',('lost'))]}" colspan="4" name="compra_ids" nolabel="1" widget="one2many_list">
-                                    <tree editable="bottom" default_order='consecutivo desc'>
+                            <page attrs="{'invisible':[('tipo','=','caja_chica')]}" string="Compras Ventana">
+                                <field attrs="{'readonly':[('state','not in',['en_proceso'])]}" colspan="4" name="compra_ids" nolabel="1" widget="one2many_list">
+                                    <tree default_order="consecutivo desc" editable="bottom">
                                         <field name="consecutivo"/>
                                         <field name="product_id"/>
                                         <field name="cantidad"/>
                                         <field name="monto" sum="True"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page attrs="{'invisible':[('tipo','=','caja_chica')]}"  string="Inventario">
+                                <field attrs="{'readonly': [('state','in',('revisado'))]}" colspan="4" name="inventario_ids" nolabel="1" widget="one2many_list">
+                                    <tree editable="bottom">
+                                        <field name="product_id"/>
+                                        <field name="precio_promedio"/>
+                                        <field name="cantidad_compra"/>
+                                        <field name="cantidad"/>
+                                        <field name="diferencia"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="Retorno de Dinero">
+                                <field attrs="{'readonly':[('state','not in',['en_proceso'])]}" colspan="4" name="dinero_ids" nolabel="1" widget="one2many_list">
+                                    <tree editable="bottom">
+                                        <field name="denominacion"/>
+                                        <field name="cantidad"/>
+                                        <field name="total" sum="True"/>
                                     </tree>
                                 </field>
                             </page>
@@ -92,7 +120,7 @@
             <field name="view_type">tree</field>
             <field name="model">cierre</field>
             <field name="arch" type="xml">
-                <tree colors="blue:state == 'new';black:state in ('assigned')" string="Cierre de Caja">
+                <tree decoration-info="state=='en_proceso'" string="Cierre de Caja" default_order='fecha desc'>
                     <field name="fecha"/>
                     <field name="cajero"/>
                     <field name="tipo"/>

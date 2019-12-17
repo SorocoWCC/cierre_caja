@@ -14,54 +14,6 @@ import yaml
 import json
 
 
-'''
-class inventario(models.Model):
-    _name = "inventario"
-    _description = "Inventario Ventana"
-    name = fields.Char(string="Name", default="Naide")
-    cierre_id = fields.Many2one(comodel_name='cierre', string='Cierre', delegate=True)
-    product_id = fields.Many2one(comodel_name='product.product', string='Producto', delegate=True, readonly=True)
-    cantidad = fields.Float('Cantidad Inventario:', required=True)
-    diferencia = fields.Float(compute='action_diferencia', string="Diferencia", readonly=True, store=True )
-    cantidad_compra = fields.Float('Cantidad Compras:', readonly=True)
-    precio_promedio = fields.Float(string="Precio Promedio", readonly=True, store=True)
-    cajero = fields.Char(string="Cajero", readonly=True, store=True )
-    _defaults = {
-    'tipo': 'ventana',
-    'cajero':  lambda self,cr,uid, context: self.pool.get('res.users').browse(cr, uid, uid, context).name
-    }   
-
-
-# Calculo de diferencia entre la compra y el inventario
-    @api.one
-    @api.depends('cantidad')
-    def action_diferencia(self):
-        self.diferencia = self.cantidad - self.cantidad_compra
-
-
-'''
-
-'''
-class dinero(models.Model):
-    _name = 'dinero'
-    denominacion = fields.Selection([('1000','1000 (Mil)'), ('2000','2000 (Dos Mil)'), ('5000','5000 (Cinco Mil)'), ('10000','10000 (Diez Mil)'), ('20000','20000 (Veinte Mil)'), ('50000','50000 (Cincuenta Mil)'), ('1','Monedas'), ('500','500 (Quinientos)'), ('100','100 (Cien)'), ('50','50 (Cincuenta)'), ('25','25 (Veinticinco)'), ('10','10 (Diez)'), ('5','5 (Cinco)')], string='Denominacion', required=True)
-    total = fields.Integer('Total', required=True)
-    cierre_id = fields.Many2one(comodel_name='cierre', string='Cierre', delegate=True)
-    cantidad = fields.Integer(compute='_retorno_dinero', store=True, string="Cantidad")
-    cajero = fields.Char(string="Cajero", readonly=True, store=True )
-    _defaults = {
-    'cajero':  lambda self,cr,uid, context: self.pool.get('res.users').browse(cr, uid, uid, context).name
-    }   
-
-# Cantidad Dinero
-    @api.one
-    @api.depends('denominacion')
-    def _retorno_dinero(self):
-        total= 0
-        if int(self.denominacion) > 0 :
-            total = self.total / int(self.denominacion)
-        self.cantidad= total
-'''
 class cierre(models.Model):
 
 
@@ -75,24 +27,15 @@ class cierre(models.Model):
     name = fields.Char(string='Name', default=_get_name, readonly=True, copy=False)
     fecha = fields.Date(string='Fecha', readonly=True)
     tipo = fields.Selection ([('regular','Regular'), ('caja_chica','Caja Chica')], required=True, string='Tipo')
-    # Convierte a reaonly el tipo de caja para evitar varios cierres abiertos al mismo tiempo
-    #bloqueo_tipo_cierre = fields.Char(compute='_action_bloqueo', readonly=True, string="Bloqueo")
+    mostrar_boton_facturar = fields.Boolean(string = "Mostrar Boton Facturar", default=False)
     cajero = fields.Char(string="Cajero", readonly=True, store=True )
     revisado = fields.Char(string="Revisado por :", readonly=True, store=True, default="Nadie")
-    # Agrupa todas las facturas para el reporte diario
     factura_ids = fields.One2many(comodel_name='purchase.order', inverse_name='cierre_id', string="Facturas", readonly=True)
-    # Agrupa todas las facturas para el reporte diario
-    #factura_ids_caja_regular = fields.One2many(comodel_name='purchase.order', inverse_name='cierre_id', string="Facturas",  domain=[('pago', '=', 'regular')], readonly=True)
-    # Agrupa solamente facturas de caja chica
-    #factura_ids_caja_chica = fields.One2many(comodel_name='purchase.order', inverse_name='cierre_id_caja_chica', string="Facturas", domain=[('pago', '=', 'caja_chica')], readonly=True)
     ingreso_ids = fields.One2many(comodel_name='ingreso', inverse_name='cierre_id', string="Ingresos de Dinero")
     salida_ids = fields.One2many(comodel_name='salida',inverse_name='cierre_id', string="Salidas de Dinero")
-    #gasto_id = fields.One2many(comodel_name='gasto',inverse_name='cierre_id', string="Gastos")
-    #empleado_allowance_id = fields.One2many(comodel_name='empleado.allowance',inverse_name='cierre_id', string="Prestamos Empleados")
-    #cliente_amortizable_id = fields.One2many(comodel_name='cliente.amortizable',inverse_name='cierre_id', string="Prestamos Clientes")
     compra_ids = fields.One2many(comodel_name='compra',inverse_name='cierre_id', string="Compras Ventana")
-    #inventario_ids = fields.One2many(comodel_name='inventario',inverse_name='cierre_id', string="Inventario")
-    #dinero_ids = fields.One2many(comodel_name='dinero',inverse_name='cierre_id', string="Dinero Retorno")
+    inventario_ids = fields.One2many(comodel_name='inventario',inverse_name='cierre_id', string="Inventario")
+    dinero_ids = fields.One2many(comodel_name='dinero',inverse_name='cierre_id', string="Dinero Retorno")
     total_dinero_ingreso = fields.Float(compute='action_dinero_ingreso', store=True, string="TOTAL")
     dinero_ingreso_caja = fields.Float(compute='action_dinero_ingreso', store=True, string="Dinero Caja")
     dinero_ingreso_bns = fields.Float(compute='action_dinero_ingreso', store=True, string="Dinero BNS")
@@ -100,11 +43,9 @@ class cierre(models.Model):
     dinero_salida = fields.Float(compute='action_dinero_salida', store=True, string="Salidas")
     dinero_compra_ventana = fields.Float(compute='action_dinero_salida', store=True, string="Compra Ventana")
     dinero_compra_regular = fields.Float(compute='action_dinero_salida', store=True, string="Compra Sistema")
-    #dinero_retorno = fields.Float(compute='_dinero_retorno', store=True, string="Dinero Retorno")
+    dinero_retorno = fields.Float(compute='action_dinero_ingreso', store=True, string="Dinero Retorno")
     dinero_salida_total = fields.Float(compute='action_dinero_salida', store=True, string="TOTAL")
-    #dinero_balance = fields.Float(compute='_dinero_balance', store=True, string="BALANCE")
-    # Indica si la factura de ventana fue creada
-    factura = fields.Char( string="Factura", readonly=True, store=True, default='False' ) 
+    dinero_balance = fields.Float(compute='action_dinero_balance', store=True, string="BALANCE")
 
 
     @api.one
@@ -129,7 +70,7 @@ class cierre(models.Model):
 
     # Dinero Ingreso
     @api.one
-    @api.depends('ingreso_ids')
+    @api.depends('ingreso_ids', 'dinero_ids')
     def action_dinero_ingreso(self):  
         dinero_caja= 0
         dinero_bns= 0
@@ -149,6 +90,12 @@ class cierre(models.Model):
         self.dinero_ingreso_bns= dinero_bns
         self.dinero_ingreso_ventas= dinero_ventas
         self.total_dinero_ingreso= total
+
+        # Dinero Retorno
+        total_dinero_retorno= 0
+        for dinero in self.dinero_ids:
+            total_dinero_retorno += int(dinero.total)
+        self.dinero_retorno= total_dinero_retorno
 
     # Dinero Salidas
     @api.one
@@ -170,6 +117,103 @@ class cierre(models.Model):
         self.dinero_compra_regular = total_compra_facturas  
 
         self.dinero_salida_total = total + total_compra_ventanta + total_compra_facturas     
+
+
+# Revisado Por y Generar Inventario
+    @api.one
+    def action_revisado(self):
+        # Generar Inventario
+        if self.tipo == "regular":
+            # Valida si los productos ya fueron ingresados en la seccion de inventario
+            for i in self.compra_ids :
+                validacion = 0
+                producto = i.product_id.name
+                for b in self.inventario_ids:
+                    if b.product_id.name == i.product_id.name :
+                        validacion = 1
+               # Ingresa los productos en la seccion de inventarios 
+                if validacion == 0 :
+                # Calcula la cantidad y precio promedio de producto comprado en la ventana
+                    cantidad_producto_ventana = 0
+                    inversion = 0
+                    for prod in self.compra_ids :
+                        if prod.product_id.name == i.product_id.name:
+                            cantidad_producto_ventana += prod.cantidad
+                            inversion +=prod.monto
+                    self.inventario_ids.create({'cierre_id': self.id, 'product_id': i.product_id.id, 'cantidad': 0, 'cantidad_compra': cantidad_producto_ventana,
+                    'precio_promedio': float(inversion / cantidad_producto_ventana)})
+            # Mostar Boton Facturar
+            self.mostrar_boton_facturar = True
+        # Warning
+        if str(self.cajero) == str(self.env.user.name):
+            raise Warning ("El cierre de caja no puede ser revisado por el Cajero")
+        # Marca el cierre de caja como revisado
+        else:
+            self.state = "revisado"
+            self.revisado = str(self.env.user.name)
+
+    # Generar Inventario y Enviar cierre de caja a revision        
+    @api.one
+    def action_listo_para_revisar(self):
+
+        if self.state == "en_proceso":
+            self.state = "esperando_revision"
+
+        # Generar Inventario
+        if self.tipo == "regular":
+            # Valida si los productos ya fueron ingresados en la seccion de inventario
+            for i in self.compra_ids :
+                validacion = 0
+                producto = i.product_id.name
+                for b in self.inventario_ids:
+                    if b.product_id.name == i.product_id.name :
+                        validacion = 1
+               # Ingresa los productos en la seccion de inventarios 
+                if validacion == 0 :
+                # Calcula la cantidad y precio promedio de producto comprado en la ventana
+                    cantidad_producto_ventana = 0
+                    inversion = 0
+                    for prod in self.compra_ids :
+                        if prod.product_id.name == i.product_id.name:
+                            cantidad_producto_ventana += prod.cantidad
+                            inversion +=prod.monto
+                    self.inventario_ids.create({'cierre_id': self.id, 'product_id': i.product_id.id, 'cantidad': 0, 'cantidad_compra': cantidad_producto_ventana,
+                    'precio_promedio': float(inversion / cantidad_producto_ventana)})
+
+        mensaje = "<p>Cierre de caja listo para revisar : " + str(self.env.user.name) + " - " + datetime.now(timezone('America/Costa_Rica')).strftime("%Y-%m-%d %H:%M:%S") + "</p>"
+        self.message_post(body=mensaje, content_subtype='html')
+
+
+# Generar Factura de Varios
+    @api.one
+    def action_facturar(self):
+        # Valida que exista el proveedor compra de la ventana
+        proveedor = self.env['res.partner'].search([['name', '=', 'Compra de la Ventana']])
+
+        if not proveedor:
+            proveedor = self.env['res.partner'].create({'name': 'Compra de la Ventana', 'supplier': True})
+        # Crea la orden de compra
+        purchase_order = self.env['purchase.order'].create({'partner_id': proveedor.id , 'location_id': 12, 'pricelist_id': 1, 'tipo_pago': 'muy'})
+        # Buscar la Orden de compra de la ventana
+    
+        for i in self.inventario_ids:
+            purchase_order.order_line.create({'product_id': i.product_id.id, 'name': i.product_id.name, 'product_qty' : i.cantidad, 'price_unit': float(i.precio_promedio),
+                                              'date_planned': str(fields.Date.today()), 'product_uom': i.product_id.uom_po_id.id, 'order_id': purchase_order.id})
+    
+        purchase_order.button_confirm()
+        purchase_order.action_quotation_paid()
+        mensaje = "<p>Factura creada por : " + str(self.env.user.name) + " - " + datetime.now(timezone('America/Costa_Rica')).strftime("%Y-%m-%d %H:%M:%S") + "</p>"
+        self.message_post(body=mensaje, content_subtype='html')
+
+
+# Dinero Balance
+    @api.one
+    @api.depends('dinero_salida_total', 'dinero_retorno', 'total_dinero_ingreso')
+    def action_dinero_balance(self):
+        total= 0
+        total += (float(self.dinero_salida_total) + float(self.dinero_retorno)) - float(self.total_dinero_ingreso)
+        self.dinero_balance= total
+
 
 '''
 # Dinero Compra Regular / Sistema
@@ -216,52 +260,11 @@ class cierre(models.Model):
             total += int(dinero.total)
         self.dinero_retorno= total
 
-# Dinero Balance
-    @api.one
-    @api.depends('dinero_salida_total', 'dinero_retorno', 'dinero_ingreso')
-    def _dinero_balance(self):
-        total= 0
-        total += (float(self.dinero_salida_total) + float(self.dinero_retorno)) - float(self.dinero_ingreso)
-        self.dinero_balance= total
+
 '''
 # Validacion para la creacion de un objeto cierre
-
+  
 '''
-# Revisado Por y Generar Inventario
-    @api.one
-    @api.depends('state')
-    def action_revisado(self):
-        if str(self.state) == "new" :
-            self.state = "assigned"
-            # Generar Inventario
-            if self.tipo == "regular":
-                # Valida si los productos ya fueron ingresados en la seccion de inventario
-                for i in self.compra_ids :
-                    validacion = 0
-                    producto = i.product_id.name
-                    for b in self.inventario_ids:
-                        if b.product_id.name == i.product_id.name :
-                            validacion = 1
-                   # Ingresa los productos en la seccion de inventarios 
-                    if validacion == 0 :
-                    # Calcula la cantidad y precio promedio de producto comprado en la ventana
-                        cantidad_producto_ventana = 0
-                        inversion = 0
-                        for prod in self.compra_ids :
-                            if prod.product_id.name == i.product_id.name:
-                                cantidad_producto_ventana += prod.cantidad
-                                inversion +=prod.monto
-                        self.inventario_ids.create({'cierre_id': self.id, 'product_id': i.product_id.id, 'cantidad': 0, 'cantidad_compra': cantidad_producto_ventana,
-                        'precio_promedio': float(inversion / cantidad_producto_ventana)})
-            return  
-        # Warning
-        if str(self.cajero) == str(self.env.user.name) and str(self.state) == "assigned" :
-            raise Warning ("El cierre de caja no puede ser revisado por el Cajero")
-        # Marca el cierre de caja como revisado
-        else:
-            self.state = "lost"
-            self.revisado = str(self.env.user.name)  
-
 # Generar Factura de Varios
     @api.one
     def action_facturar(self):
