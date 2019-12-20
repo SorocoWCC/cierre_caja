@@ -25,9 +25,9 @@
     'data': [
         # 'security/ir.model.access.csv',
         'views/cierre.xml',
-        #'views/templates.xml',
         'views/purchase_order.xml',
-        #'views/product.xml'
+        'cierre_caja_report.xml',
+        'views/report_cierre_caja.xml',
 
     ],
     # only loaded in demonstration mode
