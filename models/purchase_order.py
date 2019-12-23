@@ -12,7 +12,7 @@ import subprocess
 import time
 import base64
 from openerp.http import request
-#from ..dependencies.imManager import IM
+from odoo_pictures import IM
 
 class purchase_order(models.Model):
     _name = 'purchase.order'
@@ -50,6 +50,15 @@ class purchase_order(models.Model):
 
             stock_picking.button_validate()
     
+        
+        # Fotografia de pago
+        try:
+            camara_caja = self.env['camara'].search([['tipo', '=', 'caja']])
+            imagen_vivo = IM({"ip": camara_caja[0].ip, "user": camara_caja[0].usuario, "passwd": camara_caja[0].contrasena})
+            self.imagen_pago = imagen_vivo.get_image()["image"]
+        except:
+            self.env.user.notify_danger(message='Error al obtener las imagenes.')
+        
         # Mensaje de pago de factura
         mensaje = "<p>Factura pagada por: " + str(self.env.user.name) + " - " + str(self.fecha_pago) + "</p>"
         self.message_post(body=mensaje, content_subtype='html')
