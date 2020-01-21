@@ -23,7 +23,6 @@
 
     # always loaded
     'data': [
-        # 'security/ir.model.access.csv',
         'views/cierre.xml',
         'views/purchase_order.xml',
         'cierre_caja_report.xml',

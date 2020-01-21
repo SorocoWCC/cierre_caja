@@ -129,7 +129,7 @@
             </field>
         </record>
         <!-- Top menu item -->
-        <menuitem id="menu_purchase_root_cierre_caja" name="Cierre Caja" sequence="30" web_icon="odoo12-cierre_caja,static/icon.png"/>
+        <menuitem id="menu_purchase_root_cierre_caja" name="Cierre Caja" sequence="30" web_icon="cierre_caja,static/icon.png"/>
         <!--Menus-->
         <menuitem id="cierrecaja" name="Cierre de Caja"/>
         <menuitem id="cierrecaja_menu" name="Cierres" parent="menu_purchase_root_cierre_caja"/>

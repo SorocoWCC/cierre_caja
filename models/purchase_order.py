@@ -43,8 +43,9 @@ class purchase_order(models.Model):
 
         # Ingreso Automatico de Albaranes
         stock_picking = self.env['stock.picking'].search([('state', '=', 'assigned'), ('origin', '=', self.name)])
+        procesar_albaran= self.env['movement_conf'].search([('name', '=', 'Configuracion')])
 
-        if stock_picking :
+        if stock_picking and procesar_albaran[0].configuracion == "activo" :
             for move in stock_picking.move_ids_without_package:
                 move.quantity_done = move.product_uom_qty
 
