@@ -83,11 +83,3 @@ class purchase_order(models.Model):
         else:
             raise Warning ("No existe un cierre de caja.") 
             
-        
-'''
-
-6- Tomamos la foto
-7- Imprimir
-
-return self.env.ref('purchase.report_purchase_quotation').report_action(self)
-'''
