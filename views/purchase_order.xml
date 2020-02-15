@@ -45,6 +45,7 @@
       <field name="arch" type="xml">
         <field name="date_order" position="after">
           <field name="fecha_pago"/>
+          <field name="tipo_pago"/>
         </field>
         <field name="state" position="before">
           <field name="pago_caja"/>
