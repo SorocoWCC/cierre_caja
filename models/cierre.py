@@ -204,6 +204,8 @@ class cierre(models.Model):
         purchase_order.action_quotation_paid()
         mensaje = "<p>Factura creada por : " + str(self.env.user.name) + " - " + datetime.now(timezone('America/Costa_Rica')).strftime("%Y-%m-%d %H:%M:%S") + "</p>"
         self.message_post(body=mensaje, content_subtype='html')
+        # Oculta el boton de facturar
+        self.mostrar_boton_facturar = False
 
 
 # Dinero Balance
