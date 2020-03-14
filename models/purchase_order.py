@@ -51,7 +51,19 @@ class purchase_order(models.Model):
 
             stock_picking.button_validate()
     
-        
+        # Manejo de Abonos a Prestamos
+        if self.prestamo_saldo > 0 :
+            prestamo= self.env['prestamo'].search([['tipo', '=', 'cliente'], ['state', '=', 'abierto'], ['cliente_id.id', '=', self.partner_id.id]])
+            for line in self.order_line:
+                if line.product_id.name == "Prestamo" and line.price_unit <= prestamo[0].saldo:
+                    # Valida que el monto del abono sea negativo para no pagar de mas al cliente
+                    if line.price_unit > 0 :
+                        raise Warning ("Error: El monto del abono al prestamo debe de ser negativo")
+                    else:
+                        # Realiza el abono al prestamo
+                        abono = prestamo.abono_ids.create({'detalle': self.name, 'monto': abs(line.price_unit), 'prestamo_id': prestamo.id})
+                        self.abono_id = abono.id
+                       
         # Fotografia de pago
         try:
             camara_caja = self.env['camara'].search([['tipo', '=', 'caja']])
@@ -64,9 +76,9 @@ class purchase_order(models.Model):
         mensaje = "<p>Factura pagada por: " + str(self.env.user.name) + " - " + str(self.fecha_pago) + "</p>"
         self.message_post(body=mensaje, content_subtype='html')
             
-        # Imprimir el tiquete de caja automaticamente
-        return self.env.ref('purchase_order_modifications.custom_report_tiquete_compra').report_action(self)
-
+        # Imprimir el tiquete de caja automaticamente solo para caja regular
+        if self.tipo_pago == "regular":
+            return self.env.ref('purchase_order_modifications.custom_report_tiquete_compra').report_action(self)
 
     def validar_cierre(self, tipo_pago):
 
