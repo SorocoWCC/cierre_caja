@@ -1,99 +1,133 @@
 <?xml version="1.0" encoding="utf-8"?>
 <openerp>
   <data>
-<template id="report_cierre_caja_document">
-     <t t-call="web.html_container">
+    <template id="report_cierre_caja_document">
+        <t t-call="web.html_container">
+          <div class="page">
+            <t t-foreach="docs" t-as="o">
+                <style>
+                  table, td, th {
+                    border: 1px solid black; 
+                    text-align:center;
+                    font-size: 12px; 
+                  }
+
+                  table {
+                    border-collapse: collapse;
+                    width: 100%;
+                  }
+
+                  td {
+                    vertical-align: left;
+                    font-size: 14px; 
+                  }
+                </style>       
+              <!-- Cierre de Caja Regular -->
+              <t t-if="o.tipo == 'regular' ">
+                <div align="center">
+                  <h4> Cierre Caja - Regular - <span t-field="o.fecha"/></h4>
+                </div>
+
+                <table>
+                  <tr>
+                    <th colspan="2"> Dineros Ingreso</th>
+                    <th colspan="2"> Dineros Salida</th>
+                  </tr>
+                  <tr>
+                    <td>Compra Ventana</td>
+                    <td>₡ <t t-esc="'{0:,.2f}'.format(int(o.dinero_compra_ventana))"/> </td>
+                    <td>Dinero Caja</td>
+                    <td>₡ <t t-esc="'{0:,.2f}'.format(int(o.dinero_ingreso_caja))"/> </td> 
+                  </tr> 
+                  <tr>
+                    <td>Compra Sistema</td>
+                    <td>₡ <t t-esc="'{0:,.2f}'.format(int(o.dinero_compra_regular))"/> </td>
+                    <td>Dinero BNS</td>
+                    <td>₡ <t t-esc="'{0:,.2f}'.format(int(o.dinero_ingreso_bns))"/> </td> 
+                  </tr> 
+                  <tr>
+                    <td>Salidas / Vales </td>
+                    <td>₡ <t t-esc="'{0:,.2f}'.format(int(o.dinero_salida))"/> </td>
+                    <td>Dinero Ventas</td>
+                    <td>₡ <t t-esc="'{0:,.2f}'.format(int(o.dinero_ingreso_ventas))"/> </td> 
+                  </tr> 
+                </table>  
+                
+                <br/>
+
+                <table>
+                  <tr>
+                    <td>Total Dineros Ingreso</td>
+                    <td>₡ <t t-esc="'{0:,.2f}'.format(int(o.total_dinero_ingreso))"/> </td> 
+                  </tr> 
+                  <tr>
+                    <td>Total Dineros Salida</td>
+                    <td>₡ <t t-esc="'{0:,.2f}'.format(int(o.dinero_salida_total))"/> </td>
+                  </tr> 
+                  <tr>
+                    <td>Dinero Retorno </td>
+                    <td>₡ <t t-esc="'{0:,.2f}'.format(int(o.dinero_retorno))"/> </td>
+                  </tr> 
+                  <tr>
+                    <th style="background-color: #D8D8D8;"> Balance </th>
+                    <th style="background-color: #D8D8D8;" >₡ <t t-esc="'{0:,.2f}'.format(int(o.dinero_balance))"/> </th>
+                  </tr> 
+                </table>  
+              </t>  
+
+              <!-- Cierre de Caja Chica -->
+              <t t-if="o.tipo == 'caja_chica' ">
+                <div align="center">
+                  <h4> Cierre Caja - Chica - <span t-field="o.fecha"/></h4>
+                </div>
+
+                <table>
+                  <tr>
+                    <th colspan="2"> Dineros Ingreso</th>
+                    <th colspan="2"> Dineros Salida</th>
+                  </tr>
+                  <tr>
+                    <td>Compra Sistema</td>
+                    <td>₡ <t t-esc="'{0:,.2f}'.format(int(o.dinero_compra_regular))"/> </td>
+                    <td>Dinero BNS</td>
+                    <td>₡ <t t-esc="'{0:,.2f}'.format(int(o.dinero_ingreso_bns))"/> </td> 
+                  </tr> 
+                  <tr>
+                    <td>Salidas / Vales </td>
+                    <td>₡ <t t-esc="'{0:,.2f}'.format(int(o.dinero_salida))"/> </td>
+                    <td>Dinero Ventas</td>
+                    <td>₡ <t t-esc="'{0:,.2f}'.format(int(o.dinero_ingreso_ventas))"/> </td> 
+                  </tr> 
+                </table>  
+                
+                <br/>
+
+                <table>
+                  <tr>
+                    <td>Total Dineros Ingreso</td>
+                    <td>₡ <t t-esc="'{0:,.2f}'.format(int(o.total_dinero_ingreso))"/> </td> 
+                  </tr> 
+                  <tr>
+                    <td>Total Dineros Salida</td>
+                    <td>₡ <t t-esc="'{0:,.2f}'.format(int(o.dinero_salida_total))"/> </td>
+                  </tr> 
+                  <tr>
+                    <td>Dinero Retorno </td>
+                    <td>₡ <t t-esc="'{0:,.2f}'.format(int(o.dinero_retorno))"/> </td>
+                  </tr> 
+                  <tr>
+                    <th style="background-color: #D8D8D8;"> Balance </th>
+                    <th style="background-color: #D8D8D8;" >₡ <t t-esc="'{0:,.2f}'.format(int(o.dinero_balance))"/> </th>
+                  </tr> 
+                </table>  
+              </t>  
 
 
+            </t>
+          </div>
 
-<div class="page">
-  <t t-foreach="docs" t-as="o">
-
-
-          <style>
-            table, td, th {
-              border: 1px solid black; 
-              text-align:center;
-              font-size: 12px; 
-            }
-
-            table {
-              border-collapse: collapse;
-              width: 100%;
-            }
-
-            td {
-              vertical-align: left;
-              font-size: 14px; 
-            }
-          </style>       
-
-          <t t-if="o.tipo == 'regular' ">
-            <div align="center">
-              <h4> Cierre Caja - Regular - <span t-field="o.fecha"/></h4>
-            </div>
-
-
-
-  <table>
-              <tr>
-                <th colspan="2"> Dineros Ingreso</th>
-                <th colspan="2"> Dineros Salida</th>
-              </tr>
-              <tr>
-                <td>Compra Ventana</td>
-                <td>₡ <t t-esc="'{0:,.2f}'.format(int(o.dinero_compra_ventana))"/> </td>
-                <td>Dinero Caja</td>
-                <td>₡ <t t-esc="'{0:,.2f}'.format(int(o.dinero_ingreso_caja))"/> </td> 
-              </tr> 
-              <tr>
-                <td>Compra Sistema</td>
-                <td>₡ <t t-esc="'{0:,.2f}'.format(int(o.dinero_compra_regular))"/> </td>
-                <td>Dinero BNS</td>
-                <td>₡ <t t-esc="'{0:,.2f}'.format(int(o.dinero_ingreso_bns))"/> </td> 
-              </tr> 
-              <tr>
-                <td>Salidas / Vales </td>
-                <td>₡ <t t-esc="'{0:,.2f}'.format(int(o.dinero_salida))"/> </td>
-                <td>Dinero Ventas</td>
-                <td>₡ <t t-esc="'{0:,.2f}'.format(int(o.dinero_ingreso_ventas))"/> </td> 
-              </tr> 
-            </table>  
-            
-            <br/>
-
-            <table>
-              <tr>
-                <td>Total Dineros Ingreso</td>
-                <td>₡ <t t-esc="'{0:,.2f}'.format(int(o.total_dinero_ingreso))"/> </td> 
-              </tr> 
-              <tr>
-                <td>Total Dineros Salida</td>
-                <td>₡ <t t-esc="'{0:,.2f}'.format(int(o.dinero_salida_total))"/> </td>
-              </tr> 
-              <tr>
-                <td>Dinero Retorno </td>
-                <td>₡ <t t-esc="'{0:,.2f}'.format(int(o.dinero_retorno))"/> </td>
-              </tr> 
-              <tr>
-                <th style="background-color: #D8D8D8;"> Balance </th>
-                <th style="background-color: #D8D8D8;" >₡ <t t-esc="'{0:,.2f}'.format(int(o.dinero_balance))"/> </th>
-              </tr> 
-            </table>  
-
-
-
-</t>            
-</t>
-
-
-</div>
-
-        
-     </t>
-</template>
-
-
-
+          
+        </t>
+    </template>
   </data>
 </openerp>
