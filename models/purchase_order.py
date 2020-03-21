@@ -64,13 +64,14 @@ class purchase_order(models.Model):
                         abono = prestamo.abono_ids.create({'detalle': self.name, 'monto': abs(line.price_unit), 'prestamo_id': prestamo.id})
                         self.abono_id = abono.id
                        
-        # Fotografia de pago
-        try:
-            camara_caja = self.env['camara'].search([['tipo', '=', 'caja']])
-            imagen_vivo = IM({"ip": camara_caja[0].ip, "user": camara_caja[0].usuario, "passwd": camara_caja[0].contrasena})
-            self.imagen_pago = imagen_vivo.get_image()["image"]
-        except:
-            self.env.user.notify_danger(message='Error al obtener las imagenes.')
+        # Fotografia de pago para facturas regulares
+        if self.tipo_pago == 'regular':       
+            try:
+                camara_caja = self.env['camara'].search([['tipo', '=', 'caja']])
+                imagen_vivo = IM({"ip": camara_caja[0].ip, "user": camara_caja[0].usuario, "passwd": camara_caja[0].contrasena})
+                self.imagen_pago = imagen_vivo.get_image()["image"]
+            except:
+                self.env.user.notify_danger(message='Error al obtener las imagenes.')
         
         # Mensaje de pago de factura
         mensaje = "<p>Factura pagada por: " + str(self.env.user.name) + " - " + str(self.fecha_pago) + "</p>"

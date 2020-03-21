@@ -10,7 +10,7 @@
       <field name="arch" type="xml">
         <field name="date_order" position="after">
           <field attrs="{'readonly': ['|', ('state','!=', 'draft')]}" name="tipo_pago"/>
-          <field attrs="{'invisible': [('state','=','draft')], 'readonly': [('pago_caja','=', 'pagado')]}" height="150" name="imagen_pago" widget="image"/>
+          <field attrs="{'invisible': [ '|',  ('state','!=', 'purchase'),('tipo_pago','!=', 'regular')]}" height="150" name="imagen_pago" widget="image"/>
         </field>
         <!-- Boton para pagar la factura -->
         <button name="button_cancel" position="before">
