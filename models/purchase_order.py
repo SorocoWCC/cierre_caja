@@ -20,10 +20,10 @@ class purchase_order(models.Model):
 
     pagado_por = fields.Char(string="Pagado por: ", readonly=True, copy=False)
     pago_caja = fields.Selection ([('pendiente','Pendiente'),('pagado','Pagado')], string='Pago', default="pendiente", readonly=True, copy=False)
-    imagen_pago = fields.Binary(string="Información de pago")
+    imagen_pago = fields.Binary(string="Información de pago", copy=False)
     tipo_pago = fields.Selection ([('regular','Regular'), ('muy','***MUY PAGA***'), ('caja_chica','Caja Chica')], string='Metodo de Pago', required=True, default='regular')
     fecha_pago = fields.Datetime(string="Fecha Pago", readonly=True, copy=False)
-    cierre_id= fields.Many2one(comodel_name='cierre', string='Cierre', readonly=True)
+    cierre_id= fields.Many2one(comodel_name='cierre', string='Cierre', readonly=True, copy=False)
 
 
     # Marcar la factura como pagada y la asocia con los cierres de caja
